@@ -1,0 +1,52 @@
+{
+  "phase": 2,
+  "gate_date": "2026-08-24",
+  "gate_result": "PASS",
+  "agent": {
+    "id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+    "name": "SpecGuard",
+    "status": "stopped",
+    "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
+    "token_mint": "BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e",
+    "token_ticker": "SPECGU",
+    "market_phase0": "SOL / SOL-PERP",
+    "allow_perps_actions": true
+  },
+  "wallet_at_gate": {
+    "sol_balance": 0.11,
+    "usdc_balance": 0,
+    "updated_at": "2026-08-24T22:50:36.064Z"
+  },
+  "enabled_skills_requested": [
+    "perps-trading",
+    "portfolio",
+    "wallet-ops"
+  ],
+  "enabled_skills_actual": [
+    "perps-trading",
+    "portfolio",
+    "wallet-ops",
+    "action-plans",
+    "private-transfers",
+    "bitget-intel",
+    "self-learning",
+    "skill-management"
+  ],
+  "integrations": [],
+  "dashboard_urls": {
+    "dashboard": "https://agents.clawpump.tech/dashboard?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+    "chat": "https://agents.clawpump.tech/dashboard/chat?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+    "terminal": "https://agents.clawpump.tech/dashboard/terminal?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+    "office": "https://agents.clawpump.tech/dashboard/office?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+    "settings": "https://agents.clawpump.tech/dashboard/settings?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+    "wallet": "https://agents.clawpump.tech/dashboard/wallet?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+    "launch_token": "https://agents.clawpump.tech/dashboard/launch-token?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+    "skills": "https://agents.clawpump.tech/dashboard/skills?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04"
+  },
+  "tests": {
+    "T2.1_get_agent": "PASS",
+    "T2.2_wallet_sol": "PASS",
+    "T2.3_list_integrations": "PASS",
+    "T2.4_terminal_loads": "PASS"
+  }
+}

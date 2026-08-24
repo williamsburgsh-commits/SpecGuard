@@ -1,0 +1,16 @@
+{
+  "test": "T0.3 perps_markets",
+  "date": "2026-08-24",
+  "status": "ok",
+  "venue": "phoenix",
+  "count": 69,
+  "chosen_market_symbol": "SOL",
+  "chosen_perp_symbol": "SOL-PERP",
+  "sample_active_markets": [
+    { "symbol": "SOL", "perpSymbol": "SOL-PERP", "status": "active", "maxLeverage": 25 },
+    { "symbol": "ANSEM", "perpSymbol": "ANSEM-PERP", "status": "active", "isolatedOnly": true, "maxLeverage": 3 },
+    { "symbol": "BTC", "perpSymbol": "BTC-PERP", "status": "active", "maxLeverage": 40 },
+    { "symbol": "ETH", "perpSymbol": "ETH-PERP", "status": "active", "maxLeverage": 25 }
+  ],
+  "note": "Full API response captured during Phase 0 gate run; 69 active Phoenix markets returned."
+}

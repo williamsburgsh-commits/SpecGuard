@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "market": "SOL-PERP",
+  "max_notional_usd": 200,
+  "max_inventory_usd": 100,
+  "max_drawdown_usd": 40,
+  "max_leverage": 2,
+  "allowed_tools": [
+    "perps_order_preview",
+    "perps_order_execute",
+    "perps_order_cancel",
+    "perps_account",
+    "swap_execute"
+  ],
+  "heartbeat_ttl_seconds": 300,
+  "flatten_on_breach": true,
+  "agent_can_override": false
+}
