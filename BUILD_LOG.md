@@ -230,3 +230,108 @@ Sample:
 ---
 
 **Next:** Phase 3 — publish [`spec/reference-spec.json`](./spec/reference-spec.json) at a public URL (`SOL-PERP`, `max_drawdown_usd: 40`, `agent_can_override: false`).
+
+---
+
+## Phase 3 — Public spec (immutable to agent)
+
+**Date:** 2026-08-25  
+**Gate result:** **PASS**
+
+### Setup notes
+
+| Item | Result |
+|---|---|
+| Spec file | [`spec/reference-spec.json`](./spec/reference-spec.json) |
+| GitHub repo | [williamsburgsh-commits/SpecGuard](https://github.com/williamsburgsh-commits/SpecGuard) |
+| Public raw URL | [raw spec JSON](https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json) |
+| SHA256 | `256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C` |
+| Market | **`SOL-PERP`** (Phase 0 choice; not legacy `SOL-USD`) |
+| `agent_can_override` | **`false`** |
+| Snapshot artifact | [`logs/phase3-spec-snapshot.json`](./logs/phase3-spec-snapshot.json) |
+
+**Doc hygiene:** Updated example JSON in [`SPECGUARD.md`](./SPECGUARD.md) from `SOL-USD` → `SOL-PERP`.
+
+---
+
+### T3.1 — Fetch spec URL (unauthenticated)
+
+**Result:** PASS — HTTP 200, valid JSON
+
+```json
+{
+  "version": 1,
+  "market": "SOL-PERP",
+  "max_notional_usd": 200,
+  "max_inventory_usd": 100,
+  "max_drawdown_usd": 40,
+  "max_leverage": 2,
+  "agent_can_override": false
+}
+```
+
+---
+
+### T3.2 — `agent_can_override`
+
+**Result:** PASS — `"agent_can_override": false`
+
+---
+
+### T3.3 — `allowed_tools`
+
+**Result:** PASS — exactly 5 tools (perps + swap only)
+
+```json
+[
+  "perps_order_preview",
+  "perps_order_execute",
+  "perps_order_cancel",
+  "perps_account",
+  "swap_execute"
+]
+```
+
+No sniper, predictions, or marketplace tools.
+
+---
+
+### T3.4 — SHA256 hash
+
+**Result:** PASS
+
+```
+256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C
+```
+
+---
+
+### Canonical artifact table
+
+| Field | Value |
+|---|---|
+| Spec URL | `https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json` |
+| SHA256 | `256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C` |
+| Market | `SOL-PERP` |
+| `max_drawdown_usd` | `40` |
+| `agent_can_override` | `false` |
+| Version | `1` |
+
+---
+
+### Phase 3 gate checklist
+
+- [x] Public URL works for anyone
+- [x] Spec hash recorded
+- [x] Market symbol matches Phase 0 choice (`SOL-PERP`)
+
+---
+
+### Hackathon hygiene (non-blocking)
+
+- Add spec URL to [clawpump.tech/ansemhack](https://clawpump.tech/ansemhack) entry
+- Pin spec URL on project X `@specguardxyz`
+
+---
+
+**Next:** Phase 4 — `perps_account_prepare`, USDC collateral deposit, `perps_account` baseline.
