@@ -484,3 +484,114 @@ Parent subaccount 0:
 ---
 
 **Next:** Phase 5 — single order lifecycle (`perps_order_preview` → execute → cancel).
+
+---
+
+## Phase 5 — Single order lifecycle (preview → execute → cancel)
+
+**Date:** 2026-08-25  
+**Gate result:** **PASS**
+
+### Setup notes
+
+| Item | Result |
+|---|---|
+| Preflight SOL | **0.10976028** (0.1 SOL deposit confirmed) |
+| Phoenix collateral (parent sub 0) | **$3.90 USDC** after order margin transfer |
+| Isolated subaccount | **1** — activated by order (`transferAmountUsdc: 1.5`) |
+| Market | **`SOL-PERP`** |
+| Snapshot artifact | [`logs/phase5-order-lifecycle.json`](./logs/phase5-order-lifecycle.json) |
+
+**Order placed:** limit **bid** **0.01 SOL @ $50** (post-only, ~$1 notional), far below mark (~$100). Isolated margin **1.5 USDC** transferred from parent.
+
+**Operator note:** `confirmRisk: true` required on execute/cancel writes; idempotency keys prevent duplicate submits.
+
+---
+
+### T5.1 — `perps_order_preview`
+
+**Result:** PASS
+
+```json
+{
+  "status": "preview",
+  "symbol": "SOL-PERP",
+  "side": "bid",
+  "orderType": "limit",
+  "quantity": 0.01,
+  "price": 50,
+  "estimatedNotionalUsd": 0.999
+}
+```
+
+---
+
+### T5.2 — `perps_order_execute`
+
+**Result:** PASS
+
+```json
+{
+  "status": "executed",
+  "transferAmountUsdc": "1.500000",
+  "idempotencyKey": "phase5-exec-20260825-a",
+  "signature": "h6ExGkwWXZN9niY92jkvB7qVCBUEbenEd8gjQRU6NkaTYtFRLaEs24t9TgKavFumQ4Jo1kFwMDMWVmw9859q1DA"
+}
+```
+
+[Solscan execute tx](https://solscan.io/tx/h6ExGkwWXZN9niY92jkvB7qVCBUEbenEd8gjQRU6NkaTYtFRLaEs24t9TgKavFumQ4Jo1kFwMDMWVmw9859q1DA)
+
+---
+
+### T5.3 — `perps_account` (order visible → empty)
+
+**Result:** PASS — open limit order on subaccount 1 (`orderSequenceNumber: 18446744073639738419`, price tick `500000`), then cleared after cancel
+
+---
+
+### T5.4 — `perps_order_cancel`
+
+**Result:** PASS
+
+```json
+{
+  "status": "executed",
+  "subaccountIndex": 1,
+  "idempotencyKey": "phase5-cancel-20260825-a",
+  "signature": "63xKWXkjVyoV6uhKKQ6UtTiZif9tXqTvtYmDCy4oz2jK9qNMrUgRS2u9R1LEMKLbG7UBGaBwutqQZ8Bf84mcvrDq"
+}
+```
+
+[Solscan cancel tx](https://solscan.io/tx/63xKWXkjVyoV6uhKKQ6UtTiZif9tXqTvtYmDCy4oz2jK9qNMrUgRS2u9R1LEMKLbG7UBGaBwutqQZ8Bf84mcvrDq)
+
+Follow-up `cancelAll` cleanup tx (Phoenix state lag): [5U9WCM…Yy3Gh](https://solscan.io/tx/5U9WCMUTpoUb527FMQqW6wTqmtpgJtQbGpGUStVq1V5iPa47nsxyTMqXcSTsHmwHvgU3fC9mczswr4KCJMZYy3Gh)
+
+---
+
+### T5.5 — Idempotency replay
+
+**Result:** PASS — re-execute with same key returned `"duplicate": true` and same signature (no second order)
+
+---
+
+### Canonical artifact table
+
+| Field | Value |
+|---|---|
+| Execute sig | `h6ExGkwWXZN9niY92jkvB7qVCBUEbenEd8gjQRU6NkaTYtFRLaEs24t9TgKavFumQ4Jo1kFwMDMWVmw9859q1DA` |
+| Cancel sig | `63xKWXkjVyoV6uhKKQ6UtTiZif9tXqTvtYmDCy4oz2jK9qNMrUgRS2u9R1LEMKLbG7UBGaBwutqQZ8Bf84mcvrDq` |
+| Market | `SOL-PERP` |
+| Order size | 0.01 SOL limit @ $50 |
+| Idempotency | `duplicate: true` on replay |
+
+---
+
+### Phase 5 gate checklist
+
+- [x] One successful execute + cancel on mainnet
+- [x] Signatures saved in BUILD_LOG
+- [x] Operator confirms `confirmRisk` flow understood
+
+---
+
+**Next:** Phase 6 — status page GREEN/RED + heartbeat.
