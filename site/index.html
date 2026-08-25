@@ -3,311 +3,238 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SpecGuard Status</title>
-  <style>
-    :root {
-      --bg: #0b0f14;
-      --text: #e8eef4;
-      --muted: #8fa3b8;
-      --green: #22c55e;
-      --stale: #f59e0b;
-      --red: #ef4444;
-      --card: #121821;
-      --border: #243041;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-    }
-    main { max-width: 760px; margin: 0 auto; padding: 2rem 1rem 3rem; }
-    h1 { margin: 0 0 0.25rem; font-size: 1.75rem; }
-    .subtitle { color: var(--muted); margin-bottom: 1.5rem; }
-    .badge {
-      display: inline-block;
-      padding: 0.35rem 0.75rem;
-      border-radius: 999px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      font-size: 0.85rem;
-    }
-    .badge.green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid var(--green); }
-    .badge.stale { background: rgba(245,158,11,0.15); color: var(--stale); border: 1px solid var(--stale); }
-    .badge.red { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid var(--red); }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1rem 1.1rem;
-      margin: 1rem 0;
-    }
-    .card h2 { margin: 0 0 0.75rem; font-size: 1rem; color: var(--muted); font-weight: 600; }
-    dl { margin: 0; display: grid; grid-template-columns: 9rem 1fr; gap: 0.45rem 1rem; }
-    dt { color: var(--muted); }
-    dd { margin: 0; word-break: break-word; }
-    a { color: #7dd3fc; }
-    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
-    ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
-    .eligible-yes { color: var(--green); font-weight: 600; }
-    .eligible-no { color: var(--stale); font-weight: 600; }
-    .error { color: var(--red); }
-    .within-spec-yes { color: var(--green); font-weight: 600; }
-    .within-spec-no { color: var(--red); font-weight: 600; }
-    .limit-bar {
-      height: 6px;
-      background: var(--border);
-      border-radius: 999px;
-      overflow: hidden;
-      margin-top: 0.25rem;
-    }
-    .limit-bar > span {
-      display: block;
-      height: 100%;
-      background: var(--green);
-    }
-    .limit-bar.warn > span { background: var(--stale); }
-    .limit-bar.danger > span { background: var(--red); }
-  </style>
+  <title>SpecGuard — Spec-bound perps operator on Solana</title>
+  <meta name="description" content="ClawPump agent quoting SOL-PERP under a public spec. Kill-switch is onchain — blocks, then flattens. Live operator terminal at specguard.xyz.">
+  <meta name="theme-color" content="#05080f">
+  <meta property="og:title" content="SpecGuard — Spec-bound perps. Flatten on breach.">
+  <meta property="og:description" content="AI operator on ClawPump. Public spec, live heartbeat, enforced flatten — not a recommendation layer.">
+  <meta property="og:image" content="https://specguard.xyz/assets/banner.png">
+  <meta property="og:url" content="https://specguard.xyz">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@specguardxyz">
+  <link rel="icon" href="assets/pfp.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main>
-    <h1>SpecGuard</h1>
-    <p class="subtitle">Public agent status — SOL-PERP reference operator</p>
+  <div class="bg-mesh" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-scan" aria-hidden="true"></div>
 
-    <p id="badge-wrap"><span class="badge stale" id="status-badge">LOADING</span></p>
+  <header class="nav">
+    <a class="nav-brand" href="#">
+      <img src="assets/pfp.png" alt="SpecGuard" width="36" height="36">
+      SpecGuard
+    </a>
+    <ul class="nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#live">Live terminal</a></li>
+      <li><a href="#token">$GUARD</a></li>
+      <li><a id="spec-nav-link" href="https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json" target="_blank" rel="noopener">Spec</a></li>
+    </ul>
+    <div class="nav-actions">
+      <span class="nav-updated" id="nav-updated">—</span>
+      <a class="btn btn-ghost" href="https://x.com/specguardxyz" target="_blank" rel="noopener">@specguardxyz</a>
+      <a class="btn btn-primary" id="nav-dashboard-link" href="https://agents.clawpump.tech/dashboard/terminal?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04" target="_blank" rel="noopener">ClawPump</a>
+    </div>
+  </header>
 
-    <section class="card">
-      <h2>Live state</h2>
-      <dl>
-        <dt>Operator status</dt><dd id="operator-status">—</dd>
-        <dt>Display status</dt><dd id="display-status">—</dd>
-        <dt>Last heartbeat</dt><dd id="last-heartbeat">—</dd>
-        <dt>Heartbeat age</dt><dd id="heartbeat-age">—</dd>
-        <dt>TTL</dt><dd id="heartbeat-ttl">—</dd>
-        <dt>Copy-trade</dt><dd id="copy-trade">—</dd>
-      </dl>
-    </section>
+  <section class="hero">
+    <img class="hero-banner" src="assets/banner.png" alt="" aria-hidden="true">
+    <div class="hero-inner">
+      <div>
+        <p class="hero-eyebrow">ClawPump · Ansem Hackathon · SOL-PERP</p>
+        <h1>Spec-bound perps.<br>Flatten on breach.</h1>
+        <p class="hero-sub">A ClawPump agent quoting isolated Phoenix perps under a public spec. On breach it cancels, closes onchain, posts signatures, and turns RED — the kill-switch is a tool call, not a recommendation.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" id="hero-dashboard-link" href="https://agents.clawpump.tech/dashboard/terminal?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04" target="_blank" rel="noopener">View operator</a>
+          <a class="btn btn-ghost" id="hero-spec-link" href="https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json" target="_blank" rel="noopener">Read public spec</a>
+          <a class="btn btn-ghost" href="#live">Live terminal ↓</a>
+        </div>
+        <div class="hero-status">
+          <span class="badge stale" id="status-badge">LOADING</span>
+          <p class="hero-status-hint" id="hero-status-hint">Loading operator state…</p>
+        </div>
+      </div>
+      <div class="reveal" aria-hidden="true">
+        <img src="assets/pfp.png" alt="SpecGuard operator" style="width:min(280px,70vw);border-radius:24px;border:1px solid rgba(125,211,252,0.2);box-shadow:0 0 60px rgba(34,211,238,0.15);">
+      </div>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>Public spec</h2>
-      <dl>
-        <dt>Market</dt><dd id="market">—</dd>
-        <dt>Spec URL</dt><dd><a id="spec-url" href="#" target="_blank" rel="noopener">—</a></dd>
-        <dt>Spec SHA256</dt><dd><code id="spec-hash">—</code></dd>
-      </dl>
-    </section>
+  <section class="section reveal" id="how">
+    <p class="section-label">Architecture</p>
+    <h2>How it works</h2>
+    <p class="section-lead">Three layers: published limits, autonomous quoting, enforced shutdown.</p>
+    <div class="steps">
+      <article class="step">
+        <div class="step-num">01 · SPEC</div>
+        <h3>Public spec is law</h3>
+        <p>Max notional, inventory, drawdown, and leverage are pinned in JSON. Anyone can verify the hash onchain and on GitHub.</p>
+      </article>
+      <article class="step">
+        <div class="step-num">02 · QUOTE</div>
+        <h3>Tiny quotes within limits</h3>
+        <p>Post-only bid/ask on SOL-PERP subaccount 1. Pre-checks block orders that would breach before they hit the book.</p>
+      </article>
+      <article class="step">
+        <div class="step-num">03 · FLATTEN</div>
+        <h3>Breach → cancel → close → RED</h3>
+        <p>Armed automation cancels all orders, closes position, publishes attestation sigs. Status goes RED until manual reset.</p>
+      </article>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>Quoting activity</h2>
-      <dl>
-        <dt>Operator</dt><dd id="quote-operator">—</dd>
-        <dt>Spread</dt><dd id="quote-spread">—</dd>
-        <dt>Last cycle</dt><dd id="quote-last-cycle">—</dd>
-        <dt>Last action</dt><dd id="quote-last-action">—</dd>
-        <dt>Cycles (total)</dt><dd id="quote-cycles">—</dd>
-        <dt>Posts / cancels</dt><dd id="quote-counts">—</dd>
-        <dt>Last mark</dt><dd id="quote-mark">—</dd>
-        <dt>Last bid sig</dt><dd id="quote-bid-sig">—</dd>
-        <dt>Last ask sig</dt><dd id="quote-ask-sig">—</dd>
-      </dl>
-    </section>
+  <section class="section reveal">
+    <p class="section-label">Differentiator</p>
+    <h2>Why SpecGuard</h2>
+    <p class="section-lead">ClawPump ships <code>risk-manager</code> — advice only. SpecGuard inverts that.</p>
+    <div class="compare">
+      <div class="compare-card them">
+        <h3>risk-manager</h3>
+        <p>Pre-trade sizing and drawdown <em>recommendations</em>. Last rule: never block a trade — only recommend.</p>
+      </div>
+      <div class="compare-card us">
+        <h3>specguard-enforcer</h3>
+        <p><strong>Blocks, then flattens.</strong> Skill law + armed automation. Judges verify shutdown on Solscan, not in a chat log.</p>
+      </div>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>PnL overlay</h2>
-      <dl>
-        <dt>Baseline equity</dt><dd id="pnl-baseline">—</dd>
-        <dt>Current equity</dt><dd id="pnl-current">—</dd>
-        <dt>Unrealized PnL</dt><dd id="pnl-unrealized">—</dd>
-        <dt>Drawdown</dt><dd id="pnl-drawdown">—</dd>
-        <dt>Inventory</dt><dd id="pnl-inventory">—</dd>
-        <dt>Leverage</dt><dd id="pnl-leverage">—</dd>
-        <dt>Within spec</dt><dd id="pnl-within-spec">—</dd>
-        <dt>Updated</dt><dd id="pnl-updated">—</dd>
-      </dl>
-    </section>
+  <section class="section reveal" id="token">
+    <p class="section-label">Token</p>
+    <h2>$GUARD</h2>
+    <p class="section-lead">Fee-claim token for the reference operator — not governance. Treasury can buy $ANSEM on the flatten tape (Phase 13).</p>
+    <div class="token-strip">
+      <span class="symbol">$GUARD</span>
+      <div>
+        <div class="token-mint">BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e</div>
+        <a href="https://pump.fun/coin/BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e" target="_blank" rel="noopener">View on pump.fun →</a>
+      </div>
+      <a class="btn btn-primary" href="https://agents.clawpump.tech/dashboard/wallet?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04" target="_blank" rel="noopener">Fee dashboard</a>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>Fills</h2>
-      <dl>
-        <dt>Fill count</dt><dd id="fills-count">—</dd>
-        <dt>Last fill</dt><dd id="fills-last-at">—</dd>
-        <dt>Position size</dt><dd id="fills-position">—</dd>
-        <dt>Last fill sig</dt><dd id="fills-sig">—</dd>
-      </dl>
-    </section>
+  <section class="section terminal-section reveal" id="live">
+    <div class="terminal-header">
+      <div>
+        <p class="section-label">Live feed</p>
+        <h2>Operator terminal</h2>
+        <p class="section-lead" style="margin-bottom:0">Machine-readable state from <code>status.json</code> — refreshed every 15s.</p>
+      </div>
+      <div class="terminal-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
 
-    <section class="card">
-      <ul>
-        <li><a id="portfolio-link" href="#" target="_blank" rel="noopener">ClawPump portfolio</a></li>
-        <li><a id="dashboard-link" href="#" target="_blank" rel="noopener">ClawPump agent dashboard</a></li>
-        <li><a id="wallet-link" href="#" target="_blank" rel="noopener">Solscan agent wallet</a></li>
-        <li><a href="https://github.com/williamsburgsh-commits/SpecGuard" target="_blank" rel="noopener">GitHub repo</a></li>
-        <li><a id="spec-link" href="#" target="_blank" rel="noopener">Raw spec JSON</a></li>
-      </ul>
-    </section>
+    <div class="terminal-grid">
+      <section class="card">
+        <h2>Live state</h2>
+        <dl>
+          <dt>Operator status</dt><dd id="operator-status">—</dd>
+          <dt>Display status</dt><dd id="display-status">—</dd>
+          <dt>Last heartbeat</dt><dd id="last-heartbeat">—</dd>
+          <dt>Heartbeat age</dt><dd id="heartbeat-age">—</dd>
+          <dt>TTL</dt><dd id="heartbeat-ttl">—</dd>
+          <dt>Copy-trade</dt><dd id="copy-trade">—</dd>
+        </dl>
+      </section>
 
-    <section class="card">
-      <h2>STALE / copy-trade rules</h2>
-      <p>Copy-trade is eligible only when <strong>operator status is GREEN</strong> and the heartbeat is fresh.</p>
-      <ul>
-        <li><code>heartbeat_age = now - last_heartbeat_at</code></li>
-        <li><strong>STALE</strong> if <code>last_heartbeat_at</code> is missing or <code>heartbeat_age &gt; heartbeat_ttl_seconds</code> (300s)</li>
-        <li><strong>Copy-trade eligible</strong> if <code>status === GREEN</code> and not STALE</li>
-        <li>Breach also includes drawdown, inventory, notional, leverage, and disallowed tools per the public spec</li>
-      </ul>
-      <p id="load-error" class="error" hidden></p>
-    </section>
-  </main>
+      <section class="card">
+        <h2>Public spec</h2>
+        <dl>
+          <dt>Market</dt><dd id="market">—</dd>
+          <dt>Spec URL</dt><dd><a id="spec-url" href="#" target="_blank" rel="noopener">—</a></dd>
+          <dt>Spec SHA256</dt><dd><code id="spec-hash">—</code></dd>
+        </dl>
+      </section>
 
-  <script>
-    const AGENT_ID = '89ca5e76-d59f-4276-8399-eecdf8bb3a04';
+      <section class="card">
+        <h2>Quoting activity</h2>
+        <dl>
+          <dt>Operator</dt><dd id="quote-operator">—</dd>
+          <dt>Spread</dt><dd id="quote-spread">—</dd>
+          <dt>Last cycle</dt><dd id="quote-last-cycle">—</dd>
+          <dt>Last action</dt><dd id="quote-last-action">—</dd>
+          <dt>Cycles (total)</dt><dd id="quote-cycles">—</dd>
+          <dt>Posts / cancels</dt><dd id="quote-counts">—</dd>
+          <dt>Last mark</dt><dd id="quote-mark">—</dd>
+          <dt>Last bid sig</dt><dd id="quote-bid-sig">—</dd>
+          <dt>Last ask sig</dt><dd id="quote-ask-sig">—</dd>
+        </dl>
+      </section>
 
-    function truncateHash(hash) {
-      if (!hash || hash.length < 16) return hash || '—';
-      return hash.slice(0, 8) + '…' + hash.slice(-8);
-    }
+      <section class="card">
+        <h2>PnL overlay</h2>
+        <dl>
+          <dt>Baseline equity</dt><dd id="pnl-baseline">—</dd>
+          <dt>Current equity</dt><dd id="pnl-current">—</dd>
+          <dt>Unrealized PnL</dt><dd id="pnl-unrealized">—</dd>
+          <dt>Drawdown</dt><dd id="pnl-drawdown">—</dd>
+          <dt>Inventory</dt><dd id="pnl-inventory">—</dd>
+          <dt>Leverage</dt><dd id="pnl-leverage">—</dd>
+          <dt>Within spec</dt><dd id="pnl-within-spec">—</dd>
+          <dt>Updated</dt><dd id="pnl-updated">—</dd>
+        </dl>
+      </section>
 
-    function formatUsd(n) {
-      if (n == null || Number.isNaN(n)) return '—';
-      return `$${Number(n).toFixed(2)}`;
-    }
+      <section class="card">
+        <h2>Fills</h2>
+        <dl>
+          <dt>Fill count</dt><dd id="fills-count">—</dd>
+          <dt>Last fill</dt><dd id="fills-last-at">—</dd>
+          <dt>Position size</dt><dd id="fills-position">—</dd>
+          <dt>Last fill sig</dt><dd id="fills-sig">—</dd>
+        </dl>
+      </section>
 
-    function renderLimitBar(elId, value, max) {
-      const el = document.getElementById(elId);
-      if (!el || max == null || max <= 0) return;
-      const pct = Math.min(100, Math.max(0, (value / max) * 100));
-      el.className = 'limit-bar' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warn' : '');
-      el.innerHTML = `<span style="width:${pct}%"></span>`;
-    }
+      <section class="card card-wide">
+        <h2>Proof links</h2>
+        <ul>
+          <li><a id="portfolio-link" href="#" target="_blank" rel="noopener">ClawPump portfolio</a></li>
+          <li><a id="dashboard-link" href="#" target="_blank" rel="noopener">ClawPump agent dashboard</a></li>
+          <li><a id="wallet-link" href="#" target="_blank" rel="noopener">Solscan agent wallet</a></li>
+          <li><a href="https://github.com/williamsburgsh-commits/SpecGuard" target="_blank" rel="noopener">GitHub repo</a></li>
+          <li><a id="spec-link" href="#" target="_blank" rel="noopener">Raw spec JSON</a></li>
+        </ul>
+      </section>
 
-    function renderSigLink(elId, sig) {
-      const el = document.getElementById(elId);
-      if (!el) return;
-      if (sig) {
-        el.innerHTML = `<a href="https://solscan.io/tx/${sig}" target="_blank" rel="noopener"><code>${sig.slice(0, 8)}…</code></a>`;
-      } else {
-        el.textContent = '—';
-      }
-    }
+      <section class="card card-wide">
+        <details class="accordion">
+          <summary>STALE / copy-trade rules</summary>
+          <div class="accordion-body">
+            <p>Copy-trade is eligible only when <strong>operator status is GREEN</strong> and the heartbeat is fresh.</p>
+            <ul>
+              <li><code>heartbeat_age = now - last_heartbeat_at</code></li>
+              <li><strong>STALE</strong> if heartbeat age &gt; TTL (300s)</li>
+              <li><strong>Copy-trade eligible</strong> if GREEN and not STALE</li>
+              <li>Breach includes drawdown, inventory, notional, leverage, disallowed tools</li>
+            </ul>
+            <p id="load-error" class="error" hidden></p>
+          </div>
+        </details>
+      </section>
+    </div>
+  </section>
 
-    function formatAge(seconds) {
-      if (seconds == null || Number.isNaN(seconds)) return '—';
-      if (seconds < 60) return `${Math.floor(seconds)}s`;
-      const m = Math.floor(seconds / 60);
-      const s = Math.floor(seconds % 60);
-      return `${m}m ${s}s`;
-    }
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <strong>SpecGuard</strong>
+        <p class="footer-disclaimer" style="margin-top:0.5rem">Autonomous operator demo — not financial advice. Onchain actions are irreversible.</p>
+      </div>
+      <nav class="footer-links">
+        <a href="https://specguard.xyz">specguard.xyz</a>
+        <a href="https://x.com/specguardxyz" target="_blank" rel="noopener">X</a>
+        <a href="https://github.com/williamsburgsh-commits/SpecGuard" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://clawpump.tech/ansemhack" target="_blank" rel="noopener">Hackathon</a>
+        <a href="#live">Live terminal</a>
+      </nav>
+    </div>
+    <p class="footer-disclaimer">© SpecGuard · ClawPump Ansem Hackathon · SOL-PERP reference operator</p>
+  </footer>
 
-    function computeDisplay(statusData) {
-      const ttl = statusData.heartbeat_ttl_seconds || 300;
-      const operatorStatus = statusData.status || 'UNKNOWN';
-      const last = statusData.last_heartbeat_at ? Date.parse(statusData.last_heartbeat_at) : NaN;
-      const ageSec = Number.isNaN(last) ? null : (Date.now() - last) / 1000;
-      const isStale = !statusData.last_heartbeat_at || (ageSec != null && ageSec > ttl);
-      let displayStatus = operatorStatus;
-      if (operatorStatus === 'GREEN' && isStale) displayStatus = 'STALE';
-      const copyEligible = operatorStatus === 'GREEN' && !isStale;
-      return { ttl, operatorStatus, last, ageSec, isStale, displayStatus, copyEligible };
-    }
-
-    function renderBadge(displayStatus) {
-      const badge = document.getElementById('status-badge');
-      badge.textContent = displayStatus;
-      badge.className = 'badge ' + (displayStatus === 'GREEN' ? 'green' : displayStatus === 'RED' ? 'red' : 'stale');
-    }
-
-    async function loadStatus() {
-      const res = await fetch('status.json?' + Date.now(), { cache: 'no-store' });
-      if (!res.ok) throw new Error('Failed to load status.json: HTTP ' + res.status);
-      const data = await res.json();
-      const computed = computeDisplay(data);
-
-      renderBadge(computed.displayStatus);
-      document.getElementById('operator-status').textContent = computed.operatorStatus;
-      document.getElementById('display-status').textContent = computed.displayStatus;
-      document.getElementById('last-heartbeat').textContent = data.last_heartbeat_at || 'never';
-      document.getElementById('heartbeat-age').textContent = computed.ageSec == null ? '—' : formatAge(computed.ageSec);
-      document.getElementById('heartbeat-ttl').textContent = `${computed.ttl}s`;
-      const copyEl = document.getElementById('copy-trade');
-      copyEl.textContent = computed.copyEligible ? 'eligible' : 'not eligible';
-      copyEl.className = computed.copyEligible ? 'eligible-yes' : 'eligible-no';
-
-      document.getElementById('market').textContent = data.market || '—';
-      document.getElementById('spec-url').href = data.spec_url;
-      document.getElementById('spec-url').textContent = data.spec_url;
-      document.getElementById('spec-link').href = data.spec_url;
-      document.getElementById('spec-hash').textContent = truncateHash(data.spec_sha256) + ' (' + data.spec_sha256 + ')';
-
-      const q = data.quoting || {};
-      document.getElementById('quote-operator').textContent = q.operator || '—';
-      document.getElementById('quote-spread').textContent =
-        q.spread_bps != null ? `${q.spread_bps} bps` : '—';
-      document.getElementById('quote-last-cycle').textContent = q.last_cycle_at || '—';
-      document.getElementById('quote-last-action').textContent = q.last_action || '—';
-      document.getElementById('quote-cycles').textContent = q.cycles_total != null ? String(q.cycles_total) : '—';
-      document.getElementById('quote-counts').textContent =
-        (q.posts_total != null && q.cancels_total != null) ? `${q.posts_total} / ${q.cancels_total}` : '—';
-      document.getElementById('quote-mark').textContent =
-        q.last_mark_usd != null ? `$${q.last_mark_usd}` : '—';
-      const bidSig = q.last_bid_sig;
-      const askSig = q.last_ask_sig;
-      renderSigLink('quote-bid-sig', bidSig);
-      renderSigLink('quote-ask-sig', askSig);
-
-      const pnl = data.pnl || {};
-      const limits = pnl.spec_limits || {};
-      document.getElementById('pnl-baseline').textContent = formatUsd(pnl.baseline_equity_usd);
-      document.getElementById('pnl-current').textContent = formatUsd(pnl.current_equity_usd);
-      document.getElementById('pnl-unrealized').textContent = formatUsd(pnl.unrealized_pnl_usd);
-      document.getElementById('pnl-drawdown').innerHTML =
-        `${formatUsd(pnl.drawdown_usd)} / ${formatUsd(limits.max_drawdown_usd)}` +
-        `<div id="drawdown-bar" class="limit-bar"></div>`;
-      document.getElementById('pnl-inventory').innerHTML =
-        `${formatUsd(pnl.inventory_usd)} / ${formatUsd(limits.max_inventory_usd)}` +
-        `<div id="inventory-bar" class="limit-bar"></div>`;
-      document.getElementById('pnl-leverage').textContent =
-        (pnl.leverage != null && limits.max_leverage != null)
-          ? `${pnl.leverage} / ${limits.max_leverage}`
-          : '—';
-      const withinEl = document.getElementById('pnl-within-spec');
-      if (pnl.within_spec == null) {
-        withinEl.textContent = '—';
-      } else {
-        withinEl.textContent = pnl.within_spec ? 'yes' : 'no';
-        withinEl.className = pnl.within_spec ? 'within-spec-yes' : 'within-spec-no';
-      }
-      document.getElementById('pnl-updated').textContent = pnl.updated_at || '—';
-      renderLimitBar('drawdown-bar', pnl.drawdown_usd ?? 0, limits.max_drawdown_usd ?? 40);
-      renderLimitBar('inventory-bar', pnl.inventory_usd ?? 0, limits.max_inventory_usd ?? 100);
-
-      const fills = data.fills || {};
-      document.getElementById('fills-count').textContent =
-        fills.count != null ? String(fills.count) : '0';
-      document.getElementById('fills-last-at').textContent = fills.last_fill_at || '—';
-      document.getElementById('fills-position').textContent =
-        fills.position_size_sol != null ? `${fills.position_size_sol} SOL` : '—';
-      renderSigLink('fills-sig', fills.last_fill_sig);
-
-      const wallet = data.wallet_address;
-      const agentId = data.agent_id || AGENT_ID;
-      document.getElementById('wallet-link').href = 'https://solscan.io/account/' + wallet;
-      document.getElementById('dashboard-link').href =
-        'https://agents.clawpump.tech/dashboard/terminal?agent=' + agentId;
-      document.getElementById('portfolio-link').href =
-        'https://agents.clawpump.tech/dashboard/terminal?agent=' + agentId + '&tab=portfolio';
-    }
-
-    loadStatus().catch((err) => {
-      document.getElementById('load-error').hidden = false;
-      document.getElementById('load-error').textContent = err.message;
-      renderBadge('ERROR');
-    });
-
-    setInterval(loadStatus, 15000);
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>

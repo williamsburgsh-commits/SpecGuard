@@ -1147,3 +1147,31 @@ node tools/phase11-api.mjs quote-dry-run-tight
 Status page updates via **git push** (PAT) — does **not** require GitHub Actions billing.
 
 GitHub Actions [`.github/workflows/operator.yml`](.github/workflows/operator.yml) cron **disabled**; manual `workflow_dispatch` only as backup.
+
+---
+
+## Landing page — AI-themed redesign
+
+**Date:** 2026-08-25  
+**Deploy:** GitHub Pages from [`site/`](site/) via [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml)
+
+### Files
+
+| File | Purpose |
+|---|---|
+| [`site/index.html`](site/index.html) | Landing + live operator terminal |
+| [`site/styles.css`](site/styles.css) | AI command-center theme, animations |
+| [`site/app.js`](site/app.js) | `status.json` loader, scroll reveal, nav ticker |
+| [`site/assets/pfp.png`](site/assets/pfp.png) | Logo |
+| [`site/assets/banner.png`](site/assets/banner.png) | Hero + og:image |
+
+### Design
+
+- Hero: “Spec-bound perps. Flatten on breach.”
+- Sections: How it works, vs risk-manager, `$GUARD` strip, live terminal dashboard
+- Animations: mesh gradient, grid scan, badge pulse, fade-up on scroll (`prefers-reduced-motion` respected)
+- Social: [@specguardxyz](https://x.com/specguardxyz)
+
+### DNS reminder (operator)
+
+Point **specguard.xyz** at GitHub Pages (A records + `www` CNAME). Repo **Settings → Pages → Custom domain** → enforce HTTPS. Interim: `williamsburgsh-commits.github.io/SpecGuard/`.
