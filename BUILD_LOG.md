@@ -335,3 +335,152 @@ No sniper, predictions, or marketplace tools.
 ---
 
 **Next:** Phase 4 — `perps_account_prepare`, USDC collateral deposit, `perps_account` baseline.
+
+---
+
+## Phase 4 — Phoenix perps account ready
+
+**Date:** 2026-08-25  
+**Gate result:** **PASS**
+
+### Setup notes
+
+| Item | Result |
+|---|---|
+| Agent ID | `89ca5e76-d59f-4276-8399-eecdf8bb3a04` |
+| Agent wallet | `2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk` |
+| Market | **`SOL-PERP`** |
+| Phoenix parent subaccount | **0** (collateral + trading) |
+| Collateral deposited | **5.4 USDC** |
+| Baseline equity | **$5.40** (`portfolioValue` on subaccount 0) |
+| Snapshot artifact | [`logs/phase4-perps-baseline.json`](./logs/phase4-perps-baseline.json) |
+
+**Funding path:** No external USDC on agent or deposit wallet. Operator swapped **0.055 SOL → ~5.47 USDC** (Jupiter), then deposited **5.4 USDC** to Phoenix parent collateral. Target was ~$30; actual limited by agent SOL balance (~0.11 SOL at gate start). Scale up in a later phase if needed.
+
+**Known state:** Isolated subaccount **1** is **frozen** (zero collateral). Parent subaccount **0** is **cold** but has collateral and `riskIncreasingTrade: immediate`. Phase 5 orders should use parent/isolated flow per Phoenix tool params.
+
+---
+
+### Prepare — `perps_account_prepare`
+
+**Result:** PASS — registered isolated trader 1; cross subaccount 0 already existed
+
+```json
+{
+  "status": "executed",
+  "steps": ["activate_phoenix_access_code", "register_isolated_trader_1"],
+  "signature": "4Z87b6bkMTJScD1NVHQkDL3g5x8Fh3717a5cCa3FG2xUzT3U7d6bEtpx9QcZcCZz2WzZojuPiS7TiGHP5kcxkxx8"
+}
+```
+
+[Solscan prepare tx](https://solscan.io/tx/4Z87b6bkMTJScD1NVHQkDL3g5x8Fh3717a5cCa3FG2xUzT3U7d6bEtpx9QcZcCZz2WzZojuPiS7TiGHP5kcxkxx8)
+
+---
+
+### Fund — SOL → USDC swap (operator)
+
+**Result:** PASS — ~5.47 USDC received on agent wallet
+
+```json
+{
+  "status": "executed",
+  "input": "0.055 SOL",
+  "output": "5.473416 USDC",
+  "txHash": "63McZH9Bk8aQ9sutx1p1jB4bXWhK3kLyxYJtpoVKqupUtbUCrkof2ZCNb7BfSHKPZytVMpzLnF9rk486Lz5Hyyvm"
+}
+```
+
+---
+
+### Deposit — `perps_collateral_deposit`
+
+**Result:** PASS — 5.4 USDC to parent trader collateral
+
+```json
+{
+  "status": "executed",
+  "amountUsdc": "5.400000",
+  "signature": "3E6wYit6wG37TwDbBR1gnShn1aNEDeuRPspbJfqsqfRuqSDYd7Pgg8TBar3t3PN2Af8uDFyg9oMd5dg1AR63uTsh"
+}
+```
+
+[Solscan deposit tx](https://solscan.io/tx/3E6wYit6wG37TwDbBR1gnShn1aNEDeuRPspbJfqsqfRuqSDYd7Pgg8TBar3t3PN2Af8uDFyg9oMd5dg1AR63uTsh)
+
+---
+
+### T4.1 — `perps_account`
+
+**Result:** PASS — collateral > 0, risk tier shown
+
+Parent subaccount 0:
+
+```json
+{
+  "subaccountIndex": 0,
+  "riskTier": "safe",
+  "collateralBalance": "5.400000",
+  "portfolioValue": "5.400000",
+  "positions": [],
+  "limitOrders": {}
+}
+```
+
+---
+
+### T4.2 — `perps_market_data` (`SOL-PERP`)
+
+**Result:** PASS — mark price returned
+
+```json
+{
+  "perpSymbol": "SOL-PERP",
+  "markPrice": 99.9
+}
+```
+
+---
+
+### T4.3 — Wallet on-chain verification
+
+**Result:** PASS — verified via Solana RPC (automated Solscan page returned 403)
+
+| Token | Balance at gate |
+|---|---|
+| SOL | **0.00976028** |
+| USDC (wallet) | **0.064345** |
+| USDC (Phoenix collateral) | **5.400000** |
+
+[Agent wallet on Solscan](https://solscan.io/account/2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk)
+
+---
+
+### T4.4 — No open orders
+
+**Result:** PASS — `positions: []`, `limitOrders: {}` on both subaccounts
+
+---
+
+### Canonical artifact table
+
+| Field | Value |
+|---|---|
+| Baseline equity | **$5.40** |
+| Collateral deposited | **5.4 USDC** |
+| Prepare tx | `4Z87b6bkMTJScD1NVHQkDL3g5x8Fh3717a5cCa3FG2xUzT3U7d6bEtpx9QcZcCZz2WzZojuPiS7TiGHP5kcxkxx8` |
+| Swap tx | `63McZH9Bk8aQ9sutx1p1jB4bXWhK3kLyxYJtpoVKqupUtbUCrkof2ZCNb7BfSHKPZytVMpzLnF9rk486Lz5Hyyvm` |
+| Deposit tx | `3E6wYit6wG37TwDbBR1gnShn1aNEDeuRPspbJfqsqfRuqSDYd7Pgg8TBar3t3PN2Af8uDFyg9oMd5dg1AR63uTsh` |
+| Market | `SOL-PERP` |
+| Open orders | none |
+| Total exposure | ~$5.5 (well under spec $200 cap) |
+
+---
+
+### Phase 4 gate checklist
+
+- [x] Collateral deposited and visible in `perps_account`
+- [x] Baseline equity recorded (for drawdown math later)
+- [x] Total wallet exposure ≤ planned ~$200
+
+---
+
+**Next:** Phase 5 — single order lifecycle (`perps_order_preview` → execute → cancel).

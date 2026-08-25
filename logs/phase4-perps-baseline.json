@@ -1,0 +1,47 @@
+{
+  "phase": 4,
+  "gate_date": "2026-08-25",
+  "gate_result": "PASS",
+  "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+  "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
+  "market": "SOL-PERP",
+  "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
+  "collateral_target_usd": 30,
+  "collateral_deposited_usd": 5.4,
+  "baseline_equity_usd": 5.4,
+  "funding_note": "No external USDC available; operator swapped 0.055 SOL to ~5.47 USDC then deposited 5.4 USDC to Phoenix parent subaccount 0.",
+  "prepare_tx_sig": "4Z87b6bkMTJScD1NVHQkDL3g5x8Fh3717a5cCa3FG2xUzT3U7d6bEtpx9QcZcCZz2WzZojuPiS7TiGHP5kcxkxx8",
+  "swap_tx_sig": "63McZH9Bk8aQ9sutx1p1jB4bXWhK3kLyxYJtpoVKqupUtbUCrkof2ZCNb7BfSHKPZytVMpzLnF9rk486Lz5Hyyvm",
+  "deposit_tx_sigs": [
+    "3E6wYit6wG37TwDbBR1gnShn1aNEDeuRPspbJfqsqfRuqSDYd7Pgg8TBar3t3PN2Af8uDFyg9oMd5dg1AR63uTsh"
+  ],
+  "wallet_at_gate": {
+    "sol_balance": 0.00976028,
+    "usdc_balance": 0.064345
+  },
+  "perps_account_snapshot": {
+    "parent_subaccount_0": {
+      "traderKey": "Euk1hCQDtjDbekQcatXRPRaYsnrSwZYhuogX3VfGNnko",
+      "state": "cold",
+      "riskTier": "safe",
+      "collateralBalance": "5.400000",
+      "portfolioValue": "5.400000",
+      "positions": [],
+      "limitOrders": {}
+    },
+    "isolated_subaccount_1": {
+      "traderKey": "8dsKcaf1dtexpNodEYRGjKGzhg1n9E3tKL6BuTZRJpxu",
+      "state": "frozen",
+      "collateralBalance": "0.000000",
+      "positions": [],
+      "limitOrders": {}
+    }
+  },
+  "mark_price_sol_perp": 99.9,
+  "tests": {
+    "T4.1_perps_account_collateral": "PASS",
+    "T4.2_market_data": "PASS",
+    "T4.3_solscan_onchain": "PASS",
+    "T4.4_no_open_orders": "PASS"
+  }
+}
