@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SpecGuard Status</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --text: #e8eef4;
+      --muted: #8fa3b8;
+      --green: #22c55e;
+      --stale: #f59e0b;
+      --red: #ef4444;
+      --card: #121821;
+      --border: #243041;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+    h1 { margin: 0 0 0.25rem; font-size: 1.75rem; }
+    .subtitle { color: var(--muted); margin-bottom: 1.5rem; }
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+    .badge.green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid var(--green); }
+    .badge.stale { background: rgba(245,158,11,0.15); color: var(--stale); border: 1px solid var(--stale); }
+    .badge.red { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid var(--red); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.1rem;
+      margin: 1rem 0;
+    }
+    .card h2 { margin: 0 0 0.75rem; font-size: 1rem; color: var(--muted); font-weight: 600; }
+    dl { margin: 0; display: grid; grid-template-columns: 9rem 1fr; gap: 0.45rem 1rem; }
+    dt { color: var(--muted); }
+    dd { margin: 0; word-break: break-word; }
+    a { color: #7dd3fc; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; }
+    ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+    .eligible-yes { color: var(--green); font-weight: 600; }
+    .eligible-no { color: var(--stale); font-weight: 600; }
+    .error { color: var(--red); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>SpecGuard</h1>
+    <p class="subtitle">Public agent status — SOL-PERP reference operator</p>
+
+    <p id="badge-wrap"><span class="badge stale" id="status-badge">LOADING</span></p>
+
+    <section class="card">
+      <h2>Live state</h2>
+      <dl>
+        <dt>Operator status</dt><dd id="operator-status">—</dd>
+        <dt>Display status</dt><dd id="display-status">—</dd>
+        <dt>Last heartbeat</dt><dd id="last-heartbeat">—</dd>
+        <dt>Heartbeat age</dt><dd id="heartbeat-age">—</dd>
+        <dt>TTL</dt><dd id="heartbeat-ttl">—</dd>
+        <dt>Copy-trade</dt><dd id="copy-trade">—</dd>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h2>Public spec</h2>
+      <dl>
+        <dt>Market</dt><dd id="market">—</dd>
+        <dt>Spec URL</dt><dd><a id="spec-url" href="#" target="_blank" rel="noopener">—</a></dd>
+        <dt>Spec SHA256</dt><dd><code id="spec-hash">—</code></dd>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h2>Links</h2>
+      <ul>
+        <li><a id="dashboard-link" href="#" target="_blank" rel="noopener">ClawPump agent dashboard</a></li>
+        <li><a id="wallet-link" href="#" target="_blank" rel="noopener">Solscan agent wallet</a></li>
+        <li><a href="https://github.com/williamsburgsh-commits/SpecGuard" target="_blank" rel="noopener">GitHub repo</a></li>
+        <li><a id="spec-link" href="#" target="_blank" rel="noopener">Raw spec JSON</a></li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>STALE / copy-trade rules</h2>
+      <p>Copy-trade is eligible only when <strong>operator status is GREEN</strong> and the heartbeat is fresh.</p>
+      <ul>
+        <li><code>heartbeat_age = now - last_heartbeat_at</code></li>
+        <li><strong>STALE</strong> if <code>last_heartbeat_at</code> is missing or <code>heartbeat_age &gt; heartbeat_ttl_seconds</code> (300s)</li>
+        <li><strong>Copy-trade eligible</strong> if <code>status === GREEN</code> and not STALE</li>
+        <li>Breach also includes drawdown, inventory, notional, leverage, and disallowed tools per the public spec</li>
+      </ul>
+      <p id="load-error" class="error" hidden></p>
+    </section>
+  </main>
+
+  <script>
+    const AGENT_ID = '89ca5e76-d59f-4276-8399-eecdf8bb3a04';
+
+    function truncateHash(hash) {
+      if (!hash || hash.length < 16) return hash || '—';
+      return hash.slice(0, 8) + '…' + hash.slice(-8);
+    }
+
+    function formatAge(seconds) {
+      if (seconds == null || Number.isNaN(seconds)) return '—';
+      if (seconds < 60) return `${Math.floor(seconds)}s`;
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m}m ${s}s`;
+    }
+
+    function computeDisplay(statusData) {
+      const ttl = statusData.heartbeat_ttl_seconds || 300;
+      const operatorStatus = statusData.status || 'UNKNOWN';
+      const last = statusData.last_heartbeat_at ? Date.parse(statusData.last_heartbeat_at) : NaN;
+      const ageSec = Number.isNaN(last) ? null : (Date.now() - last) / 1000;
+      const isStale = !statusData.last_heartbeat_at || (ageSec != null && ageSec > ttl);
+      let displayStatus = operatorStatus;
+      if (operatorStatus === 'GREEN' && isStale) displayStatus = 'STALE';
+      const copyEligible = operatorStatus === 'GREEN' && !isStale;
+      return { ttl, operatorStatus, last, ageSec, isStale, displayStatus, copyEligible };
+    }
+
+    function renderBadge(displayStatus) {
+      const badge = document.getElementById('status-badge');
+      badge.textContent = displayStatus;
+      badge.className = 'badge ' + (displayStatus === 'GREEN' ? 'green' : displayStatus === 'RED' ? 'red' : 'stale');
+    }
+
+    async function loadStatus() {
+      const res = await fetch('status.json?' + Date.now(), { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to load status.json: HTTP ' + res.status);
+      const data = await res.json();
+      const computed = computeDisplay(data);
+
+      renderBadge(computed.displayStatus);
+      document.getElementById('operator-status').textContent = computed.operatorStatus;
+      document.getElementById('display-status').textContent = computed.displayStatus;
+      document.getElementById('last-heartbeat').textContent = data.last_heartbeat_at || 'never';
+      document.getElementById('heartbeat-age').textContent = computed.ageSec == null ? '—' : formatAge(computed.ageSec);
+      document.getElementById('heartbeat-ttl').textContent = `${computed.ttl}s`;
+      const copyEl = document.getElementById('copy-trade');
+      copyEl.textContent = computed.copyEligible ? 'eligible' : 'not eligible';
+      copyEl.className = computed.copyEligible ? 'eligible-yes' : 'eligible-no';
+
+      document.getElementById('market').textContent = data.market || '—';
+      document.getElementById('spec-url').href = data.spec_url;
+      document.getElementById('spec-url').textContent = data.spec_url;
+      document.getElementById('spec-link').href = data.spec_url;
+      document.getElementById('spec-hash').textContent = truncateHash(data.spec_sha256) + ' (' + data.spec_sha256 + ')';
+
+      const wallet = data.wallet_address;
+      document.getElementById('wallet-link').href = 'https://solscan.io/account/' + wallet;
+      document.getElementById('dashboard-link').href = 'https://agents.clawpump.tech/dashboard/terminal?agent=' + (data.agent_id || AGENT_ID);
+    }
+
+    loadStatus().catch((err) => {
+      document.getElementById('load-error').hidden = false;
+      document.getElementById('load-error').textContent = err.message;
+      renderBadge('ERROR');
+    });
+
+    setInterval(loadStatus, 15000);
+  </script>
+</body>
+</html>
