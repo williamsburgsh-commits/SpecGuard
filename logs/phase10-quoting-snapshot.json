@@ -1,0 +1,38 @@
+{
+  "phase": 10,
+  "gate_date": "2026-08-25",
+  "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+  "market": "SOL-PERP",
+  "subaccount_index": 1,
+  "quote_logic": {
+    "spread_bps": 500,
+    "quantity_sol": 0.01,
+    "post_only": true,
+    "margin_usdc_first_fill": 1.5,
+    "refresh": "cancel_all then replace bid/ask"
+  },
+  "quote_loop_script": "tools/quote-loop.mjs",
+  "phase10_api_helper": "tools/phase10-api.mjs",
+  "automation_id": "edc20f2d-9ebd-4d3f-94b7-7654a74b0014",
+  "automation_name": "SpecGuard Quote Refresh",
+  "automation_dashboard": "https://agents.clawpump.tech/dashboard/automations?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+  "baseline_equity_usd": 5.4,
+  "sample_cycle_sig": "3SZCMDfvGQPgfPv9t2BgufCPqQGYFgaS7329Hv92qa1jhYo2SafLfoahyh3E5r1eAsexh7VxAjr78Zi9z4CbiYgq",
+  "sample_cancel_sig": "43MaMQsAdyiihc3J29X8WeY9ZerMa9E9PnVdowLfVqQnJ82Z1mWRubQk1NL8Dsf58Ld1YG5BDEgaYnQjT47UhMfi",
+  "sample_ask_sig": "4Ybp3w3JCyEiHjVZmjzChnAtSUWkwVh1ivBUUDiU14oTVnk73dyRt1phCeGnfbUv1Uj5Qdkgn4tvkRGZKvM9ZChh",
+  "quote_history_at_gate": {
+    "log_count": 5,
+    "cycles": 4,
+    "posts": 8,
+    "cancels": 4
+  },
+  "operator_24h_command": "node tools/quote-loop.mjs --loop",
+  "heartbeat_command": "node tools/heartbeat.mjs",
+  "tests": {
+    "T10.1": "PASS",
+    "T10.2": "PASS",
+    "T10.3": "PASS",
+    "T10.4": "PASS"
+  },
+  "gate_24h": "IN_PROGRESS"
+}

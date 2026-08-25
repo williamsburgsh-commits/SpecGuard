@@ -913,7 +913,7 @@ Extracted to [`tools/breach-math.mjs`](tools/breach-math.mjs) — reused by `enf
 
 ---
 
-**Next:** Phase 10 — quoting loop (recurring tiny quotes).
+**Next:** Phase 9 — token `$GUARD` (verify + document).
 
 ---
 
@@ -972,4 +972,79 @@ Phase 9 was **verify-only**. `launch_token_gasless` was not invoked — the agen
 
 ---
 
-**Next:** Phase 10 — quoting loop (recurring tiny quotes).
+**Next:** Phase 11 — first fill + PnL overlay.
+
+---
+
+## Phase 10 — Quoting loop (recurring tiny quotes)
+
+**Gate date:** 2026-08-25  
+**Result:** PASS (mechanism + initial cycles) — **24h continuous loop in progress**
+
+### Quote logic (v2)
+
+| Parameter | Value |
+|---|---|
+| Market | `SOL-PERP` |
+| Subaccount | **1** (isolated) |
+| Spread | **500 bps** (±5% around mark) |
+| Size | **0.01 SOL** post-only (~$1 notional) |
+| Refresh | `cancelAll` → new bid + ask |
+| Spec checks | `breach-math.mjs` pre-check + heartbeat freshness |
+
+Example at mark **$99.74**: bid **$94.75**, ask **$104.73**.
+
+### Build
+
+1. [`tools/quote-loop.mjs`](tools/quote-loop.mjs) — LLM-independent quote sidecar (`--loop` for 5m refresh).
+2. [`tools/phase10-api.mjs`](tools/phase10-api.mjs) — `quote-once`, `verify-gate`, `create-quote-automation`.
+3. ClawPump automation armed: **SpecGuard Quote Refresh** (`edc20f2d-9ebd-4d3f-94b7-7654a74b0014`) — backup agent-prompt path.
+4. Heartbeat refreshed before quoting (stale heartbeat blocks quotes).
+
+### Gate tests (initial)
+
+| # | Action | Result | Evidence |
+|---|---|---|---|
+| T10.1 | Regular post/cancel activity | **PASS** | 4 quote cycles logged |
+| T10.2 | >10 cancels/posts | **PASS** | 8 posts + 4 cancels |
+| T10.3 | No spec breach | **PASS** | inventory 0, drawdown 0, no flatten |
+| T10.4 | Txs on Solscan | **PASS** | sample sigs below |
+
+Sample onchain sigs:
+
+| Action | Signature |
+|---|---|
+| Bid post | `3SZCMDfvGQPgfPv9t2BgufCPqQGYFgaS7329Hv92qa1jhYo2SafLfoahyh3E5r1eAsexh7VxAjr78Zi9z4CbiYgq` |
+| Ask post | `4Ybp3w3JCyEiHjVZmjzChnAtSUWkwVh1ivBUUDiU14oTVnk73dyRt1phCeGnfbUv1Uj5Qdkgn4tvkRGZKvM9ZChh` |
+| Cancel refresh | `43MaMQsAdyiihc3J29X8WeY9ZerMa9E9PnVdowLfVqQnJ82Z1mWRubQk1NL8Dsf58Ld1YG5BDEgaYnQjT47UhMfi` |
+
+### Canonical artifact table
+
+| Field | Value |
+|---|---|
+| Quote loop | `tools/quote-loop.mjs` |
+| Phase 10 API | `tools/phase10-api.mjs` |
+| Automation ID | `edc20f2d-9ebd-4d3f-94b7-7654a74b0014` |
+| Spread | 500 bps |
+| Size | 0.01 SOL |
+| Snapshot | [`logs/phase10-quoting-snapshot.json`](./logs/phase10-quoting-snapshot.json) |
+
+---
+
+### Phase 10 gate checklist
+
+- [x] Post+cancel cycle on Solscan (clip-ready sigs saved)
+- [x] No unplanned flatten during quoting drills
+- [ ] **24h of quoting activity** — run continuously:
+
+```powershell
+# Terminal 1 — quotes every 5 minutes
+node tools/quote-loop.mjs --loop
+
+# Terminal 2 — heartbeat every 4 minutes (keep GREEN)
+while ($true) { node tools/heartbeat.mjs; Start-Sleep -Seconds 240 }
+```
+
+---
+
+**Next:** Phase 11 — first fill + PnL overlay.
