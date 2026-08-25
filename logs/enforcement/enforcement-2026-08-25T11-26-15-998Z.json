@@ -1,0 +1,14 @@
+{
+  "time": "2026-08-25T11:26:15.987Z",
+  "tool": "perps_order_execute",
+  "mark_usd": 99.74,
+  "inventory_usd": 0,
+  "drawdown_usd": 0,
+  "order_notional_usd": 0.5,
+  "decision": "BLOCK",
+  "reason": "heartbeat_stale",
+  "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
+  "tx_sigs": [],
+  "scenario": "allow",
+  "label": "T7.1 within-spec 0.01 SOL @ $50"
+}

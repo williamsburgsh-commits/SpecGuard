@@ -1,0 +1,14 @@
+{
+  "time": "2026-08-25T11:26:16.000Z",
+  "tool": "sniper",
+  "mark_usd": 99.74,
+  "inventory_usd": 0,
+  "drawdown_usd": 0,
+  "order_notional_usd": null,
+  "decision": "BLOCK",
+  "reason": "disallowed_tool",
+  "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
+  "tx_sigs": [],
+  "scenario": "block_tool",
+  "label": "T7.3 disallowed tool sniper"
+}

@@ -1,0 +1,14 @@
+{
+  "time": "2026-08-25T11:27:15.853Z",
+  "tool": "perps_order_execute",
+  "mark_usd": 99.74,
+  "inventory_usd": 0,
+  "drawdown_usd": 0,
+  "order_notional_usd": 500,
+  "decision": "BLOCK",
+  "reason": "max_notional",
+  "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
+  "tx_sigs": [],
+  "scenario": "block_notional",
+  "label": "T7.2 over max_notional_usd (5 SOL ~ $500)"
+}
