@@ -3,7 +3,7 @@
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "fill": {
     "filled": true,
-    "fill_sig": null,
+    "fill_sig": "bGioLSEXC5CMRESr4gKvxSyMnXyPxBCicKyzUdAnz3Mk1KzB7mrC7SAUfFEiJsCp1Ue6sBkNxq9Dd6MyWuTBwiq",
     "position_size_sol": 0.01,
     "position_value_usd": 0.982,
     "at": "2026-08-25T13:12:22.994Z",
@@ -16,7 +16,9 @@
         "unrealized_pnl_usd": -0.0001,
         "entry_price": 98.21
       }
-    ]
+    ],
+    "proof_sig": "bGioLSEXC5CMRESr4gKvxSyMnXyPxBCicKyzUdAnz3Mk1KzB7mrC7SAUfFEiJsCp1Ue6sBkNxq9Dd6MyWuTBwiq",
+    "proof_type": "resting_order"
   },
   "before_account": null,
   "after_account": {

@@ -6,6 +6,7 @@ import { runQuoteCycle } from './quote-loop.mjs';
 import { fetchSpec } from './breach-math.mjs';
 import {
   applyFillToStatus,
+  backfillMissingFillSig,
   buildPnlBlock,
   defaultFillsBlock,
   detectFillEvent,
@@ -100,7 +101,7 @@ function applyQuoteResult(status, quoteResult, operatorName) {
   return status;
 }
 
-async function syncPnlAndFills(status, quoteResult, now) {
+async function syncPnlAndFills(status, quoteResult, now, priorQuoting) {
   const [spec, account, walletHistory] = await Promise.all([
     fetchSpec(),
     fetchAccount(),
@@ -117,6 +118,8 @@ async function syncPnlAndFills(status, quoteResult, now) {
     afterAccount: account,
     walletHistory,
     knownFillSigs: knownSigs,
+    priorQuoting,
+    quoteResult,
     now,
   });
 
@@ -125,6 +128,8 @@ async function syncPnlAndFills(status, quoteResult, now) {
     afterMetrics: quoteResult?.after_metrics ?? null,
     afterAccount: account,
   });
+
+  await backfillMissingFillSig(status);
 
   return { fillEvent, account };
 }
@@ -151,8 +156,9 @@ export async function runOperatorCycle({ operatorName = OPERATOR_NAME } = {}) {
   let pnlSync = null;
   try {
     let status = loadStatus();
+    const priorQuoting = status.quoting ? { ...status.quoting } : {};
     if (quoteResult) status = applyQuoteResult(status, quoteResult, operatorName);
-    pnlSync = await syncPnlAndFills(status, quoteResult, now);
+    pnlSync = await syncPnlAndFills(status, quoteResult, now, priorQuoting);
     saveStatus(status);
   } catch (err) {
     if (!quoteError) {

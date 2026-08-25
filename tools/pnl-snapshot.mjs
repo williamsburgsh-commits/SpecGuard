@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {
@@ -13,6 +13,9 @@ const BASE = process.env.CLAWPUMP_API_URL || 'https://ai-agents-production-6ca0.
 const KEY = process.env.CLAWPUMP_API_KEY;
 const AGENT = process.env.CLAWPUMP_DEFAULT_AGENT || '89ca5e76-d59f-4276-8399-eecdf8bb3a04';
 const QUOTE_SUBACCOUNT = Number(process.env.SPECGUARD_QUOTE_SUBACCOUNT ?? 1);
+const QUOTES_DIR = join(ROOT, 'logs', 'quotes');
+const SOLANA_RPC = process.env.SPECGUARD_SOLANA_RPC || 'https://api.mainnet-beta.solana.com';
+const WALLET = process.env.SPECGUARD_WALLET || '2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk';
 
 export const PHASE11_BEFORE_PATH = join(ROOT, 'logs', 'phase11-account-before.json');
 export const PHASE11_FILL_PATH = join(ROOT, 'logs', 'phase11-fill-snapshot.json');
@@ -129,6 +132,183 @@ function isFillLikeTx(entry) {
   return Boolean(entry?.fill || entry?.isFill);
 }
 
+export function collectQuoteSigs({ quoting = {}, quoteResult = null } = {}) {
+  const sigs = new Set();
+  for (const sig of [
+    quoting.last_bid_sig,
+    quoting.last_ask_sig,
+    quoting.last_cancel_sig,
+    quoteResult?.bid_sig,
+    quoteResult?.ask_sig,
+    quoteResult?.cancel_sig,
+  ]) {
+    if (sig) sigs.add(sig);
+  }
+  return sigs;
+}
+
+function priceDistance(a, b) {
+  if (a == null || b == null) return Number.POSITIVE_INFINITY;
+  return Math.abs(Number(a) - Number(b));
+}
+
+export function inferFillSigFromRestingOrder({
+  afterAccount,
+  priorQuoting = {},
+  quoteResult = null,
+}) {
+  const positions = extractQuoteSubaccountPositions(afterAccount);
+  const active = positions.find((p) => Math.abs(p.position_size) > 1e-9);
+  if (!active) return null;
+
+  const entry = active.entry_price;
+  const side = active.position_size >= 0 ? 'bid' : 'ask';
+  const priorBid = priorQuoting.last_mark_usd != null && priorQuoting.spread_bps != null
+    ? priorQuoting.last_mark_usd * (1 - (priorQuoting.spread_bps / 10000) / 2)
+    : null;
+  const priorAsk = priorQuoting.last_mark_usd != null && priorQuoting.spread_bps != null
+    ? priorQuoting.last_mark_usd * (1 + (priorQuoting.spread_bps / 10000) / 2)
+    : null;
+
+  let chosenSide = side;
+  if (entry > 0 && priorBid != null && priorAsk != null) {
+    chosenSide = priceDistance(entry, priorBid) <= priceDistance(entry, priorAsk) ? 'bid' : 'ask';
+  }
+
+  const sig = chosenSide === 'bid'
+    ? (priorQuoting.last_bid_sig || quoteResult?.bid_sig)
+    : (priorQuoting.last_ask_sig || quoteResult?.ask_sig);
+  return sig || null;
+}
+
+async function fetchOnchainSignatures(limit = 100) {
+  const body = {
+    jsonrpc: '2.0',
+    id: 1,
+    method: 'getSignaturesForAddress',
+    params: [WALLET, { limit }],
+  };
+  const res = await fetch(SOLANA_RPC, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  const json = await res.json();
+  return (json.result || []).map((row) => ({
+    signature: row.signature,
+    timestamp: row.blockTime,
+    date: row.blockTime ? new Date(row.blockTime * 1000).toISOString() : null,
+  }));
+}
+
+function resolveFillSigFromHistory(history, { knownFillSigs = [], excludeSigs = new Set(), aroundMs = null }) {
+  const known = new Set(knownFillSigs.filter(Boolean));
+  const candidates = normalizeHistory(history).filter((entry) => {
+    const sig = extractTxSig(entry);
+    if (!sig || known.has(sig) || excludeSigs.has(sig)) return false;
+    if (aroundMs != null && entry.date) {
+      const delta = Math.abs(Date.parse(entry.date) - aroundMs);
+      if (delta > 15 * 60 * 1000) return false;
+    }
+    return isFillLikeTx(entry) || entry?.side != null;
+  });
+  if (!candidates.length) return null;
+  if (aroundMs != null) {
+    candidates.sort((a, b) =>
+      Math.abs(Date.parse(a.date) - aroundMs) - Math.abs(Date.parse(b.date) - aroundMs));
+  }
+  return extractTxSig(candidates[0]);
+}
+
+function findQuoteLogSigBeforeFill(fillAtIso, entryPrice = null) {
+  if (!existsSync(QUOTES_DIR)) return null;
+  const fillMs = Date.parse(fillAtIso);
+  if (Number.isNaN(fillMs)) return null;
+
+  const files = readdirSync(QUOTES_DIR)
+    .filter((name) => name.startsWith('quote-') && name.endsWith('.json'))
+    .sort()
+    .reverse();
+
+  let fallback = null;
+  for (const name of files) {
+    const quote = JSON.parse(readFileSync(join(QUOTES_DIR, name), 'utf8'));
+    const atMs = Date.parse(quote.at);
+    if (Number.isNaN(atMs) || atMs > fillMs) continue;
+
+    const bidPrice = quote.prices?.bid ?? quote.bid?.price;
+    const askPrice = quote.prices?.ask ?? quote.ask?.price;
+    if (!fallback && (quote.bid_sig || quote.ask_sig)) fallback = quote.bid_sig || quote.ask_sig;
+
+    if (entryPrice != null) {
+      if (bidPrice != null && priceDistance(entryPrice, bidPrice) <= 0.05 && quote.bid_sig) {
+        return quote.bid_sig;
+      }
+      if (askPrice != null && priceDistance(entryPrice, askPrice) <= 0.05 && quote.ask_sig) {
+        return quote.ask_sig;
+      }
+    }
+  }
+  return fallback;
+}
+
+export async function backfillMissingFillSig(status) {
+  const fills = status.fills ?? defaultFillsBlock();
+  if (!fills.count || fills.last_fill_sig || !fills.last_fill_at) return fills.last_fill_sig;
+
+  const snapshot = existsSync(PHASE11_FILL_PATH)
+    ? JSON.parse(readFileSync(PHASE11_FILL_PATH, 'utf8'))
+    : null;
+  const afterAccount = snapshot?.after_account ?? null;
+  const entryPrice = snapshot?.fill?.positions?.[0]?.entry_price
+    ?? extractQuoteSubaccountPositions(afterAccount)[0]?.entry_price
+    ?? null;
+
+  let fillSig = findQuoteLogSigBeforeFill(fills.last_fill_at, entryPrice);
+
+  if (!fillSig) {
+    fillSig = inferFillSigFromRestingOrder({
+      afterAccount,
+      priorQuoting: {},
+    });
+  }
+
+  if (!fillSig) {
+    const exclude = collectQuoteSigs({ quoting: status.quoting || {} });
+    const aroundMs = Date.parse(fills.last_fill_at);
+    const [walletHistory, onchain] = await Promise.all([
+      fetchWalletHistory(100).catch(() => []),
+      fetchOnchainSignatures(100).catch(() => []),
+    ]);
+    fillSig = resolveFillSigFromHistory(walletHistory, {
+      knownFillSigs: [fills.last_fill_sig],
+      excludeSigs: exclude,
+      aroundMs,
+    }) || resolveFillSigFromHistory(onchain, {
+      knownFillSigs: [fills.last_fill_sig],
+      excludeSigs: exclude,
+      aroundMs,
+    });
+  }
+
+  if (fillSig) {
+    fills.last_fill_sig = fillSig;
+    status.fills = fills;
+    if (existsSync(PHASE11_FILL_PATH)) {
+      const snap = JSON.parse(readFileSync(PHASE11_FILL_PATH, 'utf8'));
+      if (snap.fill) {
+        snap.fill.fill_sig = fillSig;
+        snap.fill.source = snap.fill.source || 'position_change';
+        snap.fill.proof_sig = fillSig;
+        snap.fill.proof_type = 'resting_order';
+        writeFileSync(PHASE11_FILL_PATH, JSON.stringify(snap, null, 2) + '\n');
+      }
+    }
+  }
+
+  return fillSig;
+}
+
 function normalizeHistory(history) {
   return Array.isArray(history) ? history : [];
 }
@@ -140,6 +320,8 @@ export function detectFillEvent({
   afterMetrics,
   walletHistory,
   knownFillSigs = [],
+  priorQuoting = {},
+  quoteResult = null,
   now = new Date(),
 }) {
   const beforeSize = beforeAccount
@@ -153,28 +335,29 @@ export function detectFillEvent({
   const afterInv = afterMetrics?.inventory ?? 0;
   const positionOpened = afterSize > beforeSize + 1e-9 || afterInv > beforeInv + 0.01;
 
-  const history = normalizeHistory(walletHistory);
-  const known = new Set(knownFillSigs.filter(Boolean));
-  const newFillTx = history.find((entry) => {
-    const sig = extractTxSig(entry);
-    if (!sig || known.has(sig)) return false;
-    return isFillLikeTx(entry) || entry?.side != null;
-  });
-
-  if (!positionOpened && !newFillTx) {
+  if (!positionOpened) {
     return { filled: false };
   }
 
   const positions = afterAccount ? extractQuoteSubaccountPositions(afterAccount) : [];
   const active = positions.find((p) => Math.abs(p.position_size) > 1e-9);
 
+  let fillSig = inferFillSigFromRestingOrder({ afterAccount, priorQuoting, quoteResult });
+  if (!fillSig && active?.entry_price != null) {
+    fillSig = findQuoteLogSigBeforeFill(now.toISOString(), active.entry_price);
+  }
+
+  const excludeSigs = collectQuoteSigs({ quoting: priorQuoting, quoteResult });
+
   return {
     filled: true,
-    fill_sig: extractTxSig(newFillTx) ?? null,
+    fill_sig: fillSig ?? null,
     position_size_sol: active ? active.position_size : afterSize,
     position_value_usd: active ? active.position_value_usd : afterInv,
     at: now.toISOString(),
-    source: newFillTx ? 'wallet_history' : 'position_change',
+    source: fillSig && excludeSigs.has(fillSig)
+      ? 'resting_order'
+      : (fillSig ? 'quote_log' : 'position_change'),
     positions,
   };
 }
@@ -197,12 +380,17 @@ export function applyFillToStatus(status, fillEvent, { beforeAccount, afterAccou
     : fills.count === 0;
 
   if (!isNew && fills.count > 0) {
-    status.fills = fills;
+    if (fillEvent.fill_sig && !fills.last_fill_sig) {
+      fills.last_fill_sig = fillEvent.fill_sig;
+      status.fills = fills;
+    }
     return status;
   }
 
-  fills.count = (fills.count || 0) + 1;
-  fills.last_fill_at = fillEvent.at;
+  if (isNew) {
+    fills.count = (fills.count || 0) + 1;
+    fills.last_fill_at = fillEvent.at;
+  }
   fills.last_fill_sig = fillEvent.fill_sig ?? fills.last_fill_sig;
   fills.position_size_sol = fillEvent.position_size_sol ?? fills.position_size_sol;
   status.fills = fills;

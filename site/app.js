@@ -1,4 +1,5 @@
 const AGENT_ID = '89ca5e76-d59f-4276-8399-eecdf8bb3a04';
+const REPO_RAW = 'https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main';
 const DASHBOARD_URL = `https://agents.clawpump.tech/dashboard/terminal?agent=${AGENT_ID}`;
 
 function truncateHash(hash) {
@@ -70,7 +71,7 @@ function updateHeroHint(computed) {
   }
 }
 
-function updateNavTicker(data) {
+function updateNavTicker(data, computed) {
   const el = document.getElementById('nav-updated');
   const dot = document.getElementById('nav-ticker-dot');
   if (el && data.last_heartbeat_at) {
@@ -78,7 +79,8 @@ function updateNavTicker(data) {
     el.textContent = `HB ${t.toISOString().slice(11, 19)}Z`;
   }
   if (dot) {
-    dot.classList.toggle('live', !!data.last_heartbeat_at);
+    const fresh = computed.displayStatus === 'GREEN';
+    dot.classList.toggle('live', fresh);
   }
 }
 
@@ -90,7 +92,7 @@ async function loadStatus() {
 
   renderBadge(computed.displayStatus);
   updateHeroHint(computed);
-  updateNavTicker(data);
+  updateNavTicker(data, computed);
 
   const opEl = document.getElementById('operator-status');
   if (opEl) opEl.textContent = computed.operatorStatus;
@@ -107,6 +109,8 @@ async function loadStatus() {
     copyEl.textContent = computed.copyEligible ? 'eligible' : 'not eligible';
     copyEl.className = computed.copyEligible ? 'eligible-yes' : 'eligible-no';
   }
+  const agentEl = document.getElementById('agent-id');
+  if (agentEl) agentEl.textContent = data.agent_id || AGENT_ID;
 
   const marketEl = document.getElementById('market');
   if (marketEl) marketEl.textContent = data.market || '—';
@@ -120,7 +124,10 @@ async function loadStatus() {
   const heroSpecEl = document.getElementById('hero-spec-link');
   if (heroSpecEl) heroSpecEl.href = data.spec_url;
   const hashEl = document.getElementById('spec-hash');
-  if (hashEl) hashEl.textContent = truncateHash(data.spec_sha256) + ' (' + data.spec_sha256 + ')';
+  if (hashEl) {
+    hashEl.textContent = truncateHash(data.spec_sha256);
+    hashEl.title = data.spec_sha256 || '';
+  }
 
   const q = data.quoting || {};
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
@@ -133,6 +140,7 @@ async function loadStatus() {
   set('quote-mark', q.last_mark_usd != null ? `$${q.last_mark_usd}` : '—');
   renderSigLink('quote-bid-sig', q.last_bid_sig);
   renderSigLink('quote-ask-sig', q.last_ask_sig);
+  set('quote-open-orders', q.open_order_count != null ? String(q.open_order_count) : '—');
 
   const pnl = data.pnl || {};
   const limits = pnl.spec_limits || {};
@@ -185,6 +193,15 @@ async function loadStatus() {
   if (navDash) navDash.href = DASHBOARD_URL.replace(AGENT_ID, agentId);
   const portfolioLink = document.getElementById('portfolio-link');
   if (portfolioLink) portfolioLink.href = `https://agents.clawpump.tech/dashboard/terminal?agent=${agentId}&tab=portfolio`;
+  const hbProof = document.getElementById('heartbeat-proof-link');
+  if (hbProof) {
+    if (data.last_heartbeat_proof) {
+      hbProof.href = `${REPO_RAW}/${data.last_heartbeat_proof}`;
+      hbProof.hidden = false;
+    } else {
+      hbProof.hidden = true;
+    }
+  }
 }
 
 function initReveal() {
