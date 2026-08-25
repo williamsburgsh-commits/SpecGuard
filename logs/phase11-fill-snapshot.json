@@ -1,12 +1,12 @@
 {
-  "at": "2026-08-25T22:47:34.546Z",
+  "at": "2026-08-25T22:52:39.898Z",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "fill": {
     "filled": true,
-    "fill_sig": "4gC5x8EJHJ2cTPsAv3N6d8KV9tLDQqx1kC5K4pBkNB4GkujUKocTnAsgXbkKCS6QTSBtMK673w88ZTb664wvrsv1",
+    "fill_sig": "2keNkbJ36YE4PeK4yvzXLCu1VeKNtre1rgdbKFVvuQBuM8hqpTFVUoLcNKh7oLvUyeSeYbxHumDHXqSryT2aj7GB",
     "position_size_sol": 0.06,
     "position_value_usd": 5.8416,
-    "at": "2026-08-25T22:47:34.546Z",
+    "at": "2026-08-25T22:52:39.898Z",
     "source": "resting_order",
     "positions": [
       {
@@ -25,8 +25,8 @@
     "apiBaseUrl": "https://perp-api.phoenix.trade",
     "authority": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
     "pdaIndex": 0,
-    "slot": 441731954,
-    "slotIndex": 1384,
+    "slot": 441732793,
+    "slotIndex": 1164,
     "traders": [
       {
         "flags": 63,
@@ -72,7 +72,7 @@
                 "ui": "96.7500"
               },
               "side": "bid",
-              "orderSequenceNumber": "18446744073639634646",
+              "orderSequenceNumber": "18446744073639634253",
               "initialTradeSize": {
                 "value": 1,
                 "decimals": 2,
@@ -92,39 +92,6 @@
                 "value": 10000,
                 "decimals": 4,
                 "ui": "1.0000"
-              },
-              "isReduceOnly": false,
-              "isStopLoss": false,
-              "isStopLossDirection": false,
-              "isConditionalOrder": false
-            },
-            {
-              "price": {
-                "value": 977300,
-                "decimals": 4,
-                "ui": "97.7300"
-              },
-              "side": "ask",
-              "orderSequenceNumber": "69916970",
-              "initialTradeSize": {
-                "value": 1,
-                "decimals": 2,
-                "ui": "0.01"
-              },
-              "tradeSizeRemaining": {
-                "value": 1,
-                "decimals": 2,
-                "ui": "0.01"
-              },
-              "marginRequirement": {
-                "value": 0,
-                "decimals": 6,
-                "ui": "0.000000"
-              },
-              "marginFactor": {
-                "value": 0,
-                "decimals": 4,
-                "ui": "0.0000"
               },
               "isReduceOnly": false,
               "isStopLoss": false,
@@ -228,6 +195,6 @@
     "drawdown": 0.008594000000000435,
     "leverage": 1.0822676040785866,
     "inventory": 5.8416,
-    "openOrderCount": 2
+    "openOrderCount": 1
   }
 }
