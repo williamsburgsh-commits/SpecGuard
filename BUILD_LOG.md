@@ -1119,3 +1119,31 @@ node tools/phase11-api.mjs quote-dry-run-tight
 ```
 
 **Next:** Phase 12 — flatten rehearsal (controlled drill).
+
+---
+
+## Operator migration — GitHub Actions → DigitalOcean
+
+**Date:** 2026-08-25  
+**Reason:** GitHub account billing lock — Actions jobs cannot start.
+
+### DigitalOcean operator
+
+| Component | Path |
+|---|---|
+| Install script | [`deploy/digitalocean/install.sh`](deploy/digitalocean/install.sh) |
+| systemd unit | [`deploy/digitalocean/specguard-operator.service`](deploy/digitalocean/specguard-operator.service) |
+| Env template | [`deploy/digitalocean/env.example`](deploy/digitalocean/env.example) |
+| Loop runner | `tools/do-operator-loop.mjs` |
+| Cycle logic | `tools/operator-cycle.mjs` |
+| Git push sync | `tools/push-status.mjs` |
+
+### Setup (summary)
+
+1. Ubuntu droplet → `bash deploy/digitalocean/install.sh`
+2. Edit `/opt/specguard/.env`: `CLAWPUMP_API_KEY`, `GITHUB_TOKEN` (repo scope PAT), `SPECGUARD_GIT_PUSH=1`
+3. `systemctl restart specguard-operator`
+
+Status page updates via **git push** (PAT) — does **not** require GitHub Actions billing.
+
+GitHub Actions [`.github/workflows/operator.yml`](.github/workflows/operator.yml) cron **disabled**; manual `workflow_dispatch` only as backup.

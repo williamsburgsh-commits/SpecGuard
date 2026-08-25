@@ -1,10 +1,10 @@
 name: SpecGuard operator
 
 on:
-  schedule:
-    # Every 5 minutes — satisfies Phase 10 recurring quote + heartbeat cadence
-    - cron: '*/5 * * * *'
+  # Disabled: GitHub account billing lock. Use deploy/digitalocean/ instead.
   workflow_dispatch:
+  # schedule:
+  #   - cron: '*/5 * * * *'
 
 permissions:
   contents: write

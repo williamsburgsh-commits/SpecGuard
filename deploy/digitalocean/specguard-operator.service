@@ -1,0 +1,20 @@
+[Unit]
+Description=SpecGuard operator (heartbeat + quote + status sync)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=specguard
+Group=specguard
+WorkingDirectory=/opt/specguard
+EnvironmentFile=/opt/specguard/.env
+ExecStart=/usr/bin/node /opt/specguard/tools/do-operator-loop.mjs
+Restart=always
+RestartSec=30
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=specguard-operator
+
+[Install]
+WantedBy=multi-user.target
