@@ -1,3 +1,4 @@
+# Local secrets — never commit (ClawPump key, DO password, GitHub PAT)
 .env
 .env.*
 !.env.example

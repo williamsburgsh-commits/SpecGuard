@@ -27,7 +27,6 @@ export function pushStatusToGit({ message } = {}) {
 
   run('git config user.name "specguard-operator"');
   run('git config user.email "operator@users.noreply.github.com"');
-  run(`git pull --rebase ${remote} ${branch}`);
 
   const paths = [
     'site/status.json',
@@ -40,10 +39,19 @@ export function pushStatusToGit({ message } = {}) {
   }
 
   const diff = run('git diff --staged --name-only');
+  const commitMsg = message || `operator: heartbeat + quote ${new Date().toISOString().slice(0, 16)}Z`;
+  if (diff) {
+    run(`git commit -m "${commitMsg.replace(/"/g, '\\"')}"`);
+  }
+
+  try {
+    run(`git pull --rebase --autostash ${remote} ${branch}`);
+  } catch {
+    run(`git pull --rebase ${remote} ${branch}`);
+  }
+
   if (!diff) return { pushed: false, reason: 'no changes' };
 
-  const commitMsg = message || `operator: heartbeat + quote ${new Date().toISOString().slice(0, 16)}Z`;
-  run(`git commit -m "${commitMsg.replace(/"/g, '\\"')}"`);
   run(`git push ${remote} ${branch}`);
 
   return { pushed: true, commit: commitMsg, files: diff.split('\n') };
