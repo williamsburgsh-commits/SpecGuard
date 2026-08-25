@@ -86,6 +86,20 @@
     </section>
 
     <section class="card">
+      <h2>Quoting activity</h2>
+      <dl>
+        <dt>Operator</dt><dd id="quote-operator">—</dd>
+        <dt>Last cycle</dt><dd id="quote-last-cycle">—</dd>
+        <dt>Last action</dt><dd id="quote-last-action">—</dd>
+        <dt>Cycles (total)</dt><dd id="quote-cycles">—</dd>
+        <dt>Posts / cancels</dt><dd id="quote-counts">—</dd>
+        <dt>Last mark</dt><dd id="quote-mark">—</dd>
+        <dt>Last bid sig</dt><dd id="quote-bid-sig">—</dd>
+        <dt>Last ask sig</dt><dd id="quote-ask-sig">—</dd>
+      </dl>
+    </section>
+
+    <section class="card">
       <h2>Links</h2>
       <ul>
         <li><a id="dashboard-link" href="#" target="_blank" rel="noopener">ClawPump agent dashboard</a></li>
@@ -163,6 +177,30 @@
       document.getElementById('spec-url').textContent = data.spec_url;
       document.getElementById('spec-link').href = data.spec_url;
       document.getElementById('spec-hash').textContent = truncateHash(data.spec_sha256) + ' (' + data.spec_sha256 + ')';
+
+      const q = data.quoting || {};
+      document.getElementById('quote-operator').textContent = q.operator || '—';
+      document.getElementById('quote-last-cycle').textContent = q.last_cycle_at || '—';
+      document.getElementById('quote-last-action').textContent = q.last_action || '—';
+      document.getElementById('quote-cycles').textContent = q.cycles_total != null ? String(q.cycles_total) : '—';
+      document.getElementById('quote-counts').textContent =
+        (q.posts_total != null && q.cancels_total != null) ? `${q.posts_total} / ${q.cancels_total}` : '—';
+      document.getElementById('quote-mark').textContent =
+        q.last_mark_usd != null ? `$${q.last_mark_usd}` : '—';
+      const bidSig = q.last_bid_sig;
+      const askSig = q.last_ask_sig;
+      const bidEl = document.getElementById('quote-bid-sig');
+      const askEl = document.getElementById('quote-ask-sig');
+      if (bidSig) {
+        bidEl.innerHTML = `<a href="https://solscan.io/tx/${bidSig}" target="_blank" rel="noopener"><code>${bidSig.slice(0, 8)}…</code></a>`;
+      } else {
+        bidEl.textContent = '—';
+      }
+      if (askSig) {
+        askEl.innerHTML = `<a href="https://solscan.io/tx/${askSig}" target="_blank" rel="noopener"><code>${askSig.slice(0, 8)}…</code></a>`;
+      } else {
+        askEl.textContent = '—';
+      }
 
       const wallet = data.wallet_address;
       document.getElementById('wallet-link').href = 'https://solscan.io/account/' + wallet;

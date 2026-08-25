@@ -1035,15 +1035,19 @@ Sample onchain sigs:
 
 - [x] Post+cancel cycle on Solscan (clip-ready sigs saved)
 - [x] No unplanned flatten during quoting drills
-- [ ] **24h of quoting activity** — run continuously:
+- [ ] **24h of quoting activity** — **GitHub Actions** (no VPS required):
 
-```powershell
-# Terminal 1 — quotes every 5 minutes
-node tools/quote-loop.mjs --loop
+1. Add repo secret **`CLAWPUMP_API_KEY`** (Settings → Secrets → Actions).
+2. Workflow [`.github/workflows/operator.yml`](.github/workflows/operator.yml) runs every **5 minutes**.
+3. Each run: heartbeat → quote cycle → commit `site/status.json` → GitHub Pages redeploys.
+4. Manual trigger: Actions → **SpecGuard operator** → **Run workflow**.
+5. After 24h: `node tools/phase10-api.mjs verify-gate` (local) or check `status.json` → `quoting.cycles_total`.
 
-# Terminal 2 — heartbeat every 4 minutes (keep GREEN)
-while ($true) { node tools/heartbeat.mjs; Start-Sleep -Seconds 240 }
-```
+| Component | Path |
+|---|---|
+| CI operator | `tools/github-operator.mjs` |
+| Workflow | `.github/workflows/operator.yml` |
+| Public quote stats | `site/status.json` → `quoting` block + status page |
 
 ---
 

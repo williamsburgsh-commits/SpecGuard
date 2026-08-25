@@ -1,0 +1,47 @@
+name: SpecGuard operator
+
+on:
+  schedule:
+    # Every 5 minutes — satisfies Phase 10 recurring quote + heartbeat cadence
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: specguard-operator
+  cancel-in-progress: false
+
+jobs:
+  heartbeat-and-quote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run heartbeat + quote cycle
+        env:
+          CLAWPUMP_API_KEY: ${{ secrets.CLAWPUMP_API_KEY }}
+          CLAWPUMP_DEFAULT_AGENT: 89ca5e76-d59f-4276-8399-eecdf8bb3a04
+          SPECGUARD_BASELINE_EQUITY: '5.4'
+        run: node tools/github-operator.mjs
+        continue-on-error: true
+
+      - name: Commit status + heartbeat proof
+        run: |
+          git config user.name "specguard-operator"
+          git config user.email "operator@users.noreply.github.com"
+          git pull --rebase origin main
+          git add site/status.json docs/status.json logs/heartbeat/*.json || true
+          if git diff --staged --quiet; then
+            echo "No status changes to commit"
+            exit 0
+          fi
+          git commit -m "operator: heartbeat + quote $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
