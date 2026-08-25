@@ -1,0 +1,27 @@
+{
+  "at": "2026-08-25T11:34:36.879Z",
+  "trigger": "force",
+  "breach": {
+    "breached": true,
+    "reasons": [
+      "heartbeat_stale"
+    ]
+  },
+  "metrics": {
+    "collateral": 5.4,
+    "unrealized": 0,
+    "positionNotional": 0,
+    "currentEquity": 5.4,
+    "baseline": 5.4,
+    "drawdown": 0,
+    "leverage": 0,
+    "inventory": 0,
+    "openOrderCount": 1
+  },
+  "cancel_sigs": [
+    "4Aet8EDUrrCgWEVuFzAuDxsduGQUGmMxSq6M13CCfZ6wJRLDkDJRtSWKYezcqgYqLgGEKESLMBo5DaVRouJYLDDJ"
+  ],
+  "close_sig": null,
+  "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
+  "note": "Phase 8 gate — cancel only; full close in Phase 12"
+}

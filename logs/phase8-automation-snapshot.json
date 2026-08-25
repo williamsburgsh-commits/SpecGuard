@@ -1,0 +1,20 @@
+{
+  "phase": 8,
+  "gate_date": "2026-08-25",
+  "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+  "automation_id": "3146cac8-b81d-46a6-b1a3-8ce9d718a027",
+  "automation_name": "SpecGuard Flatten Watcher",
+  "automation_status": "armed",
+  "automation_dashboard": "https://agents.clawpump.tech/dashboard/automations?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+  "watcher_script": "tools/watcher.mjs",
+  "flatten_log": "logs/flatten/flatten-2026-08-25T11-34-36-880Z.json",
+  "cancel_tx_sig": "4Aet8EDUrrCgWEVuFzAuDxsduGQUGmMxSq6M13CCfZ6wJRLDkDJRtSWKYezcqgYqLgGEKESLMBo5DaVRouJYLDDJ",
+  "t83_cancel_tx_sig": "5jvFR6TwH8JwZuRFYBwUBGaf2qh1UqvVt3YjRnViDebw83JP8UUYZn7eHAwQ81gjRaD2ZxK5za7hvYduDC6Kx6Hc",
+  "execute_tx_sig": "5c5pHKAtGcfUvsgqb8jkg7ho4T7pCVT7srAcBD2uiQeLSF9fWZKbYjaBkMrqsGVXPe5Z348FjzhpjkNQ4n4VxTBY",
+  "tests": {
+    "T8.1": "PASS",
+    "T8.2": "PASS",
+    "T8.3": "PASS",
+    "T8.4": "PASS"
+  }
+}

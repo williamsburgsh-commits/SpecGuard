@@ -1,0 +1,12 @@
+{
+  "symbol": "SOL-PERP",
+  "subaccountIndex": 1,
+  "orderType": "limit",
+  "side": "bid",
+  "price": 50,
+  "quantity": 0.01,
+  "postOnly": true,
+  "transferAmountUsdc": 1.5,
+  "confirmRisk": true,
+  "idempotencyKey": "phase8-exec-20260825-a"
+}
