@@ -27,9 +27,9 @@
   "pnl": {
     "baseline_equity_usd": 5.4,
     "current_equity_usd": 5.4,
-    "unrealized_pnl_usd": -0.01,
+    "unrealized_pnl_usd": 0,
     "drawdown_usd": 0,
-    "inventory_usd": 4.89,
+    "inventory_usd": 4.9,
     "leverage": 0.905,
     "within_spec": true,
     "breach_reasons": [],
@@ -38,12 +38,12 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-25T19:56:36.560Z"
+    "updated_at": "2026-08-25T19:56:19.864Z"
   },
   "fills": {
-    "count": 2,
-    "last_fill_at": "2026-08-25T19:56:36.560Z",
-    "last_fill_sig": "2RuqXcH7Ntn3caP8tLsjtpwzYhT2iMVxfs4vXpfjMZmvM9vZUCor5iEn5qwcwNMZfibftuW2EJhsVEuwYKyiWrJr",
+    "count": 3,
+    "last_fill_at": "2026-08-25T19:56:19.864Z",
+    "last_fill_sig": "2LxBRtzjqpvQpPeCcaR9yvmuGpNd6MKcedex47R9NzQK8ZT4ybd7Zm44o1QfMXpwQPggjdWLqg1Xg5byswgbMpKt",
     "position_size_sol": 0.05
   }
 }
