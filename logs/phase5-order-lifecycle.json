@@ -1,0 +1,36 @@
+{
+  "phase": 5,
+  "gate_date": "2026-08-25",
+  "gate_result": "PASS",
+  "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+  "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
+  "market": "SOL-PERP",
+  "subaccount_index": 1,
+  "order_params": {
+    "orderType": "limit",
+    "side": "bid",
+    "price": 50,
+    "quantity": 0.01,
+    "postOnly": true,
+    "transferAmountUsdc": 1.5,
+    "estimatedNotionalUsd": 0.999
+  },
+  "execute_tx_sig": "h6ExGkwWXZN9niY92jkvB7qVCBUEbenEd8gjQRU6NkaTYtFRLaEs24t9TgKavFumQ4Jo1kFwMDMWVmw9859q1DA",
+  "cancel_tx_sig": "63xKWXkjVyoV6uhKKQ6UtTiZif9tXqTvtYmDCy4oz2jK9qNMrUgRS2u9R1LEMKLbG7UBGaBwutqQZ8Bf84mcvrDq",
+  "cancel_all_tx_sig": "5U9WCMUTpoUb527FMQqW6wTqmtpgJtQbGpGUStVq1V5iPa47nsxyTMqXcSTsHmwHvgU3fC9mczswr4KCJMZYy3Gh",
+  "idempotency_exec_key": "phase5-exec-20260825-a",
+  "idempotency_replay": {
+    "duplicate": true,
+    "same_signature": "h6ExGkwWXZN9niY92jkvB7qVCBUEbenEd8gjQRU6NkaTYtFRLaEs24t9TgKavFumQ4Jo1kFwMDMWVmw9859q1DA"
+  },
+  "wallet_at_gate": {
+    "sol_balance": 0.10976028
+  },
+  "tests": {
+    "T5.1_preview": "PASS",
+    "T5.2_execute": "PASS",
+    "T5.3_account_order_then_empty": "PASS",
+    "T5.4_cancel": "PASS",
+    "T5.5_idempotency": "PASS"
+  }
+}
