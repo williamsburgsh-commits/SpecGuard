@@ -610,7 +610,7 @@ Follow-up `cancelAll` cleanup tx (Phoenix state lag): [5U9WCM…Yy3Gh](https://s
 | [https://specguard.xyz](https://specguard.xyz) | Custom domain (CNAME in `site/CNAME`; DNS pending operator) |
 | [https://williamsburgsh-commits.github.io/SpecGuard/](https://williamsburgsh-commits.github.io/SpecGuard/) | GitHub Pages interim URL |
 
-**Deploy:** `site/` on `main` + `.github/workflows/deploy-pages.yml` (GitHub Actions Pages). Enable **Settings → Pages → Source: GitHub Actions** if not auto-enabled.
+**Deploy:** `site/` canonical source; `docs/` mirror for GitHub Pages (legacy `/docs` — GitHub does not support `/site`). Pages build status: **built**. Custom domain `specguard.xyz` pending DNS (point CNAME to `williamsburgsh-commits.github.io`; remove Namecheap URL forward).
 
 ---
 
@@ -633,9 +633,7 @@ Follow-up `cancelAll` cleanup tx (Phoenix state lag): [5U9WCM…Yy3Gh](https://s
 
 ### T6.1 — Public status page load
 
-**Result:** PASS — `site/index.html` + `status.json` published; interim GitHub Pages URL serves after Actions deploy (404 before first deploy is expected)
-
-Verified locally: page fetches `status.json`, shows spec URL + SHA256, GREEN badge when heartbeat fresh.
+**Result:** PASS — GitHub Pages build **built**; interim URL `https://williamsburgsh-commits.github.io/SpecGuard/` serves `index.html` + `status.json` (HTTP 200). Custom domain pending DNS.
 
 ---
 
