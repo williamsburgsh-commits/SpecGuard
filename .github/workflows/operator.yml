@@ -30,6 +30,7 @@ jobs:
           CLAWPUMP_API_KEY: ${{ secrets.CLAWPUMP_API_KEY }}
           CLAWPUMP_DEFAULT_AGENT: 89ca5e76-d59f-4276-8399-eecdf8bb3a04
           SPECGUARD_BASELINE_EQUITY: '5.4'
+          SPECGUARD_QUOTE_SPREAD_BPS: '50'
         run: node tools/github-operator.mjs
         continue-on-error: true
 
@@ -38,7 +39,7 @@ jobs:
           git config user.name "specguard-operator"
           git config user.email "operator@users.noreply.github.com"
           git pull --rebase origin main
-          git add site/status.json docs/status.json logs/heartbeat/*.json || true
+          git add site/status.json docs/status.json logs/heartbeat/*.json logs/phase11-fill-snapshot.json || true
           if git diff --staged --quiet; then
             echo "No status changes to commit"
             exit 0

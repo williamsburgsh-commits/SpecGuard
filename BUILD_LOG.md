@@ -1052,3 +1052,70 @@ Sample onchain sigs:
 ---
 
 **Next:** Phase 11 — first fill + PnL overlay.
+
+---
+
+## Phase 11 — First fill + PnL overlay
+
+**Gate date:** 2026-08-25  
+**Result:** PASS (mechanism + PnL overlay) — **organic fill gate PENDING**
+
+### Spread change (Phase 11)
+
+| Parameter | Phase 10 | Phase 11 |
+|---|---|---|
+| Spread | 500 bps | **50 bps** |
+| Example @ $98.70 mark | bid $93.77 / ask $103.64 | bid **$98.21** / ask **$99.19** |
+| Env | default | `SPECGUARD_QUOTE_SPREAD_BPS=50` in operator workflow |
+
+Organic fill strategy: tighter quotes via GitHub Actions; no market drill.
+
+### Build
+
+1. [`tools/pnl-snapshot.mjs`](tools/pnl-snapshot.mjs) — `buildPnlBlock`, `detectFillEvent`, API fetch helpers.
+2. [`tools/phase11-api.mjs`](tools/phase11-api.mjs) — `account-before`, `snapshot`, `detect-fill`, `verify-gate`, `quote-dry-run-tight`.
+3. [`tools/github-operator.mjs`](tools/github-operator.mjs) — syncs `pnl` + `fills` blocks after each quote cycle; writes `logs/phase11-fill-snapshot.json` on first fill.
+4. [`.github/workflows/operator.yml`](.github/workflows/operator.yml) — `SPECGUARD_QUOTE_SPREAD_BPS: '50'`; commits fill snapshot when created.
+5. [`site/index.html`](site/index.html) — PnL overlay + fills cards with spec limit bars.
+6. [`site/status.json`](site/status.json) / [`docs/status.json`](docs/status.json) — `pnl` + `fills` schema.
+
+### Gate tests
+
+| # | Action | Result | Evidence |
+|---|---|---|---|
+| T11.1 | ≥1 mainnet fill | **PENDING** | `fills.count` — waiting for organic flow at 50 bps |
+| T11.2 | Inventory within spec | **PASS** | inventory 0 / cap 100 |
+| T11.3 | PnL overlay live | **PASS** | `status.json` → `pnl` block + status page |
+| T11.4 | Drawdown display | **PASS** | drawdown vs baseline $5.40 on status page |
+
+### Canonical artifact table
+
+| Field | Value |
+|---|---|
+| PnL module | `tools/pnl-snapshot.mjs` |
+| Phase 11 API | `tools/phase11-api.mjs` |
+| Baseline snapshot | `logs/phase11-account-before.json` |
+| Fill snapshot | `logs/phase11-fill-snapshot.json` (on first fill) |
+| Spread | 50 bps |
+| Baseline equity | $5.40 |
+
+---
+
+### Phase 11 gate checklist
+
+- [ ] **≥1 mainnet fill** — monitor `fills.count` / Actions operator logs; light outreach if no fill after ~24h
+- [x] PnL overlay live on status page
+- [x] Drawdown / inventory vs spec limits displayed
+- [ ] **15s fill clip** — record when first fill lands
+
+**Operator commands:**
+
+```bash
+node tools/phase11-api.mjs account-before
+node tools/phase11-api.mjs snapshot
+node tools/phase11-api.mjs detect-fill
+node tools/phase11-api.mjs verify-gate
+node tools/phase11-api.mjs quote-dry-run-tight
+```
+
+**Next:** Phase 12 — flatten rehearsal (controlled drill).

@@ -3,6 +3,15 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { createHash } from 'crypto';
 import { runQuoteCycle } from './quote-loop.mjs';
+import {
+  applyFillToStatus,
+  buildPnlBlock,
+  defaultFillsBlock,
+  detectFillEvent,
+  fetchAccount,
+  fetchSpec,
+  fetchWalletHistory,
+} from './pnl-snapshot.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const STATUS_PATHS = [
@@ -85,7 +94,36 @@ function applyQuoteResult(status, quoteResult) {
 
   status.quoting = q;
   status.copy_trade_eligible = status.status === 'GREEN';
-  saveStatus(status);
+  return status;
+}
+
+async function syncPnlAndFills(status, quoteResult, now) {
+  const [spec, account, walletHistory] = await Promise.all([
+    fetchSpec(),
+    fetchAccount(),
+    fetchWalletHistory().catch(() => []),
+  ]);
+
+  status.pnl = buildPnlBlock(account, spec, now);
+  if (!status.fills) status.fills = defaultFillsBlock();
+
+  const knownSigs = [status.fills.last_fill_sig].filter(Boolean);
+  const fillEvent = detectFillEvent({
+    beforeMetrics: quoteResult?.metrics ?? null,
+    afterMetrics: quoteResult?.after_metrics ?? null,
+    afterAccount: account,
+    walletHistory,
+    knownFillSigs: knownSigs,
+    now,
+  });
+
+  applyFillToStatus(status, fillEvent, {
+    beforeMetrics: quoteResult?.metrics ?? null,
+    afterMetrics: quoteResult?.after_metrics ?? null,
+    afterAccount: account,
+  });
+
+  return { fillEvent, account };
 }
 
 async function main() {
@@ -99,13 +137,24 @@ async function main() {
   let quoteError = null;
   try {
     quoteResult = await runQuoteCycle();
-    applyQuoteResult(loadStatus(), quoteResult);
   } catch (err) {
     quoteError = {
       message: err.message,
       status: err.status,
       body: err.body,
     };
+  }
+
+  let pnlSync = null;
+  try {
+    let status = loadStatus();
+    if (quoteResult) status = applyQuoteResult(status, quoteResult);
+    pnlSync = await syncPnlAndFills(status, quoteResult, now);
+    saveStatus(status);
+  } catch (err) {
+    if (!quoteError) {
+      quoteError = { message: err.message, phase: 'pnl_sync' };
+    }
   }
 
   const status = loadStatus();
@@ -115,6 +164,9 @@ async function main() {
     heartbeat,
     quote: quoteResult ?? null,
     quote_error: quoteError,
+    pnl: status.pnl ?? null,
+    fills: status.fills ?? null,
+    fill_detected: pnlSync?.fillEvent?.filled ?? false,
     quoting: status.quoting ?? null,
     status_path: 'site/status.json',
   };

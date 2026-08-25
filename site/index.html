@@ -55,6 +55,22 @@
     .eligible-yes { color: var(--green); font-weight: 600; }
     .eligible-no { color: var(--stale); font-weight: 600; }
     .error { color: var(--red); }
+    .within-spec-yes { color: var(--green); font-weight: 600; }
+    .within-spec-no { color: var(--red); font-weight: 600; }
+    .limit-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 0.25rem;
+    }
+    .limit-bar > span {
+      display: block;
+      height: 100%;
+      background: var(--green);
+    }
+    .limit-bar.warn > span { background: var(--stale); }
+    .limit-bar.danger > span { background: var(--red); }
   </style>
 </head>
 <body>
@@ -89,6 +105,7 @@
       <h2>Quoting activity</h2>
       <dl>
         <dt>Operator</dt><dd id="quote-operator">—</dd>
+        <dt>Spread</dt><dd id="quote-spread">—</dd>
         <dt>Last cycle</dt><dd id="quote-last-cycle">—</dd>
         <dt>Last action</dt><dd id="quote-last-action">—</dd>
         <dt>Cycles (total)</dt><dd id="quote-cycles">—</dd>
@@ -100,7 +117,32 @@
     </section>
 
     <section class="card">
+      <h2>PnL overlay</h2>
+      <dl>
+        <dt>Baseline equity</dt><dd id="pnl-baseline">—</dd>
+        <dt>Current equity</dt><dd id="pnl-current">—</dd>
+        <dt>Unrealized PnL</dt><dd id="pnl-unrealized">—</dd>
+        <dt>Drawdown</dt><dd id="pnl-drawdown">—</dd>
+        <dt>Inventory</dt><dd id="pnl-inventory">—</dd>
+        <dt>Leverage</dt><dd id="pnl-leverage">—</dd>
+        <dt>Within spec</dt><dd id="pnl-within-spec">—</dd>
+        <dt>Updated</dt><dd id="pnl-updated">—</dd>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h2>Fills</h2>
+      <dl>
+        <dt>Fill count</dt><dd id="fills-count">—</dd>
+        <dt>Last fill</dt><dd id="fills-last-at">—</dd>
+        <dt>Position size</dt><dd id="fills-position">—</dd>
+        <dt>Last fill sig</dt><dd id="fills-sig">—</dd>
+      </dl>
+    </section>
+
+    <section class="card">
       <ul>
+        <li><a id="portfolio-link" href="#" target="_blank" rel="noopener">ClawPump portfolio</a></li>
         <li><a id="dashboard-link" href="#" target="_blank" rel="noopener">ClawPump agent dashboard</a></li>
         <li><a id="wallet-link" href="#" target="_blank" rel="noopener">Solscan agent wallet</a></li>
         <li><a href="https://github.com/williamsburgsh-commits/SpecGuard" target="_blank" rel="noopener">GitHub repo</a></li>
@@ -127,6 +169,29 @@
     function truncateHash(hash) {
       if (!hash || hash.length < 16) return hash || '—';
       return hash.slice(0, 8) + '…' + hash.slice(-8);
+    }
+
+    function formatUsd(n) {
+      if (n == null || Number.isNaN(n)) return '—';
+      return `$${Number(n).toFixed(2)}`;
+    }
+
+    function renderLimitBar(elId, value, max) {
+      const el = document.getElementById(elId);
+      if (!el || max == null || max <= 0) return;
+      const pct = Math.min(100, Math.max(0, (value / max) * 100));
+      el.className = 'limit-bar' + (pct >= 90 ? ' danger' : pct >= 70 ? ' warn' : '');
+      el.innerHTML = `<span style="width:${pct}%"></span>`;
+    }
+
+    function renderSigLink(elId, sig) {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      if (sig) {
+        el.innerHTML = `<a href="https://solscan.io/tx/${sig}" target="_blank" rel="noopener"><code>${sig.slice(0, 8)}…</code></a>`;
+      } else {
+        el.textContent = '—';
+      }
     }
 
     function formatAge(seconds) {
@@ -179,6 +244,8 @@
 
       const q = data.quoting || {};
       document.getElementById('quote-operator').textContent = q.operator || '—';
+      document.getElementById('quote-spread').textContent =
+        q.spread_bps != null ? `${q.spread_bps} bps` : '—';
       document.getElementById('quote-last-cycle').textContent = q.last_cycle_at || '—';
       document.getElementById('quote-last-action').textContent = q.last_action || '—';
       document.getElementById('quote-cycles').textContent = q.cycles_total != null ? String(q.cycles_total) : '—';
@@ -188,22 +255,50 @@
         q.last_mark_usd != null ? `$${q.last_mark_usd}` : '—';
       const bidSig = q.last_bid_sig;
       const askSig = q.last_ask_sig;
-      const bidEl = document.getElementById('quote-bid-sig');
-      const askEl = document.getElementById('quote-ask-sig');
-      if (bidSig) {
-        bidEl.innerHTML = `<a href="https://solscan.io/tx/${bidSig}" target="_blank" rel="noopener"><code>${bidSig.slice(0, 8)}…</code></a>`;
+      renderSigLink('quote-bid-sig', bidSig);
+      renderSigLink('quote-ask-sig', askSig);
+
+      const pnl = data.pnl || {};
+      const limits = pnl.spec_limits || {};
+      document.getElementById('pnl-baseline').textContent = formatUsd(pnl.baseline_equity_usd);
+      document.getElementById('pnl-current').textContent = formatUsd(pnl.current_equity_usd);
+      document.getElementById('pnl-unrealized').textContent = formatUsd(pnl.unrealized_pnl_usd);
+      document.getElementById('pnl-drawdown').innerHTML =
+        `${formatUsd(pnl.drawdown_usd)} / ${formatUsd(limits.max_drawdown_usd)}` +
+        `<div id="drawdown-bar" class="limit-bar"></div>`;
+      document.getElementById('pnl-inventory').innerHTML =
+        `${formatUsd(pnl.inventory_usd)} / ${formatUsd(limits.max_inventory_usd)}` +
+        `<div id="inventory-bar" class="limit-bar"></div>`;
+      document.getElementById('pnl-leverage').textContent =
+        (pnl.leverage != null && limits.max_leverage != null)
+          ? `${pnl.leverage} / ${limits.max_leverage}`
+          : '—';
+      const withinEl = document.getElementById('pnl-within-spec');
+      if (pnl.within_spec == null) {
+        withinEl.textContent = '—';
       } else {
-        bidEl.textContent = '—';
+        withinEl.textContent = pnl.within_spec ? 'yes' : 'no';
+        withinEl.className = pnl.within_spec ? 'within-spec-yes' : 'within-spec-no';
       }
-      if (askSig) {
-        askEl.innerHTML = `<a href="https://solscan.io/tx/${askSig}" target="_blank" rel="noopener"><code>${askSig.slice(0, 8)}…</code></a>`;
-      } else {
-        askEl.textContent = '—';
-      }
+      document.getElementById('pnl-updated').textContent = pnl.updated_at || '—';
+      renderLimitBar('drawdown-bar', pnl.drawdown_usd ?? 0, limits.max_drawdown_usd ?? 40);
+      renderLimitBar('inventory-bar', pnl.inventory_usd ?? 0, limits.max_inventory_usd ?? 100);
+
+      const fills = data.fills || {};
+      document.getElementById('fills-count').textContent =
+        fills.count != null ? String(fills.count) : '0';
+      document.getElementById('fills-last-at').textContent = fills.last_fill_at || '—';
+      document.getElementById('fills-position').textContent =
+        fills.position_size_sol != null ? `${fills.position_size_sol} SOL` : '—';
+      renderSigLink('fills-sig', fills.last_fill_sig);
 
       const wallet = data.wallet_address;
+      const agentId = data.agent_id || AGENT_ID;
       document.getElementById('wallet-link').href = 'https://solscan.io/account/' + wallet;
-      document.getElementById('dashboard-link').href = 'https://agents.clawpump.tech/dashboard/terminal?agent=' + (data.agent_id || AGENT_ID);
+      document.getElementById('dashboard-link').href =
+        'https://agents.clawpump.tech/dashboard/terminal?agent=' + agentId;
+      document.getElementById('portfolio-link').href =
+        'https://agents.clawpump.tech/dashboard/terminal?agent=' + agentId + '&tab=portfolio';
     }
 
     loadStatus().catch((err) => {
