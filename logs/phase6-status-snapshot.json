@@ -1,0 +1,20 @@
+{
+  "phase": 6,
+  "gate_date": "2026-08-25",
+  "status_url": "https://specguard.xyz",
+  "status_url_interim": "https://williamsburgsh-commits.github.io/SpecGuard/",
+  "heartbeat_ttl_seconds": 300,
+  "heartbeat_count_at_gate": 3,
+  "heartbeat_proofs": [
+    "logs/heartbeat/heartbeat-2026-08-25T11-04-20-483Z.json",
+    "logs/heartbeat/heartbeat-2026-08-25T11-05-28-216Z.json",
+    "logs/heartbeat/heartbeat-2026-08-25T11-06-17-760Z.json"
+  ],
+  "last_heartbeat_at": "2026-08-25T11:06:17.760Z",
+  "tests": {
+    "T6.1": "PASS",
+    "T6.2": "PASS",
+    "T6.3": "PASS",
+    "T6.4": "PASS"
+  }
+}

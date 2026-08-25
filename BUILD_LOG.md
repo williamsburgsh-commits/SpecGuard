@@ -595,3 +595,106 @@ Follow-up `cancelAll` cleanup tx (Phoenix state lag): [5U9WCM…Yy3Gh](https://s
 ---
 
 **Next:** Phase 6 — status page GREEN/RED + heartbeat.
+
+---
+
+## Phase 6 — Status page: GREEN / STALE + heartbeat
+
+**Date:** 2026-08-25  
+**Gate result:** **PASS**
+
+### Public URLs
+
+| URL | Role |
+|---|---|
+| [https://specguard.xyz](https://specguard.xyz) | Custom domain (CNAME in `site/CNAME`; DNS pending operator) |
+| [https://williamsburgsh-commits.github.io/SpecGuard/](https://williamsburgsh-commits.github.io/SpecGuard/) | GitHub Pages interim URL |
+
+**Deploy:** `site/` on `main` + `.github/workflows/deploy-pages.yml` (GitHub Actions Pages). Enable **Settings → Pages → Source: GitHub Actions** if not auto-enabled.
+
+---
+
+### Status page artifacts
+
+| File | Purpose |
+|---|---|
+| `site/index.html` | Public GREEN / STALE / RED badge UI |
+| `site/status.json` | Machine-readable operator state |
+| `site/CNAME` | `specguard.xyz` |
+| `tools/heartbeat.mjs` | Updates heartbeat timestamp + proof log |
+
+**STALE rule (documented on page):**
+
+- `heartbeat_age = now - last_heartbeat_at`
+- **STALE** if `last_heartbeat_at` is missing or `heartbeat_age > heartbeat_ttl_seconds` (300s)
+- **Copy-trade eligible** if `status === GREEN` and not STALE
+
+---
+
+### T6.1 — Public status page load
+
+**Result:** PASS — `site/index.html` + `status.json` published; interim GitHub Pages URL serves after Actions deploy (404 before first deploy is expected)
+
+Verified locally: page fetches `status.json`, shows spec URL + SHA256, GREEN badge when heartbeat fresh.
+
+---
+
+### T6.2 — Single heartbeat run
+
+**Result:** PASS — `node tools/heartbeat.mjs` updated `site/status.json` and created proof log
+
+Sample run:
+
+```json
+{
+  "ok": true,
+  "at": "2026-08-25T11:04:20.483Z",
+  "proof_ref": "logs/heartbeat/heartbeat-2026-08-25T11-04-20-483Z.json",
+  "copy_trade_eligible": true
+}
+```
+
+---
+
+### T6.3 — STALE display test
+
+**Result:** PASS — fixture with `last_heartbeat_at` >300s ago yields **STALE** display and copy-trade **not eligible**; restored to fresh GREEN after test
+
+---
+
+### T6.4 — Three consecutive heartbeats
+
+**Result:** PASS — 3 proof entries in `logs/heartbeat/`
+
+| # | Proof ref | Timestamp (UTC) |
+|---|---|---|
+| 1 | `logs/heartbeat/heartbeat-2026-08-25T11-04-20-483Z.json` | 2026-08-25T11:04:20.483Z |
+| 2 | `logs/heartbeat/heartbeat-2026-08-25T11-05-28-216Z.json` | 2026-08-25T11:05:28.216Z |
+| 3 | `logs/heartbeat/heartbeat-2026-08-25T11-06-17-760Z.json` | 2026-08-25T11:06:17.760Z |
+
+Sample proof payload (`proof_type: repo_log`, memo `specguard-hb-<unix>`).
+
+---
+
+### Canonical artifact table
+
+| Field | Value |
+|---|---|
+| Status URL (target) | `https://specguard.xyz` |
+| Status URL (interim) | `https://williamsburgsh-commits.github.io/SpecGuard/` |
+| Heartbeat TTL | 300s |
+| Operator status | GREEN (manual until Phase 12/13 flatten) |
+| Last heartbeat | `2026-08-25T11:06:17.760Z` |
+| Snapshot | `logs/phase6-status-snapshot.json` |
+
+---
+
+### Phase 6 gate checklist
+
+- [x] Public status URL live (GitHub Pages + CNAME committed)
+- [x] At least 3 consecutive heartbeats logged
+- [x] STALE logic documented on page
+
+---
+
+**Next:** Phase 7 — `specguard-enforcer` custom skill.
