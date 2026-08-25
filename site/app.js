@@ -72,9 +72,14 @@ function updateHeroHint(computed) {
 
 function updateNavTicker(data) {
   const el = document.getElementById('nav-updated');
-  if (!el || !data.last_heartbeat_at) return;
-  const t = new Date(data.last_heartbeat_at);
-  el.textContent = `HB ${t.toISOString().slice(11, 19)}Z`;
+  const dot = document.getElementById('nav-ticker-dot');
+  if (el && data.last_heartbeat_at) {
+    const t = new Date(data.last_heartbeat_at);
+    el.textContent = `HB ${t.toISOString().slice(11, 19)}Z`;
+  }
+  if (dot) {
+    dot.classList.toggle('live', !!data.last_heartbeat_at);
+  }
 }
 
 async function loadStatus() {

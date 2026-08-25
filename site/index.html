@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SpecGuard — Spec-bound perps operator on Solana</title>
+  <title>SpecGuard — Spec-bound perps. Flatten on breach.</title>
   <meta name="description" content="ClawPump agent quoting SOL-PERP under a public spec. Kill-switch is onchain — blocks, then flattens. Live operator terminal at specguard.xyz.">
-  <meta name="theme-color" content="#05080f">
+  <meta name="theme-color" content="#04070d">
   <meta property="og:title" content="SpecGuard — Spec-bound perps. Flatten on breach.">
   <meta property="og:description" content="AI operator on ClawPump. Public spec, live heartbeat, enforced flatten — not a recommendation layer.">
   <meta property="og:image" content="https://specguard.xyz/assets/banner.png">
@@ -16,17 +16,19 @@
   <link rel="icon" href="assets/pfp.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@500..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="bg-mesh" aria-hidden="true"></div>
-  <div class="bg-grid" aria-hidden="true"></div>
-  <div class="bg-scan" aria-hidden="true"></div>
+  <div class="bg-noise" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb-1" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb-2" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb-3" aria-hidden="true"></div>
 
   <header class="nav">
     <a class="nav-brand" href="#">
-      <img src="assets/pfp.png" alt="SpecGuard" width="36" height="36">
+      <img src="assets/pfp.png" alt="SpecGuard" width="38" height="38">
       SpecGuard
     </a>
     <ul class="nav-links">
@@ -36,18 +38,21 @@
       <li><a id="spec-nav-link" href="https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json" target="_blank" rel="noopener">Spec</a></li>
     </ul>
     <div class="nav-actions">
-      <span class="nav-updated" id="nav-updated">—</span>
+      <div class="nav-ticker" id="nav-ticker">
+        <span class="dot" id="nav-ticker-dot"></span>
+        <span id="nav-updated">—</span>
+      </div>
       <a class="btn btn-ghost" href="https://x.com/specguardxyz" target="_blank" rel="noopener">@specguardxyz</a>
       <a class="btn btn-primary" id="nav-dashboard-link" href="https://agents.clawpump.tech/dashboard/terminal?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04" target="_blank" rel="noopener">ClawPump</a>
     </div>
   </header>
 
   <section class="hero">
-    <img class="hero-banner" src="assets/banner.png" alt="" aria-hidden="true">
+    <div class="hero-ring" aria-hidden="true"></div>
     <div class="hero-inner">
       <div>
-        <p class="hero-eyebrow">ClawPump · Ansem Hackathon · SOL-PERP</p>
-        <h1>Spec-bound perps.<br>Flatten on breach.</h1>
+        <p class="hero-tag">ClawPump · Ansem Hackathon · SOL-PERP</p>
+        <h1>Spec-bound perps.<br><em>Flatten on breach.</em></h1>
         <p class="hero-sub">A ClawPump agent quoting isolated Phoenix perps under a public spec. On breach it cancels, closes onchain, posts signatures, and turns RED — the kill-switch is a tool call, not a recommendation.</p>
         <div class="hero-cta">
           <a class="btn btn-primary" id="hero-dashboard-link" href="https://agents.clawpump.tech/dashboard/terminal?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04" target="_blank" rel="noopener">View operator</a>
@@ -59,14 +64,11 @@
           <p class="hero-status-hint" id="hero-status-hint">Loading operator state…</p>
         </div>
       </div>
-      <div class="reveal" aria-hidden="true">
-        <img src="assets/pfp.png" alt="SpecGuard operator" style="width:min(280px,70vw);border-radius:24px;border:1px solid rgba(125,211,252,0.2);box-shadow:0 0 60px rgba(34,211,238,0.15);">
-      </div>
     </div>
   </section>
 
   <section class="section reveal" id="how">
-    <p class="section-label">Architecture</p>
+    <p class="section-eyebrow">Architecture</p>
     <h2>How it works</h2>
     <p class="section-lead">Three layers: published limits, autonomous quoting, enforced shutdown.</p>
     <div class="steps">
@@ -89,11 +91,11 @@
   </section>
 
   <section class="section reveal">
-    <p class="section-label">Differentiator</p>
+    <p class="section-eyebrow">Differentiator</p>
     <h2>Why SpecGuard</h2>
     <p class="section-lead">ClawPump ships <code>risk-manager</code> — advice only. SpecGuard inverts that.</p>
     <div class="compare">
-      <div class="compare-card them">
+      <div class="compare-card">
         <h3>risk-manager</h3>
         <p>Pre-trade sizing and drawdown <em>recommendations</em>. Last rule: never block a trade — only recommend.</p>
       </div>
@@ -105,23 +107,25 @@
   </section>
 
   <section class="section reveal" id="token">
-    <p class="section-label">Token</p>
+    <p class="section-eyebrow">Token</p>
     <h2>$GUARD</h2>
     <p class="section-lead">Fee-claim token for the reference operator — not governance. Treasury can buy $ANSEM on the flatten tape (Phase 13).</p>
-    <div class="token-strip">
-      <span class="symbol">$GUARD</span>
-      <div>
-        <div class="token-mint">BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e</div>
-        <a href="https://pump.fun/coin/BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e" target="_blank" rel="noopener">View on pump.fun →</a>
+    <div class="token-card">
+      <div class="token-inner">
+        <span class="token-symbol">$GUARD</span>
+        <div class="token-meta">
+          <div class="token-mint">BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e</div>
+          <a href="https://pump.fun/coin/BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e" target="_blank" rel="noopener">View on pump.fun →</a>
+        </div>
+        <a class="btn btn-primary" href="https://agents.clawpump.tech/dashboard/wallet?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04" target="_blank" rel="noopener">Fee dashboard</a>
       </div>
-      <a class="btn btn-primary" href="https://agents.clawpump.tech/dashboard/wallet?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04" target="_blank" rel="noopener">Fee dashboard</a>
     </div>
   </section>
 
   <section class="section terminal-section reveal" id="live">
     <div class="terminal-header">
       <div>
-        <p class="section-label">Live feed</p>
+        <p class="section-eyebrow">Live feed</p>
         <h2>Operator terminal</h2>
         <p class="section-lead" style="margin-bottom:0">Machine-readable state from <code>status.json</code> — refreshed every 15s.</p>
       </div>
@@ -221,8 +225,8 @@
   <footer class="footer">
     <div class="footer-grid">
       <div>
-        <strong>SpecGuard</strong>
-        <p class="footer-disclaimer" style="margin-top:0.5rem">Autonomous operator demo — not financial advice. Onchain actions are irreversible.</p>
+        <div class="footer-brand">SpecGuard</div>
+        <p class="footer-disclaimer">Autonomous operator demo — not financial advice. Onchain actions are irreversible.</p>
       </div>
       <nav class="footer-links">
         <a href="https://specguard.xyz">specguard.xyz</a>
