@@ -4,15 +4,21 @@ import { fileURLToPath } from 'url';
 import { createHash } from 'crypto';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
-const STATUS_PATH = join(ROOT, 'site', 'status.json');
+const STATUS_PATHS = [
+  join(ROOT, 'site', 'status.json'),
+  join(ROOT, 'docs', 'status.json'),
+];
 const HEARTBEAT_DIR = join(ROOT, 'logs', 'heartbeat');
 
 function loadStatus() {
-  return JSON.parse(readFileSync(STATUS_PATH, 'utf8'));
+  return JSON.parse(readFileSync(STATUS_PATHS[0], 'utf8'));
 }
 
 function saveStatus(status) {
-  writeFileSync(STATUS_PATH, JSON.stringify(status, null, 2) + '\n');
+  const payload = JSON.stringify(status, null, 2) + '\n';
+  for (const path of STATUS_PATHS) {
+    writeFileSync(path, payload);
+  }
 }
 
 function isoSafe(now) {
