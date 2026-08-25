@@ -1,0 +1,40 @@
+{
+  "phase": 9,
+  "gate_date": "2026-08-25",
+  "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+  "token_symbol_plan": "GUARD",
+  "token_ticker_live": "SPECGU",
+  "token_name_pump": "SpecGuard (GUARD)",
+  "token_mint": "BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e",
+  "token_pump_url": "https://pump.fun/coin/BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e",
+  "launch_skipped": true,
+  "launch_status": {
+    "already_launched": true,
+    "token_mint": "BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e"
+  },
+  "token_search": {
+    "by_mint_count": 1,
+    "by_ticker_count": 6,
+    "mint_found": true
+  },
+  "hackathon_entry_verified": true,
+  "hackathon_entry_url": "https://clawpump.tech/ansemhack/entry",
+  "x_linked_account": "https://x.com/itswilly31",
+  "x_project_account": "https://x.com/specguardxyz",
+  "x_entry_post_url": null,
+  "x_entry_post_operator_attested": true,
+  "x_entry_post_note": "Operator confirmed 3/3 hackathon checklist complete; specific status URL not auto-discoverable (X API Pay-per-use not enrolled). Paste status URL when available.",
+  "payout_wallet_intended": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
+  "set_external_wallet_response": { "ok": true },
+  "auth_me_external_wallet": null,
+  "deposit_wallet": "EhGnSRc6M65tYUdgT5g4qrKHcwLveGt5TZUTxJyGVcBc",
+  "fee_dashboard_url": "https://agents.clawpump.tech/dashboard/wallet?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+  "launch_dashboard_url": "https://agents.clawpump.tech/dashboard/launch-token?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04",
+  "phase9_api_helper": "tools/phase9-api.mjs",
+  "tests": {
+    "T9.1": "PASS",
+    "T9.2": "PASS",
+    "T9.3": "PASS",
+    "T9.4": "PASS"
+  }
+}

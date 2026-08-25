@@ -913,4 +913,63 @@ Extracted to [`tools/breach-math.mjs`](tools/breach-math.mjs) — reused by `enf
 
 ---
 
-**Next:** Phase 9 — token `$GUARD` (`launch_token_gasless`).
+**Next:** Phase 10 — quoting loop (recurring tiny quotes).
+
+---
+
+## Phase 9 — Token `$GUARD` (verify + document)
+
+**Gate date:** 2026-08-25  
+**Result:** PASS — token already live; launch skipped; hackathon eligibility verified and documented.
+
+### Scope
+
+Phase 9 was **verify-only**. `launch_token_gasless` was not invoked — the agent already has a linked token from Phase 2.
+
+| Plan name | Live ticker | Mint |
+|---|---|---|
+| `$GUARD` | `SPECGU` (pump.fun also shows **SpecGuard (GUARD)**) | `BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e` |
+
+### Build
+
+1. Added [`tools/phase9-api.mjs`](tools/phase9-api.mjs) — `launch-status`, `get-agent`, `auth-me`, `set-external-wallet`, `token-search`, `verify-gate`.
+2. Ran `node tools/phase9-api.mjs verify-gate --set-payout`.
+3. Skipped `launch_token_gasless` (already launched).
+4. Operator attestation: hackathon registration + X entry + mint linked (confirmed 3/3 complete).
+5. `set_external_wallet` → `PATCH /auth/me/wallet` returned `{ ok: true }` for agent custodial wallet `2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk` (note: `auth/me.external_wallet` still null — verify on dashboard if needed).
+
+### Gate tests
+
+| # | Action | Result | Evidence |
+|---|---|---|---|
+| T9.1 | Token mint exists on ClawPump / pump.fun | **PASS** | Launch status + agent `token_mint` match; `/tokens/search` finds mint |
+| T9.2 | Registration shows token linked | **PASS** | Operator attestation + [ansemhack/entry](https://clawpump.tech/ansemhack/entry) |
+| T9.3 | Token associated with agent (fee dashboard) | **PASS** | `get_launch_status` / `get-agent` show mint linked; [`fee dashboard`](https://agents.clawpump.tech/dashboard/wallet?agent=89ca5e76-d59f-4276-8399-eecdf8bb3a04) |
+| T9.4 | Entry post on X | **PASS** | Operator attested; linked X `@itswilly31`, project `@specguardxyz` — status URL not auto-discovered (X API Pay-per-use not enrolled) |
+
+### Canonical artifact table (updated)
+
+| Field | Value |
+|---|---|
+| Token plan symbol | `$GUARD` |
+| Token live ticker | `SPECGU` |
+| Token mint | `BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e` |
+| pump.fun | [SpecGuard (GUARD)](https://pump.fun/coin/BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e) |
+| Payout wallet (intended) | `2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk` |
+| ClawPump deposit wallet | `EhGnSRc6M65tYUdgT5g4qrKHcwLveGt5TZUTxJyGVcBc` |
+| X linked account | `@itswilly31` |
+| X project account | `@specguardxyz` |
+| Phase 9 API helper | `tools/phase9-api.mjs` |
+| Snapshot | [`logs/phase9-token-snapshot.json`](./logs/phase9-token-snapshot.json) |
+
+---
+
+### Phase 9 gate checklist
+
+- [x] `$GUARD` mint saved (`SPECGU` alias documented)
+- [x] Hackathon 3/3 requirements attested
+- [x] Payout wallet registered via API (`{ ok: true }`)
+
+---
+
+**Next:** Phase 10 — quoting loop (recurring tiny quotes).

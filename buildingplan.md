@@ -482,8 +482,9 @@ AnsemHack/
 
 ### Artifacts
 
-- Mint: `_______`
-- X entry post: `_______`
+- Mint: `BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e` (`$GUARD` / pump ticker `SPECGU`)
+- X entry post: operator attested (linked account `@itswilly31`; paste status URL in BUILD_LOG when available)
+- Snapshot: [`logs/phase9-token-snapshot.json`](./logs/phase9-token-snapshot.json)
 
 ---
 
