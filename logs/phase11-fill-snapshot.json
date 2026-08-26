@@ -1,20 +1,20 @@
 {
-  "at": "2026-08-26T12:27:30.910Z",
+  "at": "2026-08-26T12:32:36.218Z",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "fill": {
     "filled": true,
-    "fill_sig": "U9pUkqLNA2Zt1Njbqf2LX42LfZgemwm2f3T34LMLS67vRCXABitkBv2jRTncJs2dVfhKV2NK7VjD9B742T7Ajnh",
+    "fill_sig": "21pUKNir5TThNNaBY3fpZGyA4tuDg9iMnaePsTHNaCugSZu16184UyU6uZPQnA3efuJ5Dx1qimCTDPMUrziLmAry",
     "position_size_sol": 0.07,
-    "position_value_usd": 6.818,
-    "at": "2026-08-26T12:27:30.910Z",
+    "position_value_usd": 6.7991,
+    "at": "2026-08-26T12:32:36.218Z",
     "source": "resting_order",
     "positions": [
       {
         "symbol": "SOL",
         "position_size": 0.07,
-        "position_value_usd": 6.818,
-        "unrealized_pnl_usd": 0.0381,
-        "entry_price": 96.86
+        "position_value_usd": 6.7991,
+        "unrealized_pnl_usd": 0.021957,
+        "entry_price": 96.82
       }
     ]
   },
@@ -25,8 +25,8 @@
     "apiBaseUrl": "https://perp-api.phoenix.trade",
     "authority": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
     "pdaIndex": 0,
-    "slot": 441866768,
-    "slotIndex": 1897,
+    "slot": 441867596,
+    "slotIndex": 1677,
     "traders": [
       {
         "flags": 63,
@@ -37,28 +37,28 @@
         "state": "active",
         "riskState": "healthy",
         "riskTier": "safe",
-        "collateralBalance": "3.066053",
-        "effectiveCollateral": "3.104153",
-        "effectiveCollateralForWithdrawals": "3.092723",
-        "portfolioValue": "3.104153",
-        "unrealizedPnl": "0.038100",
-        "discountedUnrealizedPnl": "0.038100",
+        "collateralBalance": "3.072998",
+        "effectiveCollateral": "3.094955",
+        "effectiveCollateralForWithdrawals": "3.088368",
+        "portfolioValue": "3.094955",
+        "unrealizedPnl": "0.021957",
+        "discountedUnrealizedPnl": "0.021957",
         "unsettledFundingOwed": "0.000000",
-        "initialMargin": "0.311680",
-        "maintenanceMargin": "0.155840",
-        "cancelMargin": "0.233760",
+        "initialMargin": "0.310816",
+        "maintenanceMargin": "0.155408",
+        "cancelMargin": "0.233112",
         "positions": [
           {
             "symbol": "SOL",
             "positionSize": "0.07",
-            "entryPrice": "96.860000",
-            "unrealizedPnl": "0.038100",
-            "discountedUnrealizedPnl": "0.038100",
-            "positionValue": "6.818000",
-            "liquidationPrice": "57.1700",
-            "initialMargin": "0.311680",
-            "maintenanceMargin": "0.155840",
-            "limitOrderMargin": "0.038960",
+            "entryPrice": "96.820000",
+            "unrealizedPnl": "0.021957",
+            "discountedUnrealizedPnl": "0.021957",
+            "positionValue": "6.799100",
+            "liquidationPrice": "57.0400",
+            "initialMargin": "0.310816",
+            "maintenanceMargin": "0.155408",
+            "limitOrderMargin": "0.038852",
             "accumulatedFunding": "-0.000212",
             "unsettledFunding": "0.000000"
           }
@@ -72,7 +72,7 @@
                 "ui": "96.5800"
               },
               "side": "bid",
-              "orderSequenceNumber": "18446744073639553786",
+              "orderSequenceNumber": "18446744073639552154",
               "initialTradeSize": {
                 "value": 1,
                 "decimals": 2,
@@ -84,9 +84,9 @@
                 "ui": "0.01"
               },
               "marginRequirement": {
-                "value": 38960,
+                "value": 38852,
                 "decimals": 6,
-                "ui": "0.038960"
+                "ui": "0.038852"
               },
               "marginFactor": {
                 "value": 10000,
@@ -105,7 +105,7 @@
                 "ui": "97.5600"
               },
               "side": "ask",
-              "orderSequenceNumber": "69997830",
+              "orderSequenceNumber": "69999468",
               "initialTradeSize": {
                 "value": 1,
                 "decimals": 2,
@@ -153,7 +153,7 @@
             "immediate": true
           }
         },
-        "isInActiveTraders": true
+        "isInActiveTraders": false
       },
       {
         "flags": 62,
@@ -209,25 +209,25 @@
     "warnings": []
   },
   "before_metrics": {
-    "collateral": 5.427428,
-    "unrealized": 0.0374,
-    "positionNotional": 6.8173,
-    "currentEquity": 5.464828,
+    "collateral": 5.434373,
+    "unrealized": 0.019857,
+    "positionNotional": 6.797,
+    "currentEquity": 5.45423,
     "baseline": 5.4,
     "drawdown": 0,
-    "leverage": 1.2560829917964826,
-    "inventory": 6.8173,
-    "openOrderCount": 2
+    "leverage": 1.2507422659430996,
+    "inventory": 6.797,
+    "openOrderCount": 0
   },
   "after_metrics": {
-    "collateral": 5.427428,
-    "unrealized": 0.0381,
-    "positionNotional": 6.818,
-    "currentEquity": 5.465528,
+    "collateral": 5.434373,
+    "unrealized": 0.021957,
+    "positionNotional": 6.7991,
+    "currentEquity": 5.4563299999999995,
     "baseline": 5.4,
     "drawdown": 0,
-    "leverage": 1.2562119663310134,
-    "inventory": 6.818,
+    "leverage": 1.2511286950674898,
+    "inventory": 6.7991,
     "openOrderCount": 1
   }
 }
