@@ -1,12 +1,12 @@
 {
-  "at": "2026-08-26T01:13:40.434Z",
+  "at": "2026-08-26T01:18:50.538Z",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "fill": {
     "filled": true,
-    "fill_sig": "2vEy3oQUCe76sw35vcrTDquGbFRTRno3C3srXypjFP8A6bxXS1ZzfCNDnzx5iXuwriCwfeUdkTsYzeUELndZc4bx",
+    "fill_sig": "4c1KVZR2bbv1NBQa6d1bRB7AhtTG6rEVmdvgXrMuuR1rpgUktF5NSzfJzi4i8pivqHRYWomQUscj5AbfrfhEhKBi",
     "position_size_sol": 0.07,
     "position_value_usd": 6.79,
-    "at": "2026-08-26T01:13:40.434Z",
+    "at": "2026-08-26T01:18:50.538Z",
     "source": "resting_order",
     "positions": [
       {
@@ -25,8 +25,8 @@
     "apiBaseUrl": "https://perp-api.phoenix.trade",
     "authority": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
     "pdaIndex": 0,
-    "slot": 441755941,
-    "slotIndex": 1633,
+    "slot": 441756769,
+    "slotIndex": 1168,
     "traders": [
       {
         "flags": 63,
@@ -72,7 +72,7 @@
                 "ui": "96.2100"
               },
               "side": "bid",
-              "orderSequenceNumber": "18446744073639618865",
+              "orderSequenceNumber": "18446744073639618266",
               "initialTradeSize": {
                 "value": 1,
                 "decimals": 2,
@@ -105,7 +105,7 @@
                 "ui": "97.1700"
               },
               "side": "ask",
-              "orderSequenceNumber": "69932751",
+              "orderSequenceNumber": "69933356",
               "initialTradeSize": {
                 "value": 1,
                 "decimals": 2,
@@ -210,14 +210,14 @@
   },
   "before_metrics": {
     "collateral": 5.395674,
-    "unrealized": -0.015518,
-    "positionNotional": 6.7907,
-    "currentEquity": 5.3801559999999995,
+    "unrealized": -0.014118,
+    "positionNotional": 6.7921,
+    "currentEquity": 5.381556,
     "baseline": 5.4,
-    "drawdown": 0.01984400000000086,
-    "leverage": 1.2585452716379828,
-    "inventory": 6.7907,
-    "openOrderCount": 1
+    "drawdown": 0.01844400000000057,
+    "leverage": 1.2588047387592356,
+    "inventory": 6.7921,
+    "openOrderCount": 2
   },
   "after_metrics": {
     "collateral": 5.395674,
