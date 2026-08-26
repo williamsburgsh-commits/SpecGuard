@@ -1,12 +1,12 @@
 {
-  "at": "2026-08-26T03:38:40.798Z",
+  "at": "2026-08-26T03:43:45.607Z",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "fill": {
     "filled": true,
-    "fill_sig": "4i9GHNXbk94FDSZdTp9wqKS1TGH3qyqgUygaML2B8drAixLebwbt5srB5Ew8YxzUNoZD9fdhQVfTxxg667htPwNK",
+    "fill_sig": "4mWiMv1VNz5DUg7mZXGt2ofaNf4YHSdWp6jSjGL4wVjCJFQCSMg6RGiBpPCdKGgdeESjPJxczgATWij2W7JKtQYM",
     "position_size_sol": 0.02,
     "position_value_usd": 1.9424,
-    "at": "2026-08-26T03:38:40.798Z",
+    "at": "2026-08-26T03:43:45.607Z",
     "source": "resting_order",
     "positions": [
       {
@@ -25,8 +25,8 @@
     "apiBaseUrl": "https://perp-api.phoenix.trade",
     "authority": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
     "pdaIndex": 0,
-    "slot": 441779743,
-    "slotIndex": 1270,
+    "slot": 441780579,
+    "slotIndex": 1141,
     "traders": [
       {
         "flags": 63,
@@ -72,7 +72,7 @@
                 "ui": "96.8400"
               },
               "side": "bid",
-              "orderSequenceNumber": "18446744073639605702",
+              "orderSequenceNumber": "18446744073639605214",
               "initialTradeSize": {
                 "value": 1,
                 "decimals": 2,
@@ -105,7 +105,7 @@
                 "ui": "97.8200"
               },
               "side": "ask",
-              "orderSequenceNumber": "69945920",
+              "orderSequenceNumber": "69946402",
               "initialTradeSize": {
                 "value": 1,
                 "decimals": 2,
@@ -228,6 +228,6 @@
     "drawdown": 0.002383000000000024,
     "leverage": 0.3597136291353224,
     "inventory": 1.9424,
-    "openOrderCount": 2
+    "openOrderCount": 1
   }
 }
