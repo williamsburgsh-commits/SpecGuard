@@ -4,25 +4,25 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-26T05:40:58.682Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-26T05-40-58-682Z.json",
+  "last_heartbeat_at": "2026-08-26T05:46:22.378Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-26T05-46-22-378Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 166,
-    "posts_total": 332,
-    "cancels_total": 166,
-    "last_cycle_at": "2026-08-26T05:40:58.683Z",
+    "cycles_total": 167,
+    "posts_total": 334,
+    "cancels_total": 167,
+    "last_cycle_at": "2026-08-26T05:46:22.379Z",
     "last_action": "quoted",
     "last_mark_usd": 96.66,
     "spread_bps": 50,
-    "last_bid_sig": "2kkzmCbd3RCzTpYDDzcCQ7MwTkmqSumY2guCYc5Ydmi4hZcnKp8t5JKUMEFkRWLYDaxSh1TuhsR1b4T3xNf7mzrr",
-    "last_ask_sig": "3a9kGaRooXn1cPpB2EQNTYL4f8vpTu2WKYJr75aUsGjfGd1FV9VrctVS8P9ppYMrS5ujEQdkMfUyv2DopchGsnD1",
-    "last_cancel_sig": "5gCi6EFAc1m9rmDk5ShLsrFywERfVpPosJU9MSfsdsAnKBHog9oWuyfpNEcwuDQWHL7hPmz2nTuDxN87VLtQgc58",
-    "open_order_count": 2
+    "last_bid_sig": "58vnu8Lqp3nvdRWVhyGrnu8LErWmq3euxA3PUifbK88n4Dtx2ryZVgfXtVT769Znx9VZxwjER3ThfhJRDwJDQvcf",
+    "last_ask_sig": "27HP1CKnqKWpdKiHEXpbUbH9mwoQJN5rD944WRtmU8kffAtjXptxEEXXgy3NfmsECv9bfPb4yDsCSWqzhMk11zvi",
+    "last_cancel_sig": "5XH7SzDmcszeaHZhaFAR6ZLEooYPbeG1uMJMbZQ2bT3zysUX2UNuWDs3bgCMD41nJB9qGzFPHm1K9NXmqS5McA2N",
+    "open_order_count": 1
   },
   "pnl": {
     "baseline_equity_usd": 5.4,
@@ -38,7 +38,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-26T05:40:58.682Z"
+    "updated_at": "2026-08-26T05:46:22.378Z"
   },
   "fills": {
     "count": 99,
