@@ -4,25 +4,25 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-26T23:33:53.106Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-26T23-33-53-106Z.json",
+  "last_heartbeat_at": "2026-08-26T23:39:00.370Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-26T23-39-00-370Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 262,
-    "posts_total": 524,
-    "cancels_total": 262,
-    "last_cycle_at": "2026-08-26T23:33:53.107Z",
+    "cycles_total": 263,
+    "posts_total": 526,
+    "cancels_total": 263,
+    "last_cycle_at": "2026-08-26T23:39:00.371Z",
     "last_action": "quoted",
     "last_mark_usd": 99.74,
     "spread_bps": 50,
-    "last_bid_sig": "5BDWbhFvJsqpwZ2TqV1ZgrXAWrajtB9Gz4U2ENFSpSX6fdpk7WTrF3Cm19i2ndThWeCsMzz2rn9XDQp3jHsYUEyW",
-    "last_ask_sig": "2y2dnYpbtDQNBEBPacuScvcrFevgkrykUMsyEQoaSWQqPkSxdg41UwBTRHfcENXzVA2B49GEBsauaoKx7wabjdEt",
-    "last_cancel_sig": "4wrX4eMGqf3GET9C1hpWfH4y2ZoaPefcMFgyh1dKTr3Y1TaXJkCh5RQ5FKx75n9Rbxqe2LbgFBE8EyCzogYoETiD",
-    "open_order_count": 1
+    "last_bid_sig": "2uc1m91kcgyqHjQCF4ieLMJnC7cPKdUKuYLyxNofmA9Pq692KWMFHN9smj3dS9FsVniysL9MMxj4xtpmiUgWLHVE",
+    "last_ask_sig": "CjPNPCmbMSBVC5s3t4czhJjr9GZSFbaSt2Qx8D5JYgaSo8QcW8H9MXSpx1ZfbKM1sknH8TLYLTjYQrAjjkjtRjj",
+    "last_cancel_sig": "cDroQX4DvLvzoXJDH1nu9U6mjaEHfu9RTkaoBnXYbMV5KCF3GS65CA3C3X35TVS1LTtamB5cusHKxhhzFT5DgPu",
+    "open_order_count": 2
   },
   "pnl": {
     "baseline_equity_usd": 5.4,
@@ -38,7 +38,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-26T23:33:53.106Z"
+    "updated_at": "2026-08-26T23:39:00.370Z"
   },
   "fills": {
     "count": 196,
