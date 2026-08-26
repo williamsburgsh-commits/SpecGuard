@@ -4,25 +4,25 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-26T08:51:17.458Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-26T08-51-17-458Z.json",
+  "last_heartbeat_at": "2026-08-26T08:56:22.354Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-26T08-56-22-354Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 203,
-    "posts_total": 406,
-    "cancels_total": 203,
-    "last_cycle_at": "2026-08-26T08:51:17.459Z",
+    "cycles_total": 204,
+    "posts_total": 408,
+    "cancels_total": 204,
+    "last_cycle_at": "2026-08-26T08:56:22.355Z",
     "last_action": "quoted",
     "last_mark_usd": 96.98,
     "spread_bps": 50,
-    "last_bid_sig": "pNc8XK5wLSikisNNVhLRphqXu4pv8FBXEsHeUvpJRdqrorHUMSG3Hwf2Z3E5vagPuBwPFvYkj1aVvdKBJykdEao",
-    "last_ask_sig": "UGCTfTs9axRvdZG9pRUP7ySAfY9KEPHXpMpxbJLFm8JFt8SvUwdPQeNeBNcJFft9WxNH28JGJLcCDJGMzhoW8VF",
-    "last_cancel_sig": "49zM8vB1A3mp96KxvbE1e1ikBpsz18x6qEhmh9jWPfJscGxZCmTKuo97fgZatpdM7oq8842v74ZGVRmeNoZp451H",
-    "open_order_count": 1
+    "last_bid_sig": "2rz5grqJzZQAgYzpJPnLBJRERiMUuXZBLvoduaQkqMPGXDhBDRTSVLQ2kqZvWDQhG4hVFUux85qCFCyrVVN9D41U",
+    "last_ask_sig": "5PMRy7wY5vVVVQXyFFHZkWecSJpM2afio34nU6QFyfeoxGwfZGz3tJvka9RX7eKmhPGzBcC3dcjdid1PGufP2ecS",
+    "last_cancel_sig": "FmVhMTsmibSUttrHhhxhZH84M1PRcTuQzjNAV8zdoD6tccSgZv2MwF12JSVg3dKZ7nJxsfRu29XxTMxGrwUN6XE",
+    "open_order_count": 2
   },
   "pnl": {
     "baseline_equity_usd": 5.4,
@@ -30,7 +30,7 @@
     "unrealized_pnl_usd": 0,
     "drawdown_usd": 0,
     "inventory_usd": 0.97,
-    "leverage": 0.18,
+    "leverage": 0.179,
     "within_spec": true,
     "breach_reasons": [],
     "spec_limits": {
@@ -38,12 +38,12 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-26T08:51:17.458Z"
+    "updated_at": "2026-08-26T08:56:22.354Z"
   },
   "fills": {
-    "count": 135,
-    "last_fill_at": "2026-08-26T08:51:17.458Z",
-    "last_fill_sig": "3pQoZFd1XLR19aeX7PBqyuxXCSFZQZvWHQhXgacs4K8RKFMSBKjPnoapsfYGgoX1inDF5WySHW9DTQgH2Yxie7hp",
+    "count": 136,
+    "last_fill_at": "2026-08-26T08:56:22.354Z",
+    "last_fill_sig": "UGCTfTs9axRvdZG9pRUP7ySAfY9KEPHXpMpxbJLFm8JFt8SvUwdPQeNeBNcJFft9WxNH28JGJLcCDJGMzhoW8VF",
     "position_size_sol": -0.01
   }
 }
