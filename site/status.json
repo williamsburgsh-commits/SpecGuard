@@ -4,8 +4,8 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-26T13:34:33.553Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-26T13-34-33-553Z.json",
+  "last_heartbeat_at": "2026-08-26T13:39:38.514Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-26T13-39-38-514Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
@@ -15,8 +15,8 @@
     "cycles_total": 249,
     "posts_total": 498,
     "cancels_total": 249,
-    "last_cycle_at": "2026-08-26T13:34:33.554Z",
-    "last_action": "quoted_then_breach",
+    "last_cycle_at": "2026-08-26T13:39:38.515Z",
+    "last_action": "skip_breach",
     "last_mark_usd": 97.06,
     "spread_bps": 50,
     "last_bid_sig": "52B8bQRLk1PAgAXTwSPwM43y5V5ktDLz57rNaQ9VB7mKDHKjp4yYA9QZ22vu1iqkkRT5ccg334hDhFdJ1cuNU21N",
@@ -26,11 +26,11 @@
   },
   "pnl": {
     "baseline_equity_usd": 5.4,
-    "current_equity_usd": 5.41,
-    "unrealized_pnl_usd": -0.02,
+    "current_equity_usd": 5.43,
+    "unrealized_pnl_usd": -0.01,
     "drawdown_usd": 0,
-    "inventory_usd": 11.58,
-    "leverage": 2.131,
+    "inventory_usd": 11.6,
+    "leverage": 2.135,
     "within_spec": false,
     "breach_reasons": [
       "max_leverage"
@@ -40,12 +40,12 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-26T13:34:33.553Z"
+    "updated_at": "2026-08-26T13:39:38.514Z"
   },
   "fills": {
-    "count": 181,
-    "last_fill_at": "2026-08-26T13:29:28.658Z",
-    "last_fill_sig": "2JwZivZV5TBMmKvgHCiYuT6jX2DhNfDAiypKDj2Ma4oeKMBZdBYd97YcAQAiG22dRMgCYL57CrTi1W37f8QTSXPs",
-    "position_size_sol": 0.11
+    "count": 182,
+    "last_fill_at": "2026-08-26T13:39:38.514Z",
+    "last_fill_sig": "52B8bQRLk1PAgAXTwSPwM43y5V5ktDLz57rNaQ9VB7mKDHKjp4yYA9QZ22vu1iqkkRT5ccg334hDhFdJ1cuNU21N",
+    "position_size_sol": 0.12
   }
 }
