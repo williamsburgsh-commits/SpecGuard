@@ -1,12 +1,12 @@
 {
-  "at": "2026-08-26T01:54:38.034Z",
+  "at": "2026-08-26T01:59:42.858Z",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "fill": {
     "filled": true,
-    "fill_sig": "2DztdZDaVPaV8nt8xEvhBhZYQWgXuKPpbHQx6iyYjFKJL7xkj66rm7v8XSD1h8HHQMktk6f9vekRCPP5jsyFNj2z",
+    "fill_sig": "4BWa5TeZ2X35JJqCfpygR44hLboxuax2heRpBsgp2gSr9VXo1bxGXf3x1U2ALPd1eZWNS6gZoQ6UqUdNxSmF2JiE",
     "position_size_sol": 0.04,
     "position_value_usd": 3.882,
-    "at": "2026-08-26T01:54:38.034Z",
+    "at": "2026-08-26T01:59:42.858Z",
     "source": "resting_order",
     "positions": [
       {
@@ -25,8 +25,8 @@
     "apiBaseUrl": "https://perp-api.phoenix.trade",
     "authority": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
     "pdaIndex": 0,
-    "slot": 441762643,
-    "slotIndex": 1082,
+    "slot": 441763478,
+    "slotIndex": 83,
     "traders": [
       {
         "flags": 63,
@@ -72,7 +72,7 @@
                 "ui": "96.2100"
               },
               "side": "bid",
-              "orderSequenceNumber": "18446744073639614861",
+              "orderSequenceNumber": "18446744073639614469",
               "initialTradeSize": {
                 "value": 1,
                 "decimals": 2,
@@ -105,7 +105,7 @@
                 "ui": "97.1700"
               },
               "side": "ask",
-              "orderSequenceNumber": "69936755",
+              "orderSequenceNumber": "69937153",
               "initialTradeSize": {
                 "value": 1,
                 "decimals": 2,
@@ -210,13 +210,13 @@
   },
   "before_metrics": {
     "collateral": 5.393677,
-    "unrealized": -0.007668,
-    "positionNotional": 3.8816,
-    "currentEquity": 5.3860090000000005,
+    "unrealized": -0.007268,
+    "positionNotional": 3.882,
+    "currentEquity": 5.3864090000000004,
     "baseline": 5.4,
-    "drawdown": 0.013990999999999865,
-    "leverage": 0.719657480416421,
-    "inventory": 3.8816,
+    "drawdown": 0.013590999999999909,
+    "leverage": 0.7197316413274284,
+    "inventory": 3.882,
     "openOrderCount": 2
   },
   "after_metrics": {
@@ -228,6 +228,6 @@
     "drawdown": 0.013590999999999909,
     "leverage": 0.7197316413274284,
     "inventory": 3.882,
-    "openOrderCount": 2
+    "openOrderCount": 1
   }
 }
