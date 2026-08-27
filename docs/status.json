@@ -4,24 +4,24 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-27T03:00:37.034Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-27T03-00-37-034Z.json",
+  "last_heartbeat_at": "2026-08-27T03:05:43.210Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-27T03-05-43-210Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 291,
-    "posts_total": 582,
-    "cancels_total": 291,
-    "last_cycle_at": "2026-08-27T03:00:37.036Z",
+    "cycles_total": 292,
+    "posts_total": 584,
+    "cancels_total": 292,
+    "last_cycle_at": "2026-08-27T03:05:43.211Z",
     "last_action": "quoted",
     "last_mark_usd": 101.23,
     "spread_bps": 50,
-    "last_bid_sig": "5Ean5A4UMoE6MapmHcMhiiBBNVWo8bsxJx4i48jbi64VeaCy6uV9LgGAjBwN3RwNHbe2GsQPueq9F9E4vruVhdWi",
-    "last_ask_sig": "24Wi4zRQeD38pCg7mCQqhAPQuFVqqAf1oRwdmD3VVQXjA8HrYRbogi4gP3rTWNZ11YH8JKj2zGwtXUko2FRT9yi1",
-    "last_cancel_sig": "3N7zJ55KobQ8SJ4MSWp5sjVr4VhmZbsTKCEb8WgbR7mrUtztUhhQioSbLoXBRpAijaMMbbPFoMPdFwhcaobwW9y9",
+    "last_bid_sig": "2a9bPojRQqycfgyepED1AyLJucVDruggX4JUAPdw2NYafAXUNXcUDbgNRmstZwk7bXJWhxrUDQbERQH1yrnWUN8G",
+    "last_ask_sig": "2Cyg4Xn2LiBAjzvpQiacrtZXdYjqavqY7LwdJQcsfjUoRwpKWwPtCvLXPpLknZeo9AukWNojnPvKukSnW9fRWmVz",
+    "last_cancel_sig": "5PMHCsKA4Sreqtp8U1oWkCeTrXjibR5pUqPmQaGLwBUBt3rYHLDjVFc8APzZuToLrU4h7odmpcJdvSWMhty8dZ8d",
     "open_order_count": 2
   },
   "pnl": {
@@ -38,7 +38,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-27T03:00:37.034Z"
+    "updated_at": "2026-08-27T03:05:43.210Z"
   },
   "fills": {
     "count": 219,
