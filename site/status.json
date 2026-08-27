@@ -4,24 +4,24 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-27T08:56:51.364Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-27T08-56-51-364Z.json",
+  "last_heartbeat_at": "2026-08-27T09:01:56.194Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-27T09-01-56-194Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 338,
-    "posts_total": 676,
-    "cancels_total": 338,
-    "last_cycle_at": "2026-08-27T07:59:00.857Z",
+    "cycles_total": 339,
+    "posts_total": 678,
+    "cancels_total": 339,
+    "last_cycle_at": "2026-08-27T09:01:56.196Z",
     "last_action": "quoted",
-    "last_mark_usd": 101.38,
+    "last_mark_usd": 104.8,
     "spread_bps": 50,
-    "last_bid_sig": "3r63mfxWcJed4e7yM5DY6uYaLFkFtMq3JSmsaH5Qn4wcFk1UYPZPT4hCGxt25m8vMAK8CL6xLSLy7mubDT7zK5bg",
-    "last_ask_sig": "62QWy7CRXt6YxD6i1zrv5sb3avfUQQrvFK7TQGmVvJS9ZpVpVAXSzEV8FoAytQye75b841myX84ptmgwsEeCFet4",
-    "last_cancel_sig": "3yny6A6ryeEzAzUhd4L5c1oSCoDBfAxe3eMyuZDb7ZeCkpfoHjKJASMgsZtpkhgFqYN6ggptHgWpmQwbNo6Q6hcb",
+    "last_bid_sig": "5g7HxLAWuDAqtdd5t71SLhumXNAxohNJrx3p4MW1T2u7e9Kh3Vt1DySgLKTEDCxMDFpXwnN8VZ59fCv1iELGij1h",
+    "last_ask_sig": "5rVaP93grqtYXw7KDdwCWw9sxQZ8JTAMvubFQ2khEvpkhJePYjZE4KtgM2TcqX71JvJv2Tp18dm93obJ3S28ZR74",
+    "last_cancel_sig": "4N48Myh4ALumx2n3EQJw7aTDzBVwbipd9bXEXBE7Le8Rz58uTQzNu8EQ11j9egX4CCgSi1Mop1AUNSPBvSWkqfCb",
     "open_order_count": 2
   },
   "pnl": {
@@ -38,7 +38,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-27T08:56:51.364Z"
+    "updated_at": "2026-08-27T09:01:56.194Z"
   },
   "fills": {
     "count": 263,
