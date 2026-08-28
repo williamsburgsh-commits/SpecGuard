@@ -4,25 +4,25 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-28T21:10:27.127Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-28T21-10-27-127Z.json",
+  "last_heartbeat_at": "2026-08-28T21:15:32.480Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-28T21-15-32-480Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 439,
-    "posts_total": 878,
-    "cancels_total": 439,
-    "last_cycle_at": "2026-08-28T21:10:27.128Z",
+    "cycles_total": 440,
+    "posts_total": 880,
+    "cancels_total": 440,
+    "last_cycle_at": "2026-08-28T21:15:32.481Z",
     "last_action": "quoted",
     "last_mark_usd": 103.92,
     "spread_bps": 50,
-    "last_bid_sig": "5V6pVoGiYzDWgJUqsmNga7GYvbDNQ98Z4pPr5QdkCexRVZMKuUXNGyeAs4cussTy7vg9TvGjQyNjd9TDAPqFQjH1",
-    "last_ask_sig": "5GbSxy1Y2fwPvkVoXL4YM4DysgdDLQQ9LU9i77w1kBK8cvp77Q1M7aUHzvpRMZYaZm4Bpns38Bd1ksNEi3vHZFJL",
-    "last_cancel_sig": "5CnG3gcCoxHMqSpm5k3UEFn1oM9p4U75LZ95cVvfkGP8HckcRfgjmHtXBAAinqaGbyc8YhuZ8rsVZgi1F3XqhaXW",
-    "open_order_count": 2
+    "last_bid_sig": "fc1WPRAkAnb6BQZYZGAshph24CiQ6bjJ7yUrN3JHM24BRzxAReYrKDNharovdcKvfzWxcghV2bCZvwXJFScVfj3",
+    "last_ask_sig": "FaM4Vpyhc5MBhPDnppiauYKRmHPwNX296PU9CQDAVVik8yn9Ugt19zJCWdnEo22SGCz3QVs3zK21HhpCWaU7MKX",
+    "last_cancel_sig": "2Pt9PrJMRwR3y1GyR5rqsv3wy5piAdmD98s64vHnb2bThwM63KuobKTFcBDgctofHiqi3Rgqoz3AbaMEPtSpL1pT",
+    "open_order_count": 1
   },
   "pnl": {
     "baseline_equity_usd": 5.4,
@@ -30,7 +30,7 @@
     "unrealized_pnl_usd": 0,
     "drawdown_usd": 0,
     "inventory_usd": 5.19,
-    "leverage": 0.902,
+    "leverage": 0.903,
     "within_spec": true,
     "breach_reasons": [],
     "spec_limits": {
@@ -38,12 +38,12 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-28T21:10:27.127Z"
+    "updated_at": "2026-08-28T21:15:32.480Z"
   },
   "fills": {
-    "count": 360,
-    "last_fill_at": "2026-08-28T21:10:27.127Z",
-    "last_fill_sig": "5erGKZinieTM2iaj6GeCGPEGEbPynGV51WPgwWii2yycV72vkGSZTiBDdv3K8LaND5xuq3JF6DNNkukansdcS1sP",
+    "count": 361,
+    "last_fill_at": "2026-08-28T21:15:32.480Z",
+    "last_fill_sig": "5V6pVoGiYzDWgJUqsmNga7GYvbDNQ98Z4pPr5QdkCexRVZMKuUXNGyeAs4cussTy7vg9TvGjQyNjd9TDAPqFQjH1",
     "position_size_sol": -0.05
   }
 }
