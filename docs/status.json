@@ -4,8 +4,8 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-28T14:38:35.474Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-28T14-38-35-474Z.json",
+  "last_heartbeat_at": "2026-08-28T14:43:42.098Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-28T14-43-42-098Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
@@ -15,8 +15,8 @@
     "cycles_total": 392,
     "posts_total": 784,
     "cancels_total": 392,
-    "last_cycle_at": "2026-08-28T14:38:35.475Z",
-    "last_action": "quoted_then_breach",
+    "last_cycle_at": "2026-08-28T14:43:42.099Z",
+    "last_action": "skip_breach",
     "last_mark_usd": 105.57,
     "spread_bps": 50,
     "last_bid_sig": "4tMNv7yU4pXo9hmEPQGnpw2VkJNNTyUhDyVGZ5vXnHNHbCFurpFbv93nD9nXGsQnpzZi7RoEjvdDkBSd9VCZiHLr",
@@ -26,11 +26,11 @@
   },
   "pnl": {
     "baseline_equity_usd": 5.4,
-    "current_equity_usd": 5.57,
-    "unrealized_pnl_usd": -0.17,
+    "current_equity_usd": 5.63,
+    "unrealized_pnl_usd": -0.12,
     "drawdown_usd": 0,
-    "inventory_usd": 11.72,
-    "leverage": 2.039,
+    "inventory_usd": 11.66,
+    "leverage": 2.029,
     "within_spec": false,
     "breach_reasons": [
       "max_leverage"
@@ -40,12 +40,12 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-28T14:38:35.474Z"
+    "updated_at": "2026-08-28T14:43:42.098Z"
   },
   "fills": {
-    "count": 316,
-    "last_fill_at": "2026-08-28T14:38:35.474Z",
-    "last_fill_sig": "4Z4ixYVpKpSnBswtxFZtFBSKGsfYttYAV21irFDHWYo9MKjLvtRoRw7ovgmCpjXoYF4ZKLGG3wz6vyitZFX6mBAn",
+    "count": 317,
+    "last_fill_at": "2026-08-28T14:43:42.098Z",
+    "last_fill_sig": "4tMNv7yU4pXo9hmEPQGnpw2VkJNNTyUhDyVGZ5vXnHNHbCFurpFbv93nD9nXGsQnpzZi7RoEjvdDkBSd9VCZiHLr",
     "position_size_sol": -0.11
   }
 }
