@@ -4,8 +4,8 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-29T14:45:06.706Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-29T14-45-06-706Z.json",
+  "last_heartbeat_at": "2026-08-29T14:50:11.898Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-29T14-50-11-898Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
@@ -15,8 +15,8 @@
     "cycles_total": 639,
     "posts_total": 1278,
     "cancels_total": 639,
-    "last_cycle_at": "2026-08-29T14:45:06.708Z",
-    "last_action": "quoted",
+    "last_cycle_at": "2026-08-29T14:50:11.899Z",
+    "last_action": "skip_breach",
     "last_mark_usd": 103.88,
     "spread_bps": 50,
     "last_bid_sig": "2t9BmsnpkADbS55qfSaSpXcJKhVYbXm2wqRe2e2pFaz2s1t4Wjyhg4g6zV1oYygVDPRK8VxKqGcU2JpYPNQCTeo8",
@@ -28,24 +28,26 @@
   },
   "pnl": {
     "baseline_equity_usd": 45,
-    "current_equity_usd": 17.82,
-    "unrealized_pnl_usd": -0.24,
-    "drawdown_usd": 27.18,
-    "inventory_usd": 33.62,
-    "leverage": 1.862,
-    "within_spec": true,
-    "breach_reasons": [],
+    "current_equity_usd": 17.76,
+    "unrealized_pnl_usd": -0.3,
+    "drawdown_usd": 27.24,
+    "inventory_usd": 38.9,
+    "leverage": 2.154,
+    "within_spec": false,
+    "breach_reasons": [
+      "max_leverage"
+    ],
     "spec_limits": {
       "max_drawdown_usd": 40,
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-29T14:45:06.706Z"
+    "updated_at": "2026-08-29T14:50:11.898Z"
   },
   "fills": {
-    "count": 560,
-    "last_fill_at": "2026-08-29T14:45:06.706Z",
-    "last_fill_sig": "65q8HNRBhqu3tJgowUVzck1KAe2jaE5ytFqxk5xY6kV9rXUqreD9Qo36L65HXLHYmJhk7Pt5EDi5WNAir1eqt45Q",
-    "position_size_sol": -0.32
+    "count": 561,
+    "last_fill_at": "2026-08-29T14:50:11.898Z",
+    "last_fill_sig": "2SWESkcSEYWMSvhgxXMe4pKmUxJ6FSRz7ZfzTgdXVvZ4FYq6fGuNX976JFMovDsWJZHhtaGQ4zLgyhDJdrK1W8gm",
+    "position_size_sol": -0.37
   }
 }
