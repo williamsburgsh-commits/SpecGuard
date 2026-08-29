@@ -1,4 +1,4 @@
-{
+﻿{
   "status": "GREEN",
   "market": "SOL-PERP",
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
@@ -48,3 +48,4 @@
     "position_size_sol": -0.02
   }
 }
+

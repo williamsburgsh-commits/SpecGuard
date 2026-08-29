@@ -11,7 +11,9 @@ import {
 } from '@heroui/react';
 import { AGENT_ID, DASHBOARD_URL, REPO_RAW } from '../lib/constants';
 import {
+  computeReturnPct,
   formatAge,
+  formatPct,
   formatUsd,
   heroHint,
   limitPct,
@@ -99,6 +101,7 @@ export function TerminalDashboard({ data, computed, error, loading }) {
   const pnl = data?.pnl || {};
   const limits = pnl.spec_limits || {};
   const fills = data?.fills || {};
+  const returnPct = computeReturnPct(pnl.baseline_equity_usd, pnl.current_equity_usd);
   const hbProof = data?.last_heartbeat_proof
     ? `${REPO_RAW}/${data.last_heartbeat_proof}`
     : null;
@@ -192,6 +195,12 @@ export function TerminalDashboard({ data, computed, error, loading }) {
               <TerminalRow label="Spread">
                 {q.spread_bps != null ? `${q.spread_bps} bps` : '—'}
               </TerminalRow>
+              <TerminalRow label="Quote size">
+                {q.quantity_sol != null ? `${q.quantity_sol} SOL` : '—'}
+              </TerminalRow>
+              <TerminalRow label="Isolated margin">
+                {q.margin_usdc != null ? `$${q.margin_usdc}` : '—'}
+              </TerminalRow>
               <TerminalRow label="Last cycle">{q.last_cycle_at || '—'}</TerminalRow>
               <TerminalRow label="Last action">{q.last_action || '—'}</TerminalRow>
               <TerminalRow label="Cycles (total)">
@@ -219,6 +228,16 @@ export function TerminalDashboard({ data, computed, error, loading }) {
             <>
               <TerminalRow label="Baseline equity">{formatUsd(pnl.baseline_equity_usd)}</TerminalRow>
               <TerminalRow label="Current equity">{formatUsd(pnl.current_equity_usd)}</TerminalRow>
+              <TerminalRow label="Total return">
+                <Chip
+                  color={returnPct == null ? 'default' : returnPct >= 0 ? 'success' : 'danger'}
+                  variant="soft"
+                  size="sm"
+                  className="terminal-chip"
+                >
+                  <Chip.Label>{formatPct(returnPct)}</Chip.Label>
+                </Chip>
+              </TerminalRow>
               <TerminalRow label="Unrealized PnL">{formatUsd(pnl.unrealized_pnl_usd)}</TerminalRow>
               <TerminalRow label="Drawdown">
                 <div>

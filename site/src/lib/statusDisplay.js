@@ -8,6 +8,20 @@ export function formatUsd(n) {
   return `$${Number(n).toFixed(2)}`;
 }
 
+export function formatPct(n) {
+  if (n == null || Number.isNaN(n)) return '—';
+  const v = Number(n);
+  const sign = v > 0 ? '+' : '';
+  return `${sign}${v.toFixed(2)}%`;
+}
+
+export function computeReturnPct(baseline, equity) {
+  const b = Number(baseline);
+  const e = Number(equity);
+  if (!b || Number.isNaN(b) || Number.isNaN(e)) return null;
+  return ((e - b) / b) * 100;
+}
+
 export function formatAge(seconds) {
   if (seconds == null || Number.isNaN(seconds)) return '—';
   if (seconds < 60) return `${Math.floor(seconds)}s`;
