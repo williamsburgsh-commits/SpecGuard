@@ -83,6 +83,8 @@ function applyQuoteResult(status, quoteResult, operatorName) {
   q.last_action = quoteResult.action;
   q.last_mark_usd = quoteResult.mark_usd ?? q.last_mark_usd ?? null;
   q.spread_bps = quoteResult.prices?.spread_bps ?? q.spread_bps ?? 500;
+  if (quoteResult.prices?.quantity != null) q.quantity_sol = quoteResult.prices.quantity;
+  if (quoteResult.transfer_per_order != null) q.margin_usdc = quoteResult.transfer_per_order;
 
   if (quoteResult.bid_sig) q.last_bid_sig = quoteResult.bid_sig;
   if (quoteResult.ask_sig) q.last_ask_sig = quoteResult.ask_sig;
