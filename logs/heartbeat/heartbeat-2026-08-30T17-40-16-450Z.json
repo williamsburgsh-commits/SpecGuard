@@ -1,0 +1,8 @@
+{
+  "at": "2026-08-30T17:40:16.450Z",
+  "proof_type": "repo_log",
+  "proof_ref": "logs/heartbeat/heartbeat-2026-08-30T17-40-16-450Z.json",
+  "memo": "specguard-hb-1788111616",
+  "content_hash": "9efd993a49b0e03d85306a47c9839a64d13898ce48a496c3061665f3ddca7367",
+  "operator": "digitalocean"
+}
