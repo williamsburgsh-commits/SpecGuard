@@ -4,35 +4,35 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-31T04:33:49.226Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-31T04-33-49-226Z.json",
+  "last_heartbeat_at": "2026-08-31T04:38:54.478Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-31T04-38-54-478Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 657,
-    "posts_total": 1314,
-    "cancels_total": 657,
-    "last_cycle_at": "2026-08-31T04:33:49.227Z",
+    "cycles_total": 658,
+    "posts_total": 1316,
+    "cancels_total": 658,
+    "last_cycle_at": "2026-08-31T04:38:54.479Z",
     "last_action": "quoted",
     "last_mark_usd": 102.03,
     "spread_bps": 50,
-    "last_bid_sig": "56dHpMn5XEvZ4UktkQuPgV7G7jz4nwGtABf4bCZmJYLjrVBv7fYG4JX3Mnq831QuuzEUF4HrBTrpUDapyYTzGcPt",
-    "last_ask_sig": "bDTn7nnRoLcH9WvyYRgnziw8sHrj5SqfhjZ9dFYr5yJfGxgH4mrAWF8DTAYdD28v3JjnCY9Sr33sgzob7dtkzEo",
-    "last_cancel_sig": "3HjkQMC4hP9yKyqKP3Gu8oh1TxCoe6DudBnVaVRsogZhs9sWx89mopssPypi6TtJ3wpXd8pyMcxSY6wEzyAtcXqZ",
-    "open_order_count": 1,
+    "last_bid_sig": "3Yr1HPrvZGgMoyDXDubvrUpSx9ro1cHxtTpdV9icDDzTPzTaFxSZ5pPJGHj9WS1njt8ucTUxi6uhPqKgbTZzqGnf",
+    "last_ask_sig": "3dDcDtC4geFfZMWqTPMUH6m9YtxyEdC7Nv6DiuckqVkNaiApCxSjkVg8F3M2mFTDoLMxonGAFnWJ4ctjou4bATcJ",
+    "last_cancel_sig": "2ZbinbgG1L98geDkvphEhieeCC2J6KcXgToQd23KwtjTLnQV9aoTJ2xw2Uiwb9NK9iAG4RLWzdGgfU4BDSiRK9jq",
+    "open_order_count": 0,
     "quantity_sol": 0.05,
     "margin_usdc": 7.5
   },
   "pnl": {
     "baseline_equity_usd": 45,
-    "current_equity_usd": 19.19,
-    "unrealized_pnl_usd": 0.45,
-    "drawdown_usd": 25.81,
-    "inventory_usd": 22.28,
-    "leverage": 1.189,
+    "current_equity_usd": 19.17,
+    "unrealized_pnl_usd": 0.34,
+    "drawdown_usd": 25.83,
+    "inventory_usd": 17.23,
+    "leverage": 0.915,
     "within_spec": true,
     "breach_reasons": [],
     "spec_limits": {
@@ -40,12 +40,12 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-31T04:33:49.226Z"
+    "updated_at": "2026-08-31T04:38:54.478Z"
   },
   "fills": {
-    "count": 580,
-    "last_fill_at": "2026-08-31T04:33:49.226Z",
-    "last_fill_sig": "5V427YTxNSc1qaJJA8M4XyqeYSZtWP3BvVYMsVuq6J5TpZP1yMs7JAVHTG8pY7U7C7yyfYYtCVAYgKjDbAE4J5nC",
-    "position_size_sol": -0.22
+    "count": 581,
+    "last_fill_at": "2026-08-31T04:38:54.478Z",
+    "last_fill_sig": "bDTn7nnRoLcH9WvyYRgnziw8sHrj5SqfhjZ9dFYr5yJfGxgH4mrAWF8DTAYdD28v3JjnCY9Sr33sgzob7dtkzEo",
+    "position_size_sol": -0.17
   }
 }
