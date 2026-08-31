@@ -4,8 +4,8 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-08-31T10:57:44.138Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-31T10-57-44-138Z.json",
+  "last_heartbeat_at": "2026-08-31T11:02:49.146Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-08-31T11-02-49-146Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
@@ -15,9 +15,9 @@
     "cycles_total": 726,
     "posts_total": 1452,
     "cancels_total": 726,
-    "last_cycle_at": "2026-08-31T10:57:44.139Z",
-    "last_action": "quoted",
-    "last_mark_usd": 103.12,
+    "last_cycle_at": "2026-08-31T11:02:49.147Z",
+    "last_action": "skip_breach",
+    "last_mark_usd": 103.65,
     "spread_bps": 50,
     "last_bid_sig": "jUYCfG7MC3jiDXKKEDCvtoCnDkKX8AwToW1tA3yKUmtaTXYbeuCbYy4NeQLy2xSwrUoMhhvEQfxJP96a7Q1XF5Y",
     "last_ask_sig": "5ey8GMMwpBsfCxPVvu8EnyFrwMNMxFxxaqtVPv1a7kQSKk1HVAdQUw3pFDNKaWR7UnMbcukJk3yqf1TFQY95mof",
@@ -28,9 +28,9 @@
   },
   "pnl": {
     "baseline_equity_usd": 45,
-    "current_equity_usd": 18.81,
-    "unrealized_pnl_usd": -0.32,
-    "drawdown_usd": 26.19,
+    "current_equity_usd": 18.8,
+    "unrealized_pnl_usd": -0.33,
+    "drawdown_usd": 26.2,
     "inventory_usd": 38.39,
     "leverage": 2.007,
     "within_spec": false,
@@ -42,12 +42,12 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-08-31T10:57:44.138Z"
+    "updated_at": "2026-08-31T11:02:49.146Z"
   },
   "fills": {
-    "count": 649,
-    "last_fill_at": "2026-08-31T10:57:44.138Z",
-    "last_fill_sig": "5vTve2rspQpznHjE9XXTTdmETJyNBo3HmH4p2s1XSQESddQpPaRTj2gDSrKRCWEEwNQLqdMcvibVntrJyVAWLjfY",
+    "count": 650,
+    "last_fill_at": "2026-08-31T11:02:49.146Z",
+    "last_fill_sig": "jUYCfG7MC3jiDXKKEDCvtoCnDkKX8AwToW1tA3yKUmtaTXYbeuCbYy4NeQLy2xSwrUoMhhvEQfxJP96a7Q1XF5Y",
     "position_size_sol": -0.37
   }
 }
