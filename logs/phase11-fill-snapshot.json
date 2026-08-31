@@ -1,12 +1,12 @@
 {
-  "at": "2026-08-31T09:56:17.834Z",
+  "at": "2026-08-31T10:01:23.317Z",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "fill": {
     "filled": true,
-    "fill_sig": "3sBwReX53B4DzTQurkHCEbpsDzGsx2rZxN7V4d9HqjUcU7WvysjYgrj3UeTa3hAacQypfn9vDHySGeYAefNbKcEV",
+    "fill_sig": "8epWX2deJG2MgDqptdhKFdrc5Ud6sSz6Z2xYBzGs6tMD9j3YqGS1H6nRhUiR9TXHByzZFNwm1rhgiKSsVYeF6R7",
     "position_size_sol": -0.22,
     "position_value_usd": 22.6644,
-    "at": "2026-08-31T09:56:17.834Z",
+    "at": "2026-08-31T10:01:23.317Z",
     "source": "resting_order",
     "positions": [
       {
@@ -25,8 +25,8 @@
     "apiBaseUrl": "https://perp-api.phoenix.trade",
     "authority": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
     "pdaIndex": 0,
-    "slot": 443122571,
-    "slotIndex": 1076,
+    "slot": 443123541,
+    "slotIndex": 1008,
     "traders": [
       {
         "flags": 63,
@@ -37,10 +37,10 @@
         "state": "active",
         "riskState": "healthy",
         "riskTier": "safe",
-        "collateralBalance": "19.132069",
-        "effectiveCollateral": "18.989469",
-        "effectiveCollateralForWithdrawals": "18.989469",
-        "portfolioValue": "18.989469",
+        "collateralBalance": "19.132289",
+        "effectiveCollateral": "18.989689",
+        "effectiveCollateralForWithdrawals": "18.989689",
+        "portfolioValue": "18.989689",
         "unrealizedPnl": "-0.142600",
         "discountedUnrealizedPnl": "-0.142600",
         "unsettledFundingOwed": "0.000000",
@@ -55,11 +55,11 @@
             "unrealizedPnl": "-0.142600",
             "discountedUnrealizedPnl": "-0.142600",
             "positionValue": "-22.664400",
-            "liquidationPrice": "176.7200",
+            "liquidationPrice": "176.7000",
             "initialMargin": "1.112616",
             "maintenanceMargin": "0.556308",
             "limitOrderMargin": "0.206040",
-            "accumulatedFunding": "0.000924",
+            "accumulatedFunding": "0.001144",
             "unsettledFunding": "0.000000"
           }
         ],
@@ -67,12 +67,12 @@
           "SOL": [
             {
               "price": {
-                "value": 1027500,
+                "value": 1026000,
                 "decimals": 4,
-                "ui": "102.7500"
+                "ui": "102.6000"
               },
               "side": "bid",
-              "orderSequenceNumber": "18446744073638682517",
+              "orderSequenceNumber": "18446744073638682071",
               "initialTradeSize": {
                 "value": 5,
                 "decimals": 2,
@@ -100,12 +100,12 @@
             },
             {
               "price": {
-                "value": 1037900,
+                "value": 1036400,
                 "decimals": 4,
-                "ui": "103.7900"
+                "ui": "103.6400"
               },
               "side": "ask",
-              "orderSequenceNumber": "70869099",
+              "orderSequenceNumber": "70869545",
               "initialTradeSize": {
                 "value": 5,
                 "decimals": 2,
@@ -210,24 +210,24 @@
   },
   "before_metrics": {
     "collateral": 19.132069,
-    "unrealized": -0.1426,
-    "positionNotional": 22.6644,
-    "currentEquity": 18.989469,
+    "unrealized": -0.1492,
+    "positionNotional": 22.671,
+    "currentEquity": 18.982869,
     "baseline": 45,
-    "drawdown": 26.010531,
-    "leverage": 1.1846288030844965,
-    "inventory": 22.6644,
+    "drawdown": 26.017131,
+    "leverage": 1.1849737736153887,
+    "inventory": 22.671,
     "openOrderCount": 2
   },
   "after_metrics": {
-    "collateral": 19.132069,
-    "unrealized": -0.1426,
-    "positionNotional": 22.6644,
-    "currentEquity": 18.989469,
+    "collateral": 19.132289,
+    "unrealized": -0.1448,
+    "positionNotional": 22.6666,
+    "currentEquity": 18.987489,
     "baseline": 45,
-    "drawdown": 26.010531,
-    "leverage": 1.1846288030844965,
-    "inventory": 22.6644,
-    "openOrderCount": 2
+    "drawdown": 26.012511,
+    "leverage": 1.18473017002827,
+    "inventory": 22.6666,
+    "openOrderCount": 1
   }
 }
