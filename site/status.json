@@ -4,24 +4,24 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-09-01T19:36:05.163Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-09-01T19-36-05-163Z.json",
+  "last_heartbeat_at": "2026-09-01T19:41:11.138Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-09-01T19-41-11-138Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 907,
-    "posts_total": 1814,
-    "cancels_total": 907,
-    "last_cycle_at": "2026-09-01T19:36:05.164Z",
+    "cycles_total": 908,
+    "posts_total": 1816,
+    "cancels_total": 908,
+    "last_cycle_at": "2026-09-01T19:41:11.139Z",
     "last_action": "quoted",
     "last_mark_usd": 99.67,
     "spread_bps": 50,
-    "last_bid_sig": "5HA5n3nzMDoYGrNRGTKBLoyrr7bZfg68152cSFnd8CBd9DBw9cCrD3Gz6ezsjt1tEeHKhw88U5LhKEAHpA2nNWLq",
-    "last_ask_sig": "Aa9DhDzvMt8yS6Du4et56RcXQjzJy4MDf2ZN3WAwSFnzazqSb6UVmAF6afnvyMLKKXBrDMS9KjHg9U5kZWY5q1T",
-    "last_cancel_sig": "4MipuAEFn7P1HGByVth6jAuZAki93bgppnNk2sxid8L9oqtzgTYHJy5z18RPLg6yCKkXhChmR5FaGFxpgcrm7Nx8",
+    "last_bid_sig": "3YhrTgBKRv7zWmvu4WxJX7g9kGZ9SRsYynV93Dba1rNzALqnpxhPqMz6Lkk5gwkVzdgpGWNNUSKaUyDuMfQdcNBt",
+    "last_ask_sig": "JWv6Zu881CnoExDwNepvbC5XRovN3mEVXFbMaxogUKi39DDE1KMUVBXeG1Vu1Nu3TLPbx11irJQTzW7HKo5WSx9",
+    "last_cancel_sig": "3kYqTBLWFxfUdBGfQwAeaiBJs5wnwnfNneXqUKe9bGkKSUTyRdmxEM2V6rZRSUD7xduCdaZ8oT18dCF78CjRV8HF",
     "open_order_count": 2,
     "quantity_sol": 0.05,
     "margin_usdc": 7.5
@@ -47,7 +47,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-09-01T19:36:05.163Z"
+    "updated_at": "2026-09-01T19:41:11.138Z"
   },
   "fills": {
     "count": 297,
