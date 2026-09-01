@@ -4,24 +4,24 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-09-01T09:40:25.730Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-09-01T09-40-25-730Z.json",
+  "last_heartbeat_at": "2026-09-01T09:45:31.074Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-09-01T09-45-31-074Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 839,
-    "posts_total": 1678,
-    "cancels_total": 839,
-    "last_cycle_at": "2026-09-01T09:40:25.731Z",
+    "cycles_total": 840,
+    "posts_total": 1680,
+    "cancels_total": 840,
+    "last_cycle_at": "2026-09-01T09:45:31.075Z",
     "last_action": "quoted",
     "last_mark_usd": 102.17,
     "spread_bps": 50,
-    "last_bid_sig": "33GDsvrT9UV1DdPrQMtbqqdeV3SZvYXLhkP5fvDs17vm1r8nZSEup2qmfHRdjJeAai98SiKUeB8yh3PsuyxLhZbA",
-    "last_ask_sig": "4pxaWMLZqs6yFaAaqN3nVCGuaURuWnSo5zWXxV2nsU1Pd9XaSQ7GZgwJcaU6qnfBJkWkdhiWAUGAiP9Frd6VRXHQ",
-    "last_cancel_sig": "4KnE5tW1nEiMY5NWs7goNgJm8KmN3CoJKome51RdakNprUXF6XD6urY3q88GxiY3H31XsT39fTFpr69ZUQG2dMu",
+    "last_bid_sig": "3h8ebKftY1Ly5whJ5BxZQTUriCt8hnMSVSNzeXvFbrdRRJDvScs72mjcrU9eQPvXLLxf54WP7oMDeLFVKdY5TreD",
+    "last_ask_sig": "2NpjdN4MHpUczzSHY4zY3id4KeCy7zpre6dDEGhpWjR8VAfPPJevHXg8vt3d27hUrRBvZZWWgT3mWC1myRKtWMUa",
+    "last_cancel_sig": "UhmvKZagob7kd1mPThCRoUt4qSnwg69zHSUWbAoyZenaKxxDXiTiGF5kGgEFbyWTgLYR1TkDVxQZbnMXDT4RA81",
     "open_order_count": 2,
     "quantity_sol": 0.05,
     "margin_usdc": 7.5
@@ -40,12 +40,12 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-09-01T09:40:25.730Z"
+    "updated_at": "2026-09-01T09:45:31.074Z"
   },
   "fills": {
-    "count": 769,
-    "last_fill_at": "2026-09-01T09:40:25.730Z",
-    "last_fill_sig": "aVtZQUCu4fXAChKjvrNTfJbWnQSt4D3jpDH3WqMmsoqcNzrdWekpgZ7L7fAYn8hgDaC5RUmXu4rnWXGq3XYE79e",
+    "count": 770,
+    "last_fill_at": "2026-09-01T09:45:31.074Z",
+    "last_fill_sig": "4pxaWMLZqs6yFaAaqN3nVCGuaURuWnSo5zWXxV2nsU1Pd9XaSQ7GZgwJcaU6qnfBJkWkdhiWAUGAiP9Frd6VRXHQ",
     "position_size_sol": -0.04
   }
 }
