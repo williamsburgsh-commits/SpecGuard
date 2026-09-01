@@ -25,7 +25,9 @@ export function Hero({ data, computed, loading, error }) {
     badgeColor = statusChipColor(computed.displayStatus);
   }
 
-  const hint = computed ? heroHint(computed) : (error ? 'Could not load live status — retrying…' : 'Loading operator state…');
+  const hint = computed
+    ? heroHint(computed, data?.pnl)
+    : (error ? 'Could not load live status — retrying…' : 'Loading operator state…');
 
   return (
     <section className="hero">

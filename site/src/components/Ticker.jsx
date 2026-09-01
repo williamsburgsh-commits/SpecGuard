@@ -4,7 +4,8 @@ const ITEMS = [
   'Kill-switch onchain · not a recommendation',
   'Breach → cancel → close → RED',
   'Heartbeat TTL 300s',
-  'Drawdown limit $40 · Inventory $100',
+  'Book profitable · 100% maker fills',
+  'Drawdown / inventory / leverage as % of spec cap',
   '$GUARD · pump.fun',
   'ClawPump × Ansem Hackathon',
 ];

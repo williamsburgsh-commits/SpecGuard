@@ -51,7 +51,7 @@ function countLimitOrders(trader) {
   return 0;
 }
 
-export function accountMetrics(account) {
+export function accountMetrics(account, extras = {}) {
   const traders = account?.traders || account?.subaccounts || [];
   let collateral = 0;
   let unrealized = 0;
@@ -78,12 +78,24 @@ export function accountMetrics(account) {
   }
 
   const currentEquity = collateral + unrealized;
-  const baseline = Number(process.env.SPECGUARD_BASELINE_EQUITY ?? currentEquity);
-  const drawdown = Math.max(0, baseline - currentEquity);
+  const withdrawn = Number(extras.withdrawnUsd ?? process.env.SPECGUARD_WITHDRAWN_USD ?? 0);
+  const baselineRaw = Number(process.env.SPECGUARD_BASELINE_EQUITY ?? currentEquity);
+  const baseline = Math.max(0, baselineRaw - withdrawn);
+  const realized = extras.realizedPnlUsd != null
+    ? Number(extras.realizedPnlUsd)
+    : Number(process.env.SPECGUARD_REALIZED_PNL_USD ?? NaN);
+  const tradingPnl = Number.isFinite(realized) ? realized + unrealized : null;
+  // Withdrawals are capital flow, not trading loss. Drawdown is the hole in the book.
+  const drawdown = tradingPnl != null
+    ? Math.max(0, -tradingPnl)
+    : Math.max(0, baseline - currentEquity);
   const leverage = collateral > 0 ? positionNotional / collateral : 0;
   return {
     collateral,
     unrealized,
+    realized: Number.isFinite(realized) ? realized : 0,
+    tradingPnl: tradingPnl ?? 0,
+    withdrawn,
     positionNotional,
     currentEquity,
     baseline,

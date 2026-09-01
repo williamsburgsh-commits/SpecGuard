@@ -35,9 +35,10 @@ Do **not** call these tools until the check completes and you emit an enforcemen
 ## Breach math (same formula everywhere)
 
 ```text
-baseline_equity   = collateral + unrealized PnL at session start (from perps_account)
+realized_pnl      = sum of Phoenix fill realized PnL (maker/taker tape)
 current_equity    = collateral + unrealized PnL now
-drawdown_usd      = baseline_equity - current_equity
+trading_pnl       = realized_pnl + unrealized
+drawdown_usd      = max(0, -trading_pnl)   # withdrawals are NOT drawdown
 inventory_usd     = abs(position_notional_usd)
 order_notional_usd = abs(quantity * price) for the proposed order
 

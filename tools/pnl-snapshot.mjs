@@ -7,7 +7,6 @@ import {
   accountMetrics,
   evaluateAccountBreach,
 } from './breach-math.mjs';
-
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.CLAWPUMP_API_URL || 'https://ai-agents-production-6ca0.up.railway.app';
 const KEY = process.env.CLAWPUMP_API_KEY;
@@ -85,22 +84,37 @@ export function quoteSubaccountInventorySol(account) {
   return positions.reduce((sum, p) => sum + Math.abs(p.position_size), 0);
 }
 
-export function buildPnlBlock(account, spec, now = new Date()) {
+function capPct(value, max) {
+  if (max == null || max <= 0) return 0;
+  return Math.round(Math.min(100, Math.max(0, (Number(value) / Number(max)) * 100)) * 10) / 10;
+}
+
+export function buildPnlBlock(account, spec, now = new Date(), extras = {}) {
   const effectiveSpec = applySpecOverrides(spec);
-  const metrics = accountMetrics(account);
+  const metrics = accountMetrics(account, extras);
   const breach = evaluateAccountBreach({
     spec: effectiveSpec,
     metrics,
     statusData: { last_heartbeat_at: now.toISOString(), heartbeat_ttl_seconds: 300 },
   });
+  const equity = metrics.currentEquity || 0;
+  const trading = metrics.tradingPnl ?? 0;
+  const returnPct = equity > 0 ? Math.round((trading / equity) * 1000) / 10 : 0;
 
   return {
-    baseline_equity_usd: metrics.baseline,
+    baseline_equity_usd: roundUsd(metrics.baseline),
     current_equity_usd: roundUsd(metrics.currentEquity),
+    withdrawn_usd: roundUsd(metrics.withdrawn),
+    realized_pnl_usd: roundUsd(metrics.realized),
     unrealized_pnl_usd: roundUsd(metrics.unrealized),
+    trading_pnl_usd: roundUsd(trading),
+    return_pct: returnPct,
     drawdown_usd: roundUsd(metrics.drawdown),
     inventory_usd: roundUsd(metrics.inventory),
     leverage: roundLeverage(metrics.leverage),
+    drawdown_pct_of_cap: capPct(metrics.drawdown, effectiveSpec.max_drawdown_usd),
+    inventory_pct_of_cap: capPct(metrics.inventory, effectiveSpec.max_inventory_usd),
+    leverage_pct_of_cap: capPct(metrics.leverage, effectiveSpec.max_leverage),
     within_spec: !breach.breached,
     breach_reasons: breach.reasons,
     spec_limits: {
@@ -418,7 +432,11 @@ export async function buildFullSnapshot() {
     fetchWalletHistory().catch(() => []),
   ]);
 
-  const pnl = buildPnlBlock(account, spec);
+  const tape = await fetchPhoenixTape(account).catch(() => null);
+  const pnl = buildPnlBlock(account, spec, new Date(), {
+    realizedPnlUsd: tape?.realized_pnl_usd,
+    withdrawnUsd: Number(process.env.SPECGUARD_WITHDRAWN_USD ?? 0),
+  });
   const positions = extractQuoteSubaccountPositions(account);
 
   return {
@@ -449,4 +467,106 @@ export function loadAccountBefore() {
 
 export function loadStatusJson() {
   return JSON.parse(readFileSync(join(ROOT, 'site', 'status.json'), 'utf8'));
+}
+
+const PHOENIX = process.env.PHOENIX_PERP_API || 'https://perp-api.phoenix.trade';
+
+function roundPct(n) {
+  return Math.round(Number(n) * 10) / 10;
+}
+
+function traderBySubaccount(account, index) {
+  const traders = account?.traders || account?.subaccounts || [];
+  return traders.find((t) => (t.subaccountIndex ?? t.subaccount_index) === index) || null;
+}
+
+async function phoenixGetJson(url) {
+  const res = await fetch(url, {
+    headers: { Accept: 'application/json' },
+    cache: 'no-store',
+  });
+  const text = await res.text();
+  let body;
+  try { body = text ? JSON.parse(text) : {}; } catch { body = { raw: text }; }
+  if (!res.ok) {
+    const err = new Error(body.error || body.message || text || res.statusText);
+    err.status = res.status;
+    err.body = body;
+    throw err;
+  }
+  return body;
+}
+
+async function fetchAllPhoenixTrades(parentKey) {
+  const trades = [];
+  let cursor = null;
+  for (let i = 0; i < 20; i += 1) {
+    const params = new URLSearchParams({
+      limit: '1000',
+      trader_pda_index: '0',
+    });
+    if (cursor) params.set('cursor', cursor);
+    const page = await phoenixGetJson(`${PHOENIX}/v1/traders/${parentKey}/trades_v2?${params}`);
+    const rows = Array.isArray(page.data) ? page.data : [];
+    trades.push(...rows);
+    if (!page.hasMore || !page.nextCursor || rows.length === 0) break;
+    cursor = page.nextCursor;
+  }
+  return trades;
+}
+
+export function summarizeTrades(trades) {
+  let realized = 0;
+  let fees = 0;
+  let makers = 0;
+  let takers = 0;
+  for (const t of trades) {
+    realized += Number(t.realizedPnl ?? t.realized_pnl ?? 0);
+    fees += Number(t.fees ?? 0);
+    if (String(t.liquidity).toLowerCase() === 'maker') makers += 1;
+    else takers += 1;
+  }
+  const latest = trades[0] || null;
+  return {
+    count: trades.length,
+    realized_pnl_usd: roundUsd(realized),
+    fees_usd: roundUsd(fees),
+    maker_count: makers,
+    taker_count: takers,
+    maker_pct: trades.length ? roundPct((makers / trades.length) * 100) : 0,
+    last_fill_at: latest?.timestamp ?? null,
+    last_fill_sig: latest?.signature ?? null,
+    last_position_sol: latest?.baseLotsAfter != null ? Number(latest.baseLotsAfter) : null,
+  };
+}
+
+export async function fetchPhoenixTape(account) {
+  const isolated = traderBySubaccount(account, 1);
+  const parent = traderBySubaccount(account, 0);
+  const isolatedKey = isolated?.traderKey;
+  const parentKey = parent?.traderKey;
+  if (!isolatedKey || !parentKey) {
+    throw new Error('Phoenix trader keys missing on perps_account');
+  }
+
+  const now = Date.now();
+  const start = now - 30 * 24 * 3600 * 1000;
+  const [pnlSeries, trades] = await Promise.all([
+    phoenixGetJson(`${PHOENIX}/v1/traders/${isolatedKey}/pnl?resolution=1d&start_time=${start}&end_time=${now}`),
+    fetchAllPhoenixTrades(parentKey),
+  ]);
+
+  const summary = summarizeTrades(trades);
+  const lastPoint = Array.isArray(pnlSeries) && pnlSeries.length
+    ? pnlSeries[pnlSeries.length - 1]
+    : null;
+
+  return {
+    source: 'phoenix',
+    isolated_trader: isolatedKey,
+    parent_trader: parentKey,
+    realized_pnl_usd: summary.realized_pnl_usd,
+    cumulative_pnl_usd: lastPoint?.cumulativePnl != null ? roundUsd(lastPoint.cumulativePnl) : summary.realized_pnl_usd,
+    fills: summary,
+  };
 }

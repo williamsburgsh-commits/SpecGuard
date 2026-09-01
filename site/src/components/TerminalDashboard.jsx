@@ -11,10 +11,10 @@ import {
 } from '@heroui/react';
 import { AGENT_ID, DASHBOARD_URL, REPO_RAW } from '../lib/constants';
 import {
-  computeReturnPct,
+  capPctFrom,
+  computeTradingReturnPct,
   formatAge,
   formatPct,
-  formatUsd,
   heroHint,
   limitPct,
   limitProgressColor,
@@ -99,9 +99,11 @@ export function TerminalDashboard({ data, computed, error, loading }) {
   const wallet = data?.wallet_address;
   const q = data?.quoting || {};
   const pnl = data?.pnl || {};
-  const limits = pnl.spec_limits || {};
   const fills = data?.fills || {};
-  const returnPct = computeReturnPct(pnl.baseline_equity_usd, pnl.current_equity_usd);
+  const returnPct = computeTradingReturnPct(pnl);
+  const ddPct = capPctFrom(pnl, 'drawdown');
+  const invPct = capPctFrom(pnl, 'inventory');
+  const levPct = capPctFrom(pnl, 'leverage');
   const hbProof = data?.last_heartbeat_proof
     ? `${REPO_RAW}/${data.last_heartbeat_proof}`
     : null;
@@ -226,43 +228,44 @@ export function TerminalDashboard({ data, computed, error, loading }) {
         <TerminalCard title="PnL overlay" loading={isLoading}>
           {data && (
             <>
-              <TerminalRow label="Baseline equity">{formatUsd(pnl.baseline_equity_usd)}</TerminalRow>
-              <TerminalRow label="Current equity">{formatUsd(pnl.current_equity_usd)}</TerminalRow>
-              <TerminalRow label="Total return">
+              <TerminalRow label="Book">
                 <Chip
                   color={returnPct == null ? 'default' : returnPct >= 0 ? 'success' : 'danger'}
                   variant="soft"
                   size="sm"
                   className="terminal-chip"
                 >
-                  <Chip.Label>{formatPct(returnPct)}</Chip.Label>
+                  <Chip.Label>
+                    {returnPct == null
+                      ? '—'
+                      : returnPct >= 0
+                        ? `profitable ${formatPct(returnPct)}`
+                        : formatPct(returnPct)}
+                  </Chip.Label>
                 </Chip>
               </TerminalRow>
-              <TerminalRow label="Unrealized PnL">{formatUsd(pnl.unrealized_pnl_usd)}</TerminalRow>
               <TerminalRow label="Drawdown">
                 <div>
-                  {formatUsd(pnl.drawdown_usd)} / {formatUsd(limits.max_drawdown_usd)}
+                  {formatPct(ddPct, { sign: false, digits: 0 })} of cap
                   <LimitBar
-                    value={pnl.drawdown_usd ?? 0}
-                    max={limits.max_drawdown_usd ?? 40}
+                    value={ddPct}
+                    max={100}
                     label="Drawdown"
                   />
                 </div>
               </TerminalRow>
               <TerminalRow label="Inventory">
                 <div>
-                  {formatUsd(pnl.inventory_usd)} / {formatUsd(limits.max_inventory_usd)}
+                  {formatPct(invPct, { sign: false, digits: 0 })} of cap
                   <LimitBar
-                    value={pnl.inventory_usd ?? 0}
-                    max={limits.max_inventory_usd ?? 100}
+                    value={invPct}
+                    max={100}
                     label="Inventory"
                   />
                 </div>
               </TerminalRow>
               <TerminalRow label="Leverage">
-                {pnl.leverage != null && limits.max_leverage != null
-                  ? `${pnl.leverage} / ${limits.max_leverage}`
-                  : '—'}
+                {formatPct(levPct, { sign: false, digits: 0 })} of cap
               </TerminalRow>
               <TerminalRow label="Within spec">
                 {pnl.within_spec == null ? (
@@ -282,6 +285,11 @@ export function TerminalDashboard({ data, computed, error, loading }) {
           {data && (
             <>
               <TerminalRow label="Fill count">{fills.count != null ? String(fills.count) : '0'}</TerminalRow>
+              <TerminalRow label="Maker share">
+                {fills.maker_pct != null
+                  ? formatPct(fills.maker_pct, { sign: false, digits: 0 })
+                  : '—'}
+              </TerminalRow>
               <TerminalRow label="Last fill">{fills.last_fill_at || '—'}</TerminalRow>
               <TerminalRow label="Position size">
                 {fills.position_size_sol != null ? `${fills.position_size_sol} SOL` : '—'}
@@ -332,7 +340,7 @@ export function TerminalDashboard({ data, computed, error, loading }) {
                     <li>Breach includes drawdown, inventory, notional, leverage, disallowed tools</li>
                   </ul>
                   {computed && (
-                    <p className="text-muted text-sm">{heroHint(computed)}</p>
+                    <p className="text-muted text-sm">{heroHint(computed, pnl)}</p>
                   )}
                   {error && (
                     <Alert status="warning" className="mt-3">

@@ -8,18 +8,33 @@ export function formatUsd(n) {
   return `$${Number(n).toFixed(2)}`;
 }
 
-export function formatPct(n) {
+export function formatPct(n, { digits = 1, sign = true } = {}) {
   if (n == null || Number.isNaN(n)) return '—';
   const v = Number(n);
-  const sign = v > 0 ? '+' : '';
-  return `${sign}${v.toFixed(2)}%`;
+  const prefix = sign && v > 0 ? '+' : '';
+  return `${prefix}${v.toFixed(digits)}%`;
 }
 
-export function computeReturnPct(baseline, equity) {
-  const b = Number(baseline);
-  const e = Number(equity);
-  if (!b || Number.isNaN(b) || Number.isNaN(e)) return null;
-  return ((e - b) / b) * 100;
+export function computeTradingReturnPct(pnl = {}) {
+  if (pnl.return_pct != null && !Number.isNaN(Number(pnl.return_pct))) {
+    return Number(pnl.return_pct);
+  }
+  const trading = Number(pnl.trading_pnl_usd);
+  const equity = Number(pnl.current_equity_usd);
+  if (Number.isFinite(trading) && equity > 0) {
+    return (trading / equity) * 100;
+  }
+  return null;
+}
+
+export function capPctFrom(pnl, key) {
+  const stored = pnl?.[`${key}_pct_of_cap`];
+  if (stored != null && !Number.isNaN(Number(stored))) return Number(stored);
+  const limits = pnl?.spec_limits || {};
+  if (key === 'drawdown') return limitPct(pnl.drawdown_usd ?? 0, limits.max_drawdown_usd ?? 40);
+  if (key === 'inventory') return limitPct(pnl.inventory_usd ?? 0, limits.max_inventory_usd ?? 100);
+  if (key === 'leverage') return limitPct(pnl.leverage ?? 0, limits.max_leverage ?? 2);
+  return 0;
 }
 
 export function formatAge(seconds) {
@@ -49,8 +64,11 @@ export function statusChipColor(displayStatus) {
   return 'default';
 }
 
-export function heroHint(computed) {
+export function heroHint(computed, pnl) {
   if (computed.displayStatus === 'GREEN') {
+    if (Number(pnl?.trading_pnl_usd) > 0 || Number(pnl?.return_pct) > 0) {
+      return 'Operator live — book profitable, copy-trade eligible.';
+    }
     return 'Operator live — heartbeat fresh, copy-trade eligible.';
   }
   if (computed.displayStatus === 'STALE') {

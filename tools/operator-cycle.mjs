@@ -11,6 +11,7 @@ import {
   defaultFillsBlock,
   detectFillEvent,
   fetchAccount,
+  fetchPhoenixTape,
   fetchWalletHistory,
 } from './pnl-snapshot.mjs';
 
@@ -110,8 +111,29 @@ async function syncPnlAndFills(status, quoteResult, now, priorQuoting) {
     fetchWalletHistory().catch(() => []),
   ]);
 
-  status.pnl = buildPnlBlock(account, spec, now);
+  const tape = await fetchPhoenixTape(account).catch(() => null);
+  status.pnl = buildPnlBlock(account, spec, now, {
+    realizedPnlUsd: tape?.realized_pnl_usd,
+    withdrawnUsd: Number(process.env.SPECGUARD_WITHDRAWN_USD ?? 0),
+  });
   if (!status.fills) status.fills = defaultFillsBlock();
+
+  if (tape?.fills) {
+    status.fills = {
+      count: tape.fills.count,
+      maker_count: tape.fills.maker_count,
+      taker_count: tape.fills.taker_count,
+      maker_pct: tape.fills.maker_pct,
+      last_fill_at: tape.fills.last_fill_at,
+      last_fill_sig: tape.fills.last_fill_sig,
+      position_size_sol: tape.fills.last_position_sol
+        ?? quoteResult?.after_metrics?.positionSize
+        ?? status.fills.position_size_sol
+        ?? null,
+      source: 'phoenix',
+    };
+    return { fillEvent: { filled: false, source: 'phoenix_tape' }, account, tape };
+  }
 
   const knownSigs = [status.fills.last_fill_sig].filter(Boolean);
   const fillEvent = detectFillEvent({
@@ -133,7 +155,7 @@ async function syncPnlAndFills(status, quoteResult, now, priorQuoting) {
 
   await backfillMissingFillSig(status);
 
-  return { fillEvent, account };
+  return { fillEvent, account, tape: null };
 }
 
 export async function runOperatorCycle({ operatorName = OPERATOR_NAME } = {}) {
