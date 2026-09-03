@@ -4,8 +4,8 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-09-03T05:18:37.898Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-09-03T05-18-37-898Z.json",
+  "last_heartbeat_at": "2026-09-03T05:23:49.578Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-09-03T05-23-49-578Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
@@ -28,17 +28,17 @@
   },
   "pnl": {
     "baseline_equity_usd": 21,
-    "current_equity_usd": 20.91,
+    "current_equity_usd": 20.7,
     "withdrawn_usd": 24,
     "realized_pnl_usd": 2.86,
-    "unrealized_pnl_usd": 0.38,
-    "trading_pnl_usd": 3.24,
-    "return_pct": 15.5,
+    "unrealized_pnl_usd": 0.17,
+    "trading_pnl_usd": 3.03,
+    "return_pct": 14.6,
     "drawdown_usd": 0,
-    "inventory_usd": 41.2,
-    "leverage": 2.007,
+    "inventory_usd": 46.02,
+    "leverage": 2.242,
     "drawdown_pct_of_cap": 0,
-    "inventory_pct_of_cap": 41.2,
+    "inventory_pct_of_cap": 46,
     "leverage_pct_of_cap": 100,
     "within_spec": false,
     "breach_reasons": [
@@ -49,16 +49,16 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-09-03T05:18:37.898Z"
+    "updated_at": "2026-09-03T05:23:49.578Z"
   },
   "fills": {
-    "count": 324,
-    "maker_count": 324,
+    "count": 325,
+    "maker_count": 325,
     "taker_count": 0,
     "maker_pct": 100,
-    "last_fill_at": "2026-09-03T02:32:04Z",
-    "last_fill_sig": "38rGrL7MBV7j3NU9EDxkCEY6S72KEYD6y5knNFr2WWJ2P1mdt354RCaib9vKcGGX4toZqfiJhB4Qz1FaKxbzXMzF",
-    "position_size_sol": 0.41,
+    "last_fill_at": "2026-09-03T05:23:55Z",
+    "last_fill_sig": "5RHGLckgLBfRvRHgBW1kzFem2LWy8J7cCkosk1BwiysoabGAoFLSj8kzqEkL7tnHP9FNxigLjumyEKK3Gc8mkMzt",
+    "position_size_sol": 0.46,
     "source": "phoenix"
   }
 }
