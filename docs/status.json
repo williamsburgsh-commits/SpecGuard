@@ -4,8 +4,8 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-09-06T22:42:13.898Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-09-06T22-42-13-898Z.json",
+  "last_heartbeat_at": "2026-09-06T22:47:17.346Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-09-06T22-47-17-346Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
@@ -15,7 +15,7 @@
     "cycles_total": 996,
     "posts_total": 1992,
     "cancels_total": 996,
-    "last_cycle_at": "2026-09-06T22:42:13.899Z",
+    "last_cycle_at": "2026-09-06T22:47:17.348Z",
     "last_action": "skip_breach",
     "last_mark_usd": 105.97,
     "spread_bps": 50,
@@ -28,17 +28,17 @@
   },
   "pnl": {
     "baseline_equity_usd": 21,
-    "current_equity_usd": 23.46,
+    "current_equity_usd": 23.34,
     "withdrawn_usd": 24,
     "realized_pnl_usd": 2.86,
-    "unrealized_pnl_usd": 2.93,
-    "trading_pnl_usd": 5.79,
-    "return_pct": 24.7,
+    "unrealized_pnl_usd": 2.81,
+    "trading_pnl_usd": 5.67,
+    "return_pct": 24.3,
     "drawdown_usd": 0,
-    "inventory_usd": 48.78,
-    "leverage": 2.376,
+    "inventory_usd": 48.66,
+    "leverage": 2.37,
     "drawdown_pct_of_cap": 0,
-    "inventory_pct_of_cap": 48.8,
+    "inventory_pct_of_cap": 48.7,
     "leverage_pct_of_cap": 100,
     "within_spec": false,
     "breach_reasons": [
@@ -49,7 +49,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-09-06T22:42:13.898Z"
+    "updated_at": "2026-09-06T22:47:17.346Z"
   },
   "fills": {
     "count": 325,
