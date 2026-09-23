@@ -4,6 +4,21 @@ import type { SolanaWalletId, SolanaWalletOption } from "@/lib/register/walletPr
 import { WALLET_TAGLINE, walletIconUrl } from "@/lib/wallet/walletBranding";
 import { cn } from "@/lib/utils";
 
+function WalletIcon({ id, dimmed }: { id: SolanaWalletId; dimmed?: boolean }) {
+  return (
+    <img
+      src={walletIconUrl(id)}
+      alt=""
+      width={40}
+      height={40}
+      className={cn(
+        "h-10 w-10 shrink-0 rounded-xl object-cover",
+        dimmed && "opacity-60 grayscale",
+      )}
+    />
+  );
+}
+
 function WalletRow({
   wallet,
   connecting,
@@ -19,63 +34,53 @@ function WalletRow({
 
   if (wallet.installed) {
     return (
-      <button
-        type="button"
-        disabled={connecting}
-        onClick={() => onConnect(wallet.id)}
-        className={cn(
-          "flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-[#ffffff08]",
-          connecting && !pending && "opacity-50",
-        )}
-      >
-        <img
-          src={walletIconUrl(wallet.id)}
-          alt=""
-          width={32}
-          height={32}
-          className="h-8 w-8 rounded-lg bg-[#08080f] object-contain p-0.5"
-        />
-        <span className="min-w-0 flex-1">
-          <span className="block font-semibold">{wallet.name}</span>
-          <span className="block truncate text-xs text-[#8888aa]">{WALLET_TAGLINE[wallet.id]}</span>
-        </span>
-        <span className="shrink-0 rounded-full bg-[#00ff88]/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#00ff88]">
-          Detected
-        </span>
-        {pending ? (
-          <span
-            className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-[#00f5c4] border-t-transparent"
-            aria-hidden
-          />
-        ) : (
-          <span className="shrink-0 text-[#8888aa]" aria-hidden>
-            →
-          </span>
-        )}
-      </button>
+      <div className="flex items-center gap-3 px-4 py-3">
+        <WalletIcon id={wallet.id} />
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold leading-tight">{wallet.name}</p>
+          <p className="truncate text-xs text-[#8888aa]">{WALLET_TAGLINE[wallet.id]}</p>
+        </div>
+        <button
+          type="button"
+          disabled={connecting}
+          onClick={() => onConnect(wallet.id)}
+          className={cn(
+            "sg-btn-primary h-9 min-h-9 shrink-0 px-4 text-sm",
+            connecting && !pending && "opacity-50",
+          )}
+        >
+          {pending ? (
+            <span className="inline-flex items-center gap-2">
+              <span
+                className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-[#08080f] border-t-transparent"
+                aria-hidden
+              />
+              Connecting…
+            </span>
+          ) : (
+            "Connect"
+          )}
+        </button>
+      </div>
     );
   }
 
   return (
-    <a
-      href={wallet.installUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-[#ffffff08]"
-    >
-      <img
-        src={walletIconUrl(wallet.id)}
-        alt=""
-        width={32}
-        height={32}
-        className="h-8 w-8 rounded-lg bg-[#08080f] object-contain p-0.5 opacity-70 grayscale"
-      />
-      <span className="min-w-0 flex-1">
-        <span className="block font-semibold">{wallet.name}</span>
-        <span className="block text-xs text-[#8888aa]">Install extension</span>
-      </span>
-      <span className="shrink-0 text-xs font-medium text-[#00f5c4]">Get →</span>
-    </a>
+    <div className="flex items-center gap-3 px-4 py-3">
+      <WalletIcon id={wallet.id} dimmed />
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold leading-tight">{wallet.name}</p>
+        <p className="text-xs text-[#8888aa]">Install extension</p>
+      </div>
+      <a
+        href={wallet.installUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="sg-btn-ghost h-9 min-h-9 shrink-0 px-4 text-sm"
+      >
+        Install
+      </a>
+    </div>
   );
 }
 
