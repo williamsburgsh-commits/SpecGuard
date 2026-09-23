@@ -1,0 +1,27 @@
+.sg-glass-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 1px 0 rgba(56, 232, 255, 0.12) inset;
+}
+
+.sg-glass-card-strong {
+  background: var(--bg-card-strong);
+  border: 1px solid var(--border-bright);
+  border-radius: var(--radius);
+  backdrop-filter: blur(16px);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.sg-section-eyebrow {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}

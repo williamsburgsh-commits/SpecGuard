@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Backpack">
+  <rect width="128" height="128" rx="28" fill="#E33E3F"/>
+  <path fill="#fff" d="M44 48h40c6 0 11 5 11 11v34c0 6-5 11-11 11H44c-6 0-11-5-11-11V59c0-6 5-11 11-11zm8 8v6h32v-6H52zm0 14v22h32V70H52z"/>
+  <path fill="#fff" d="M54 38h20v14H54V38z"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Solflare">
+  <rect width="128" height="128" rx="28" fill="#FC7227"/>
+  <circle cx="64" cy="64" r="32" fill="#fff" opacity="0.95"/>
+  <path fill="#FC7227" d="M64 44c11 0 20 9 20 20s-9 20-20 20-20-9-20-20 9-20 20-20zm0 8c-6.6 0-12 5.4-12 12s5.4 12 12 12 12-5.4 12-12-5.4-12-12-12z"/>
+</svg>

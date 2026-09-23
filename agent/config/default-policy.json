@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "name": "SpecGuard Jupiter Demo",
+  "maxDrawdownPct": 10,
+  "maxSpendPerTxSol": 0.5,
+  "allowedVenues": ["jupiter-swap", "jupiter-trigger"],
+  "heartbeatIntervalSec": 300
+}

@@ -1,0 +1,12 @@
+# SpecGuard v2 — Supabase CLI config (link: supabase link --project-ref oaosnhecdaptmyhrubfx)
+
+project_id = "oaosnhecdaptmyhrubfx"
+
+[db]
+major_version = 17
+
+[api]
+enabled = true
+
+[realtime]
+enabled = true

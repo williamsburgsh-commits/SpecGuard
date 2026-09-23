@@ -22,9 +22,11 @@ const STEPS = [
 export function HowItWorks() {
   return (
     <SectionReveal id="how">
-      <p className="section-eyebrow">Architecture</p>
-      <h2>How it works</h2>
-      <p className="section-lead">Three layers: published limits, autonomous quoting, enforced shutdown.</p>
+      <p className="section-eyebrow">Agent verification</p>
+      <h2>How SpecGuard works</h2>
+      <p className="section-lead">
+        Three layers: published limits, autonomous execution, enforced shutdown with proof.
+      </p>
       <div className="steps-grid">
         {STEPS.map((step, index) => (
           <Card key={step.num} variant="secondary" className="step-card">

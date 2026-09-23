@@ -1,0 +1,126 @@
+/* SpecGuard design tokens — shared by site (Vite) and web (Next)
+ * Typography roles:
+ *   --font-display  Space Grotesk — H1–H3, marketing headlines
+ *   --font-body     Inter Tight — paragraphs, UI copy
+ *   --font-mono     JetBrains Mono — wallets, code, tx sigs
+ *   --font-label    Inter Tight — eyebrows, badges, small caps labels (same stack as body)
+ */
+:root,
+html[data-theme="specguard"] {
+  color-scheme: dark;
+
+  --page-bg: oklch(0.06 0.01 260);
+  --text: oklch(0.98 0.005 260);
+  --background: 260 15% 5%;
+  --foreground: 260 10% 98%;
+  --muted: oklch(0.6 0.015 260);
+  --accent: oklch(0.85 0.12 210);
+  --accent-foreground: oklch(0.1 0.01 260);
+  --separator: oklch(0.3 0.015 260 / 10%);
+  --radius: 0.75rem;
+
+  --sg-cyan: #38e8ff;
+  --sg-violet: #a78bfa;
+  --sg-green: #4ade80;
+  --sg-stale: #fbbf24;
+  --sg-red: #f87171;
+  --sg-border-bright: rgba(56, 232, 255, 0.3);
+  --sg-max-w: 1280px;
+  --sg-nav-h: 4.5rem;
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter Tight", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-label: var(--font-body);
+  --font-pixel: var(--font-body);
+
+  --bg: var(--page-bg);
+  --bg-card: rgba(8, 10, 18, 0.8);
+  --bg-card-strong: rgba(12, 16, 28, 0.92);
+  --cyan: var(--sg-cyan);
+  --violet: var(--sg-violet);
+  --green: var(--sg-green);
+  --stale: var(--sg-stale);
+  --red: var(--sg-red);
+  --border: var(--separator);
+  --border-bright: var(--sg-border-bright);
+  --nav-h: var(--sg-nav-h);
+  --max-w: var(--sg-max-w);
+
+  /* shadcn (HSL for tailwind in web) */
+  --card: 260 18% 8%;
+  --card-foreground: 260 10% 98%;
+  --primary: 187 100% 61%;
+  --primary-foreground: 260 20% 5%;
+  --secondary: 260 12% 12%;
+  --secondary-foreground: 260 10% 92%;
+  --muted-foreground: 260 8% 55%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 98%;
+  --border-hsl: 260 10% 15%;
+  --input: 260 10% 15%;
+  --ring: 187 100% 61%;
+}
+
+html[data-theme="specguard"] body,
+html.dark body {
+  font-family: var(--font-body);
+  background: var(--page-bg);
+  color: var(--text);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+.font-pixel,
+.font-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+.text-muted-brand {
+  color: var(--muted);
+}
+
+.text-cyan-brand {
+  color: var(--cyan);
+}
+
+.sg-btn-gradient {
+  background: linear-gradient(135deg, var(--sg-cyan), var(--sg-violet)) !important;
+  color: var(--accent-foreground) !important;
+  font-weight: 700;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.sg-btn-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+
+.sg-btn-gradient:hover::before {
+  transform: translateX(100%);
+}
+
+.sg-btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 40px rgba(56, 232, 255, 0.35);
+}
+
+.sg-btn-gradient:active {
+  transform: translateY(0);
+}

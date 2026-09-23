@@ -128,6 +128,27 @@ code {
   object-fit: cover;
 }
 
+.nav-brand-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-version-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklch, var(--cyan) 35%, transparent);
+  background: color-mix(in oklch, var(--cyan) 12%, transparent);
+  font-family: var(--font-body);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
 .nav-links {
   display: none;
   align-items: center;
@@ -676,11 +697,12 @@ code {
 }
 
 .section-eyebrow {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.72rem;
-  letter-spacing: 0.16em;
+  font-weight: 600;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--violet);
+  color: var(--cyan);
   margin: 0 0 0.75rem;
 }
 
@@ -741,11 +763,13 @@ code {
 }
 
 .step-num {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
   font-size: 0.72rem;
+  font-weight: 600;
   color: var(--cyan);
   margin: 0 0 0.75rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 /* Compare (HeroUI cards) */

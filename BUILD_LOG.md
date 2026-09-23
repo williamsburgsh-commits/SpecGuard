@@ -1175,3 +1175,393 @@ GitHub Actions [`.github/workflows/operator.yml`](.github/workflows/operator.yml
 ### DNS reminder (operator)
 
 Point **specguard.xyz** at GitHub Pages (A records + `www` CNAME). Repo **Settings → Pages → Custom domain** → enforce HTTPS. Interim: `williamsburgsh-commits.github.io/SpecGuard/`.
+
+---
+
+## SpecGuard v2 — Slice 0 (decisions)
+
+**Date:** 2026-09-20  
+**Gate result:** **PASS** (documentation only)
+
+| Item | Outcome |
+|------|---------|
+| Artifact | [`docs/v2-decisions.md`](docs/v2-decisions.md) |
+| A1 | New self-custodied v2 hot wallet; ClawPump wallet legacy only |
+| A2 | v2 agent on DO droplet `/opt/specguard-v2`, new systemd unit |
+| A3 | Phoenix operator **always on**; v2 Registry is additive feature |
+| D1 | Slice 19: add v2 routes on specguard.xyz; do not retire Phoenix site/operator |
+| D2 | Milestone-based (Slice 8 / 16 / 19), no fixed calendar deadline |
+| P1 | Latest onchain policy memo governs; version history kept |
+| S2 | Permanent breach history; RESET memo for agent #1 drills only |
+| R1 | Registering wallet = watched trading wallet |
+
+**Next:** Slice 1 — `packages/core` + unit tests (no web/agent).
+
+---
+
+## SpecGuard v2 — Slice 1 (`packages/core`)
+
+**Date:** 2026-09-20  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| Package | `@specguard/core` under `packages/core/` (npm workspace root `package.json`) |
+| Policy | `PolicyV1` zod schema, canonical JSON + SHA256 hash |
+| Memo | `SPECGUARD:v1:` encode/decode for POLICY, HB, FLATTEN, RESET |
+| Evaluate | Pure `evaluate()` — drawdown, spend/tx, venues, heartbeat |
+| PnL | Average-cost `computeRealizedPnl()` + fee SOL handling |
+| Tests | `npm test -w @specguard/core` — **15 passed** |
+
+**Next:** Slice 2 — Supabase empty shell + RLS smoke.
+
+---
+
+## SpecGuard v2 — Slice 2 (Supabase shell)
+
+**Date:** 2026-09-20  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| Project | SupGuard-v2 (`oaosnhecdaptmyhrubfx`, us-east-1) |
+| Migrations | `0001_init`, `0002_indexes`, `0003_rls` applied |
+| Tables | `agents`, `policies` |
+| RLS | Anon SELECT allowed; anon INSERT denied |
+| Smoke | `npm run test:supabase-rls` → PASS |
+| Docs | [`docs/supabase-v2.md`](docs/supabase-v2.md), `.env.example` keys |
+
+**Note:** Add `SUPABASE_SERVICE_ROLE_KEY` from dashboard to local `.env` before server write slices.
+
+**Next:** Slice 3 — v2 agent wallet + policy memo on mainnet.
+
+---
+
+## SpecGuard v2 — Slice 3 (agent wallet + policy memo)
+
+**Date:** 2026-09-20  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| Stack | @solana/kit 8 + `getAddMemoInstruction` + `client.sendTransaction` ([solana-dev skill](.agents/skills/solana-dev/SKILL.md)) |
+| Wallet | `BS3SrBb8ewajtkcefBGZdsvUNrdYEuRP9QyVNn8EgrUK` |
+| Policy memo sig | `49ZhysL44qeXABfk9ZVMUswo8otH7eeBvdQ658EGXTWodVtMcWVh2CG4mA1kBRwWNAspakFvC6tXNSrKXkN8Ap8R` |
+| Policy hash | `05fd04d275a722e7196a1e70f45d072a58a2e145b888ab8153a589accfa1b055` |
+| Solscan | https://solscan.io/tx/49ZhysL44qeXABfk9ZVMUswo8otH7eeBvdQ658EGXTWodVtMcWVh2CG4mA1kBRwWNAspakFvC6tXNSrKXkN8Ap8R |
+| Fix | Memo fluent API had no `simulateTransaction`; use raw instruction + RPC planner simulate/send |
+
+**Next:** Slice 4 — Helius webhook → `transactions`.
+
+---
+
+## SpecGuard v2 — Slice 4 (Helius webhook)
+
+**Date:** 2026-09-20  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| DB | `transactions`, `webhook_events`; agent #1 seeded; RLS anon SELECT on `transactions` |
+| Web | `web/` Next 14 — `POST /api/webhooks/helius`, classify + idempotent ingest |
+| Deploy | https://web-williams-projects-dd1df2a7.vercel.app — SSO deployment protection disabled for Helius |
+| Helius | Webhook `92b138ec-52a1-48f7-b512-89874acfb089` → `/api/webhooks/helius` |
+| Live tx | Self-transfer sig `oaHjSUfe58SzGcqi4mWuUNtbFxvzADEp44pkNRPzgEdVThQYucis7mY2RN5ojnJust1zEZjYJGLmy4LjZLZD1Uf` — row `kind: transfer` in `transactions` |
+| Tests | `npm run test:ingest-smoke` PASS; `npm run webhook:replay-transfer` 200 after SSO fix |
+| Docs | [docs/slice4-helius-webhook.md](docs/slice4-helius-webhook.md) |
+
+**Note:** First on-chain event likely missed while Vercel SSO blocked Helius (401). Replay script backfilled the same signature; future Helius deliveries are idempotent.
+
+**Next:** Slice 5 — Jupiter Trigger one order create + cancel.
+
+---
+
+## SpecGuard v2 — Slice 5 (Jupiter Trigger)
+
+**Date:** 2026-09-20  
+**Gate result:** **PASS** (live ask create + cancel; bid path implemented)
+
+| Item | Outcome |
+|------|---------|
+| Client | `agent/src/jupiter/trigger.ts` — create/list/cancel + `/execute`, Kit wire signing |
+| Demo | `npm run agent:trigger-demo` (auto bid if USDC ≥5, else ask) |
+| Funding | ClawPump → agent +0.04 / +0.015 SOL for ~$5 ask + cancel fees |
+| Live create | [3tW12n4…LYAEh](https://solscan.io/tx/3tW12n4QNLtjxrPS7gPYD872zt1YxmByCsLmekcL7Z36zA7WSfkR3pwNJ3fNx3g6arwCuA8tVWknK9FgHXvLYAEh) — order `EpbM9tBdVTqL5DqEuUGbU3jBiXMGR13NdGaFuTnwuNxv` |
+| Live cancel | [5iKy77…6xfm](https://solscan.io/tx/5iKy77XaUxxSTtcZbGhkifnfXhPLz5MDteReW5knS4PA7yzRPZzY3iSJLJN1g68M37E1Z58SRf6pYaCUmB2T6xfm) |
+| Bid note | Agent had 0 USDC; bid `createOrder` OK, `execute` failed (3012) until USDC funded — use `--side=bid` after ≥5 USDC |
+| Docs | [docs/slice5-jupiter-trigger.md](docs/slice5-jupiter-trigger.md) |
+
+**Next:** Slice 6 — quote cycle (dry-run + one live bid/ask within policy).
+
+---
+
+## SpecGuard v2 — Slice 6 (quote cycle)
+
+**Date:** 2026-09-20  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| Core | `evaluate()` pre-check on planned bid/ask `TxSnapshot`s + metrics |
+| Config | `AGENT_QUOTE_SIZE_SOL`, `AGENT_SPREAD_BPS`, `AGENT_CYCLE_MS`, `AGENT_SOL_FEE_RESERVE` |
+| Code | `agent/src/quote/{plan,metrics,cycle}.ts`, `npm run agent:quote-cycle` |
+| Tests | `npm run test:agent` (3) — ALLOW + max_spend breach + min size bump |
+| Dry-run | `--dry-run` → `ALLOW`; `--simulate-breach` → `skip_breach` (max_drawdown) |
+| Live | Ask then bid (SOL/USDC inventory): [3nFbtF…CfggH](https://solscan.io/tx/3nFbtFn1E4xV6QnR9A9xgoyohznEFkTeSETLVkxFPsiyJbkRWRM5aUV76m5jtSqn65uquWFhnmeQGyJyCgXCfggH), [3bw4Xs…ebwyV](https://solscan.io/tx/3bw4XsE2fWK7M6KHmFWYzGsQ4WyqdT7BfR1Qt8GZ5RnuQzJbS6PQJBPJUvZMjFLernxmoEVx8CW2Ctmu1NFebwyV) |
+| Funding | ClawPump swap 0.08 SOL→USDC + 6 USDC + 0.02 SOL → v2 agent |
+| Docs | [docs/slice6-quote-cycle.md](docs/slice6-quote-cycle.md) |
+
+**Next:** Slice 7 — flatten script (cancel → swap → FLATTEN memo).
+
+---
+
+## SpecGuard v2 — Slice 7 (flatten drill)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| Flow | `runFlatten` — cancel Trigger → Jupiter swap SOL→USDC → FLATTEN memo |
+| CLI | `npm run agent:flatten-drill` (`--dry-run`, `--reason=`) |
+| Swap | `agent/src/jupiter/swap.ts` (lite-api quote/swap + Kit wire send) |
+| Local RED | `agent/state/agent-runtime.json`; `runQuoteCycle` refuses when RED |
+| Live | Cancel + swap + memo: see `logs/flatten/flatten-2026-09-21T17-14-17-638Z.json` |
+| Swap sig | [3ctmzsm…89ieVq](https://solscan.io/tx/3ctmzsmwUkRwhsXioT4CPzDJGykQqA28o4U2cPuRBCY9VcyWAenR2n5G9B6TLt5FwBYtSUndBLU6YEtEaK89ieVq) |
+| Flatten sig | [Fsb8oWn…sAL1](https://solscan.io/tx/Fsb8oWnmGamVXcpc93ZVo8PUeo5tSSbbaKSocKmYV38v2A8iKkqUr1GDhxbazM1rzaxqWw9ADFqAHQBN3oXsAL1) |
+| Docs | [docs/slice7-flatten.md](docs/slice7-flatten.md) |
+
+**Next:** Slice 8 — webhook FLATTEN → Supabase RED + `proof_sig` (hard gate).
+
+---
+
+## SpecGuard v2 — Slice 8 (flatten → RED gate)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| DB | `0007_status_events.sql` — `status_events`, RLS, Realtime publication |
+| Ingest | `registryStatus.ts` — `memo_flatten` → event + `agents.status=RED` + `first_breach_event_id` |
+| Idempotent | Duplicate webhook skip still reconciles flatten→RED |
+| proof_sig | `Fsb8oWnmGamVXcpc93ZVo8PUeo5tSSbbaKSocKmYV38v2A8iKkqUr1GDhxbazM1rzaxqWw9ADFqAHQBN3oXsAL1` |
+| Smoke | `npm run test:ingest-flatten` PASS |
+| Docs | [docs/slice8-flatten-red.md](docs/slice8-flatten-red.md) |
+
+**Next:** Slice 9 — heartbeat memo + sweep cron.
+
+---
+
+## SpecGuard v2 — Slice 9 (heartbeat + sweep)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| Agent | `npm run agent:publish-heartbeat` — `SPECGUARD:v1:HB:<ts>` memo |
+| Ingest | Webhook path updates `last_heartbeat_at` / `last_heartbeat_sig` |
+| Cron | `GET /api/cron/heartbeat-sweep` + `vercel.json` every 5m, `CRON_SECRET` |
+| Sweep | GREEN + stale (>2× policy interval) → `heartbeat_missed`, `proof_sig` null |
+| Tests | `npm run web:test`, `test:ingest-heartbeat`, `test:heartbeat-sweep` PASS |
+| Docs | [docs/slice9-heartbeat.md](docs/slice9-heartbeat.md) |
+
+**Next:** Slice 10 — PnL snapshot from classified txs.
+
+---
+
+## SpecGuard v2 — Slice 10 (PnL snapshots)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| Schema | `pnl_snapshots` migration `0008` + Supabase `0008_pnl_snapshots_slice10` |
+| Ingest | `token_deltas` from Helius; `swap` classification; refresh on swap/fill |
+| Core | `USDC_MINT` / `WSOL_MINT`; `computeRealizedPnl` via `web/lib/pnl/*` |
+| Cron | `GET /api/cron/pnl-refresh` + `vercel.json` schedule |
+| Tests | `npm run build -w @specguard/core`, `npm run web:test` PASS |
+| Smoke | `npm run test:pnl-refresh` — snapshot vs local hand calc within 0.01 USDC |
+| Docs | [docs/slice10-pnl.md](docs/slice10-pnl.md) |
+
+**Next:** Slice 11 — full Supabase schema + RLS + Realtime checklist.
+
+---
+
+## SpecGuard v2 — Slice 11 (Supabase schema + RLS + Realtime)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| Migrations | `0009_verify_requests_realtime`, `0010_seed_agent1_policy` (remote applied) |
+| Realtime | `supabase_realtime` → `agents`, `status_events` |
+| Seed | Agent #1 `current_policy_id` → Slice 3 memo `49Zhys…Ap8R` |
+| Smoke | `npm run test:supabase-rls`, `test:supabase-schema` PASS |
+| Docs | [docs/slice11-supabase.md](docs/slice11-supabase.md) |
+
+**Next:** Slice 12 — home page on Vercel preview.
+
+---
+
+## SpecGuard v2 — Slice 12 (home page)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS** (local build; preview deploy = user)
+
+| Item | Outcome |
+|------|---------|
+| API | `GET /api/status` (10s cache) |
+| UI | `/` status chip, PnL, policy, last tx/heartbeat, registry CTA |
+| Realtime | `useAgentStatus` on `agents` + `status_events` |
+| Env | `NEXT_PUBLIC_SUPABASE_ANON_KEY` required on Vercel |
+| Build | `npm run web:build` PASS |
+| Docs | [docs/slice12-home.md](docs/slice12-home.md) |
+
+**Next:** Slice 13 — `$GUARD` balance API + gate UI.
+
+---
+
+## SpecGuard v2 — Slice 13 ($GUARD balance + gate)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| API | `GET /api/guard/balance?wallet=` — raw balance, decimals, `meetsMinimum` |
+| RPC | `getTokenAccountsByOwner` + mint decimals via jsonParsed |
+| Core | `parseGuardMinBalanceRaw`, `meetsGuardMinimum`, `GUARD_MINT` |
+| UI | `/register` + `GuardBalanceGate` (policy steps Slice 14) |
+| Tests | `npm run test:core`, `npm run test:guard-balance` |
+| Docs | [docs/slice13-guard-gate.md](docs/slice13-guard-gate.md) |
+
+**Next:** Slice 14 — register prepare + confirm (Phantom).
+
+---
+
+## SpecGuard v2 — Slice 14 (register prepare + confirm)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS** (code + smoke; wallet #2 registration = manual DoD)
+
+| Item | Outcome |
+|------|---------|
+| API | `POST /api/register/prepare`, `POST /api/register/confirm` |
+| Phantom | Memo tx via `@solana/web3.js` + `RegisterWizard` on `/register` |
+| DB | Upsert `agents`, `policies`, `status_events` (`registered`) |
+| Helius | `syncHeliusWebhookAddresses` PUT on confirm; multi-wallet ingest |
+| Smoke | `npm run test:helius-webhook-addresses` (`--sync` to reconcile) |
+| Docs | [docs/slice14-register.md](docs/slice14-register.md) |
+
+**Next:** Slice 15 — `/registry` + `/agent/[wallet]`.
+
+---
+
+## SpecGuard v2 — Slice 15 (registry + agent pages)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| API | `GET /api/agents`, `/api/agents/[wallet]`, `.../history` |
+| UI | `/registry` filters + table; `/agent/[wallet]` timeline + history |
+| Realtime | `useRegistry` refetch on `agents` changes |
+| Tests | `npm run web:test` |
+| Docs | [docs/slice15-registry.md](docs/slice15-registry.md) |
+
+**Next:** Slice 16 — badge SVG + embed.
+
+---
+
+## SpecGuard v2 — Slice 19 (launch: Registry + Phoenix dual nav)
+
+**Date:** 2026-09-21  
+**Gate result:** **PASS** (code + `vercel deploy --prod` → `web-pi-opal-szwuxtcplv.vercel.app`)
+
+| Item | Outcome |
+|------|---------|
+| D1 | Option **b**: `registry.specguard.xyz` → Vercel; apex Phoenix unchanged |
+| Nav | `SiteNav` on v2 layout; Phoenix `Nav` → `REGISTRY_URL` / `VITE_REGISTRY_URL` |
+| Env | `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_PHOENIX_URL` in `.env.example` + `next.config` |
+| Redirect | `GET /phoenix` → Phoenix URL |
+| Smoke | `npm run test:production-urls` |
+| Deploy | Production alias `https://web-pi-opal-szwuxtcplv.vercel.app` (2026-09-21) |
+| Docs | [docs/slice19-launch.md](docs/slice19-launch.md) |
+
+**Operator:** Keep GitHub Pages + `specguard-operator` pushing `status.json`.
+
+**Next:** Slice 20 — production flatten drill; set Vercel env + DNS `registry.specguard.xyz`; `vercel deploy --prod`.
+
+---
+
+## SpecGuard v2 — Slice 20 (production drill + freeze)
+
+**Date:** 2026-09-22  
+**Gate result:** **PASS**
+
+| Item | Outcome |
+|------|---------|
+| Drill | `npm run agent:flatten-drill -- --reason=slice20_prod_drill` (swap + FLATTEN memo on mainnet) |
+| proof_sig | `2St8AaJaFEQAtVgJUt4mgVw8FbXTFj7zQMPy8dNhKWYoM5poKnumvZoFPRWDqF53LvciYrjZYiqV25X53UqKW8f2` |
+| Prod ingest | `WEBHOOK_PUBLIC_URL` → prod `/api/webhooks/helius`; `flatten_observed` in Supabase |
+| Verify | `npm run test:production-flatten` PASS |
+| Announcement | [logs/slice20/slice20-production-drill.json](logs/slice20/slice20-production-drill.json) |
+| Buybacks | **Not run** (T1–T3 deferred) |
+| Docs | [docs/slice20-production-drill.md](docs/slice20-production-drill.md) |
+
+**Env fix:** Root `.env` `WEBHOOK_PUBLIC_URL` aligned to `https://web-pi-opal-szwuxtcplv.vercel.app` (match Vercel production + Helius webhook target).
+
+**Freeze:** v2 milestone slices 0–20 complete; post-launch = RESET/operator + optional DNS `registry.specguard.xyz`.
+
+---
+
+## Website rebuild (HydraDB + shadcn) — W0–W6
+
+**Date:** 2026-09-22  
+**Gate result:** **PASS** (local `web:test`, `web:build`, `site` build)
+
+| Item | Outcome |
+|------|---------|
+| Copy | [docs/website-copy.md](docs/website-copy.md); no public “demo agent” |
+| DB | [0011_rename_reference_agent.sql](supabase/migrations/0011_rename_reference_agent.sql) |
+| Web | Tailwind + shadcn; marketing home + chrome; registry/register shadcn table |
+| Phoenix | Nav/footer aligned; [site/src/lib/marketingCopy.js](site/src/lib/marketingCopy.js) |
+| Docs | [docs/website-deploy.md](docs/website-deploy.md) |
+
+---
+
+## Website quality steer (R1–R6)
+
+**Date:** 2026-09-22  
+**Gate result:** **PASS** (local `web:test`, `web:build`, `site` build)
+
+| Item | Outcome |
+|------|---------|
+| Theme | [`packages/specguard-theme`](packages/specguard-theme) — tokens, atmosphere, glass, hero |
+| Verification home | `VerificationHero` (canvas grid, orbit, live reference panel); 4 sections only |
+| App surfaces | Registry, register, agent pages use glass + Syne display |
+| Phoenix | `site` imports `@specguard/theme`; nav Verification → registry URL |
+| Docs | Hero copy in [docs/website-copy.md](docs/website-copy.md); deploy QA note in [docs/website-deploy.md](docs/website-deploy.md) |
+
+---
+
+## Verification → HeroUI v3 + selective pixel type
+
+**Date:** 2026-09-22  
+**Gate result:** **PASS** (local `web:test`, `web:build`, `site` build)
+
+| Item | Outcome |
+|------|---------|
+| Toolchain | `web/`: Tailwind 4, `@heroui/react` + `@heroui/styles`, React 19, `specguard-heroui.css` bridge |
+| Deps | `@react-aria/utils` + `@react-aria/ssr` in web + site (HeroUI peer resolution) |
+| Typography | Space Grotesk + Inter Tight body; Pixelify on `.sg-section-eyebrow` / footer labels only |
+| Motion | [`packages/specguard-theme/motion.css`](packages/specguard-theme/motion.css); reduced-motion safe |
+| UI | shadcn `components/ui` removed; HeroUI Button/Table/Modal/Card on app surfaces |
+| Hero | Grid + orbit/scan; rain/tape/marquee removed; `not-found` + `global-error` pages |
+| Skill | [`.cursor/skills/heroui/SKILL.md`](.cursor/skills/heroui/SKILL.md) |
+| Docs | [docs/website-deploy.md](docs/website-deploy.md) TW4/HeroUI install notes |

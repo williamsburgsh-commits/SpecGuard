@@ -1,21 +1,33 @@
 import { Link } from '@heroui/react';
+import { REGISTRY_URL, SPEC_URL } from '../lib/constants';
+import { NAV, BRAND, TAGLINE } from '../lib/marketingCopy';
 
 const FOOTER_GROUPS = [
   {
-    title: 'Site',
+    title: 'Product',
     links: [
-      { href: 'https://williamsburgsh-commits.github.io/SpecGuard/', label: 'Live site', external: true },
-      { href: '#how', label: 'How it works' },
-      { href: '#live', label: 'Live terminal' },
-      { href: '#token', label: '$GUARD' },
+      { href: '#live', label: NAV.phoenixPerps },
+      { href: REGISTRY_URL, label: NAV.verification, external: true },
+      { href: `${REGISTRY_URL}/registry`, label: NAV.agents, external: true },
+      { href: `${REGISTRY_URL}/register`, label: NAV.registerAgent, external: true },
     ],
   },
   {
-    title: 'External',
+    title: 'Developers',
+    links: [
+      { href: SPEC_URL, label: NAV.spec, external: true },
+      { href: 'status.json', label: 'status.json' },
+    ],
+  },
+  {
+    title: 'Community',
     links: [
       { href: 'https://x.com/specguardxyz', label: 'X / Twitter', external: true },
-      { href: 'https://github.com/williamsburgsh-commits/SpecGuard', label: 'GitHub', external: true },
-      { href: 'https://clawpump.tech/ansemhack', label: 'Hackathon', external: true },
+      {
+        href: 'https://github.com/williamsburgsh-commits/SpecGuard',
+        label: 'GitHub',
+        external: true,
+      },
     ],
   },
 ];
@@ -25,10 +37,8 @@ export function Footer() {
     <footer className="footer">
       <div className="footer-grid">
         <div className="footer-brand-block">
-          <div className="footer-brand">SpecGuard</div>
-          <p className="footer-disclaimer">
-            Autonomous operator demo — not financial advice. Onchain actions are irreversible.
-          </p>
+          <div className="footer-brand">{BRAND}</div>
+          <p className="footer-disclaimer">{TAGLINE}</p>
         </div>
         <div className="footer-nav">
           {FOOTER_GROUPS.map((group) => (
@@ -52,7 +62,7 @@ export function Footer() {
         </div>
       </div>
       <p className="footer-copy">
-        © SpecGuard · ClawPump Ansem Hackathon · SOL-PERP reference operator
+        © {BRAND} · Not financial advice · Onchain actions are irreversible
       </p>
     </footer>
   );

@@ -3,3 +3,7 @@ export const REPO_RAW = 'https://raw.githubusercontent.com/williamsburgsh-commit
 export const DASHBOARD_URL = `https://agents.clawpump.tech/dashboard/terminal?agent=${AGENT_ID}`;
 export const SPEC_URL = `${REPO_RAW}/spec/reference-spec.json`;
 export const GUARD_MINT = 'BjbyvvuGbQwNZiYyk3aw1J9mAEUYkW1n5W5h6XAxxo5e';
+/** v2 Registry (Vercel). Override with VITE_REGISTRY_URL at build time. */
+export const REGISTRY_URL =
+  import.meta.env.VITE_REGISTRY_URL ||
+  'https://web-pi-opal-szwuxtcplv.vercel.app';

@@ -1,0 +1,87 @@
+/* SpecGuard motion — shared animations; respect reduced motion */
+
+@keyframes sgFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  opacity: 0;
+  animation: sgFadeIn 0.55s ease-out forwards;
+}
+
+.animate-in-delay-1 {
+  animation-delay: 100ms;
+}
+.animate-in-delay-2 {
+  animation-delay: 200ms;
+}
+.animate-in-delay-3 {
+  animation-delay: 300ms;
+}
+.animate-in-delay-4 {
+  animation-delay: 400ms;
+}
+
+.sg-glass-card,
+.sg-glass-card-strong {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.sg-glass-card:hover,
+.sg-glass-card-strong:hover {
+  transform: translateY(-4px);
+  border-color: #14f195;
+  box-shadow:
+    0 16px 40px -18px rgba(20, 241, 149, 0.4),
+    0 0 0 1px rgba(20, 241, 149, 0.15) inset;
+}
+
+.link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--cyan);
+  transition: width 0.3s ease;
+}
+
+.link-underline:hover::after {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-in,
+  .hero-v-scan,
+  .hero-v-ring::before,
+  .hero-v-orbit,
+  .orbit-v-particle {
+    animation: none !important;
+  }
+
+  .animate-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  .sg-glass-card:hover,
+  .sg-glass-card-strong:hover {
+    transform: none;
+  }
+}

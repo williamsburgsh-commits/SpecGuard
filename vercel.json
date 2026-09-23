@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build -w @specguard/web",
+  "outputDirectory": "web/.next",
+  "framework": "nextjs",
+  "crons": [
+    {
+      "path": "/api/cron/webhook-sync",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/pnl-refresh",
+      "schedule": "30 6 * * *"
+    },
+    {
+      "path": "/api/cron/heartbeat-sweep",
+      "schedule": "0 7 * * *"
+    }
+  ]
+}

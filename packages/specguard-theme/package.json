@@ -1,0 +1,12 @@
+{
+  "name": "@specguard/theme",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./tokens.css": "./tokens.css",
+    "./atmosphere.css": "./atmosphere.css",
+    "./hero.css": "./hero.css",
+    "./glass.css": "./glass.css",
+    "./motion.css": "./motion.css"
+  }
+}

@@ -5,5 +5,14 @@
 *.local
 tools/
 logs/*.txt
+node_modules/
 site/node_modules/
+packages/core/dist/
+agent/.keys/
+agent/keypair.json
+agent/state/
+web/.next/
+web/.env.local
 site/dist/
+.vercel
+.env*

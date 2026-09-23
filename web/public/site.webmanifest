@@ -1,0 +1,21 @@
+{
+  "name": "SpecGuard",
+  "short_name": "SpecGuard",
+  "description": "Onchain policy memos, public GREEN/RED status, Phoenix Perps operator, and agent verification on Solana.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#080a12",
+  "theme_color": "#080a12",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23080a12'/><path d='M8 16l4 4 8-8' stroke='%2338e8ff' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "utilities", "developer"],
+  "screenshots": [],
+  "prefer_related_applications": false
+}

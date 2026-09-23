@@ -1,0 +1,49 @@
+{
+  "name": "specguard-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "agent",
+    "web",
+    "site"
+  ],
+  "scripts": {
+    "test:core": "npm test -w @specguard/core",
+    "test:supabase-rls": "node --env-file=.env scripts/supabase-rls-smoke.mjs",
+    "test:supabase-schema": "node --env-file=.env scripts/supabase-schema-smoke.mjs",
+    "agent:generate-wallet": "npm run generate-wallet -w @specguard/agent",
+    "agent:publish-policy": "npm run publish-policy -w @specguard/agent",
+    "agent:balance": "npm run balance -w @specguard/agent",
+    "agent:trigger-demo": "npm run trigger-demo -w @specguard/agent",
+    "agent:quote-cycle": "npm run quote-cycle -w @specguard/agent --",
+    "agent:flatten-drill": "npm run flatten-drill -w @specguard/agent --",
+    "agent:publish-heartbeat": "npm run publish-heartbeat -w @specguard/agent",
+    "test:ingest-heartbeat": "tsx scripts/ingest-heartbeat-smoke.ts",
+    "test:heartbeat-sweep": "tsx scripts/heartbeat-sweep-smoke.ts",
+    "test:agent": "npm test -w @specguard/agent",
+    "agent:export-phantom-import": "npm run export-phantom-import -w @specguard/agent",
+    "agent:self-transfer": "npm run self-transfer -w @specguard/agent",
+    "web:dev": "npm run dev -w @specguard/web",
+    "web:build": "npm run build -w @specguard/web",
+    "web:test": "npm test -w @specguard/web",
+    "helius:register-webhook": "tsx scripts/register-helius-webhook.ts",
+    "test:ingest-smoke": "tsx scripts/ingest-smoke.ts",
+    "webhook:replay-transfer": "tsx scripts/replay-onchain-transfer-webhook.ts",
+    "webhook:replay-flatten": "tsx scripts/replay-flatten-webhook.ts",
+    "verify:agent-status": "tsx scripts/verify-agent-status.ts",
+    "test:ingest-flatten": "tsx scripts/ingest-flatten-smoke.ts",
+    "test:pnl-refresh": "tsx scripts/pnl-refresh-smoke.ts",
+    "test:guard-balance": "tsx scripts/guard-balance-smoke.ts",
+    "test:helius-webhook-addresses": "tsx scripts/helius-webhook-addresses-smoke.ts",
+    "test:cron-webhook-sync": "tsx scripts/cron-webhook-sync-smoke.ts",
+    "test:cron-pnl-refresh": "tsx scripts/cron-pnl-refresh-smoke.ts",
+    "test:cron-http": "tsx scripts/cron-http-smoke.ts",
+    "test:production-urls": "tsx scripts/verify-production-urls-smoke.ts",
+    "test:production-flatten": "tsx scripts/verify-production-flatten-drill.ts",
+    "sync:flatten-registry": "tsx scripts/sync-flatten-registry-from-log.ts"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "tsx": "^4.19.3"
+  }
+}

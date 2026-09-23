@@ -1,5 +1,9 @@
 @import "tailwindcss";
 @import "@heroui/styles";
+@import "@specguard/theme/tokens.css";
+@import "@specguard/theme/atmosphere.css";
+@import "@specguard/theme/glass.css";
+@import "@specguard/theme/motion.css";
 @import "./themes/specguard.css";
 @import "./styles/custom.css";
 
