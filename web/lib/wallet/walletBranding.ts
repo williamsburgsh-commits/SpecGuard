@@ -1,8 +1,14 @@
 import type { SolanaWalletId } from "@/lib/register/walletProviders";
 
+const WALLET_ICON_EXT: Partial<Record<SolanaWalletId, "png" | "svg">> = {
+  phantom: "png",
+  solflare: "png",
+};
+
 /** Served from web/public/wallets (reliable vs external CDN). */
 export function walletIconUrl(id: SolanaWalletId): string {
-  return `/wallets/${id}.svg`;
+  const ext = WALLET_ICON_EXT[id] ?? "svg";
+  return `/wallets/${id}.${ext}`;
 }
 
 export const WALLET_TAGLINE: Record<SolanaWalletId, string> = {
