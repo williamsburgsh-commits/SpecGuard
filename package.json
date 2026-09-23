@@ -1,6 +1,9 @@
 {
   "name": "specguard-monorepo",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "workspaces": [
     "packages/*",
     "agent",

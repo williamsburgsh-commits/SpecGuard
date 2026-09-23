@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "npm install && npm run build -w @specguard/web"
+buildCommand = "npm run build -w @specguard/web"
 
 [deploy]
 startCommand = "npm run start -w @specguard/web"
