@@ -1,12 +1,19 @@
+import { AGENT_TYPES, type AgentType } from "@specguard/core";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type AgentSort = "days_active" | "registered_at" | "name" | "pnl";
 export type AgentOrder = "asc" | "desc";
 export type AgentStatusFilter = "GREEN" | "RED" | "all";
+export type AgentTypeFilter = AgentType | "all";
+
+export function parseAgentTypeFilter(value: string | null): AgentTypeFilter {
+  return AGENT_TYPES.includes(value as AgentType) ? (value as AgentType) : "all";
+}
 
 export interface AgentListRow {
   wallet: string;
   name: string;
+  agentType: AgentType;
   status: "GREEN" | "RED";
   statusSince: string;
   registeredAt: string | null;
@@ -18,21 +25,49 @@ export interface AgentListRow {
   policySummary: string | null;
 }
 
-function policySummaryFromRow(policy: {
-  max_drawdown_pct: number;
+interface PolicyRow {
+  max_drawdown_pct: number | null;
   max_spend_per_tx_sol: number;
   heartbeat_interval_sec: number;
   allowed_venues: string[] | null;
-} | null): string | null {
+  daily_spend_sol: number | null;
+  social_limits: Record<string, unknown> | null;
+  allowed_tools: string[] | null;
+}
+
+function prettyVenue(slug: string): string {
+  const lower = slug.toLowerCase();
+  if (lower.includes("phoenix")) return "Phoenix";
+  if (lower.includes("jupiter")) return "Jupiter";
+  return slug;
+}
+
+/** One line of the limits that actually apply to this agent. */
+function policySummaryFromRow(policy: PolicyRow | null): string | null {
   if (!policy) return null;
-  const venues = (policy.allowed_venues ?? []).join(", ");
-  const jupiter =
-    venues.includes("jupiter") || venues.length > 0 ? "Jupiter" : "—";
-  const venueList = (policy.allowed_venues ?? [])
-    .map((v) => (v.toLowerCase().includes("phoenix") ? "Phoenix" : v.toLowerCase().includes("jupiter") ? "Jupiter" : v))
-    .filter((v, i, arr) => arr.indexOf(v) === i)
-    .join(" / ") || jupiter;
-  return `Max DD: ${policy.max_drawdown_pct}% | Max TX: ${policy.max_spend_per_tx_sol} SOL | Venues: ${venueList}`;
+  const parts: string[] = [`Max TX: ${policy.max_spend_per_tx_sol} SOL`];
+
+  if (policy.daily_spend_sol != null) {
+    parts.push(`Max/day: ${policy.daily_spend_sol} SOL`);
+  }
+  if (policy.max_drawdown_pct != null) {
+    parts.push(`Max DD: ${policy.max_drawdown_pct}%`);
+  }
+  const venues = [...new Set((policy.allowed_venues ?? []).map(prettyVenue))];
+  if (venues.length > 0) {
+    parts.push(`Venues: ${venues.join(" / ")}`);
+  }
+  const social = policy.social_limits;
+  if (social) {
+    if (typeof social.maxPostsPerDay === "number") {
+      parts.push(`Posts/day: ${social.maxPostsPerDay}`);
+    }
+    if (social.allowDMs === false) parts.push("DMs: blocked");
+  }
+  if (policy.allowed_tools?.length) {
+    parts.push(`Tools: ${policy.allowed_tools.length}`);
+  }
+  return parts.join(" | ");
 }
 
 function daysActive(registeredAt: string | null): number | null {
@@ -46,20 +81,25 @@ export async function listAgents(
   supabase: SupabaseClient,
   options: {
     status?: AgentStatusFilter;
+    agentType?: AgentTypeFilter;
     sort?: AgentSort;
     order?: AgentOrder;
   },
 ): Promise<AgentListRow[]> {
   const status = options.status ?? "all";
+  const agentType = options.agentType ?? "all";
   const sort = options.sort ?? "days_active";
   const order = options.order ?? "desc";
 
   let query = supabase.from("agents").select(
-    "wallet, name, status, status_since, registered_at, is_specguard, last_tx_at, last_heartbeat_at, current_policy_id",
+    "wallet, name, agent_type, status, status_since, registered_at, is_specguard, last_tx_at, last_heartbeat_at, current_policy_id",
   );
 
   if (status !== "all") {
     query = query.eq("status", status);
+  }
+  if (agentType !== "all") {
+    query = query.eq("agent_type", agentType);
   }
 
   const { data: agents, error } = await query;
@@ -73,21 +113,13 @@ export async function listAgents(
     ),
   ];
 
-  const policyById = new Map<
-    string,
-    {
-      max_drawdown_pct: number;
-      max_spend_per_tx_sol: number;
-      heartbeat_interval_sec: number;
-      allowed_venues: string[] | null;
-    }
-  >();
+  const policyById = new Map<string, PolicyRow>();
 
   if (policyIds.length > 0) {
     const { data: policies } = await supabase
       .from("policies")
       .select(
-        "id, max_drawdown_pct, max_spend_per_tx_sol, heartbeat_interval_sec, allowed_venues",
+        "id, max_drawdown_pct, max_spend_per_tx_sol, heartbeat_interval_sec, allowed_venues, daily_spend_sol, social_limits, allowed_tools",
       )
       .in("id", policyIds);
     for (const p of policies ?? []) {
@@ -117,6 +149,7 @@ export async function listAgents(
     return {
       wallet: a.wallet,
       name: a.name,
+      agentType: (a.agent_type ?? "trader") as AgentType,
       status: a.status as "GREEN" | "RED",
       statusSince: a.status_since,
       registeredAt: a.registered_at,

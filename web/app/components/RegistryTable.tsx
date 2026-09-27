@@ -19,14 +19,25 @@ const SORTS = [
   { value: "registered_at", label: "Recent" },
 ] as const;
 
+const TYPE_FILTERS = [
+  { value: "all", label: "All types" },
+  { value: "trader", label: "Trader" },
+  { value: "social", label: "Social" },
+  { value: "data", label: "Data" },
+  { value: "infra", label: "Infra" },
+  { value: "general", label: "General" },
+] as const;
+
 export function RegistryClient({
   initialAgents,
   initialStatus,
+  initialType,
   initialSort,
   initialOrder,
 }: {
   initialAgents: AgentListRow[];
   initialStatus: string;
+  initialType: string;
   initialSort: string;
   initialOrder: string;
 }) {
@@ -51,7 +62,7 @@ export function RegistryClient({
 
   function setParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
-    if (key === "status" && value === "all") params.delete("status");
+    if (value === "all" && (key === "status" || key === "type")) params.delete(key);
     else params.set(key, value);
     router.push(`/registry?${params.toString()}`);
   }
@@ -76,20 +87,36 @@ export function RegistryClient({
             </button>
           ))}
         </div>
-        <label className="flex items-center gap-2 text-sm text-[#8888aa]">
-          Sort
-          <select
-            value={initialSort}
-            onChange={(e) => setParam("sort", e.target.value)}
-            className="sg-input min-h-10 w-40 bg-[#0f0f1a]"
-          >
-            {SORTS.map((sort) => (
-              <option key={sort.value} value={sort.value}>
-                {sort.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="flex flex-wrap items-center gap-4">
+          <label className="flex items-center gap-2 text-sm text-[#8888aa]">
+            Type
+            <select
+              value={initialType}
+              onChange={(e) => setParam("type", e.target.value)}
+              className="sg-input min-h-10 w-36 bg-[#0f0f1a]"
+            >
+              {TYPE_FILTERS.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center gap-2 text-sm text-[#8888aa]">
+            Sort
+            <select
+              value={initialSort}
+              onChange={(e) => setParam("sort", e.target.value)}
+              className="sg-input min-h-10 w-40 bg-[#0f0f1a]"
+            >
+              {SORTS.map((sort) => (
+                <option key={sort.value} value={sort.value}>
+                  {sort.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
       </div>
 
       <div className="space-y-3">

@@ -1,8 +1,9 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
-  canonicalPolicyJson,
+  canonicalPolicyJsonAny,
   decodeMemo,
-  type PolicyV1,
+  isPolicyV2,
+  type Policy,
 } from "@specguard/core";
 import { getGuardBalanceForWallet } from "../guard/balance";
 import { syncHeliusWebhookAddresses } from "../helius/syncWebhookAddresses";
@@ -31,6 +32,49 @@ export interface ConfirmRegistrationResult {
   webhookSyncWarning?: string;
 }
 
+interface PolicyColumns {
+  schema_version: number;
+  agent_type: string;
+  max_drawdown_pct: number | null;
+  max_spend_per_tx_sol: number;
+  allowed_venues: string[] | null;
+  heartbeat_interval_sec: number;
+  daily_spend_sol: number | null;
+  social_limits: Record<string, unknown> | null;
+  allowed_tools: string[] | null;
+  denied_actions: string[] | null;
+}
+
+/** Flattens either policy version onto the shared `policies` column set. */
+function policyToColumns(policy: Policy): PolicyColumns {
+  if (isPolicyV2(policy)) {
+    return {
+      schema_version: 2,
+      agent_type: policy.type,
+      max_drawdown_pct: policy.maxDrawdownPct ?? null,
+      max_spend_per_tx_sol: policy.spendLimits.perTxSol,
+      allowed_venues: policy.allowedVenues ?? null,
+      heartbeat_interval_sec: policy.heartbeatIntervalSec,
+      daily_spend_sol: policy.spendLimits.dailySol ?? null,
+      social_limits: policy.socialLimits ?? null,
+      allowed_tools: policy.allowedTools ?? null,
+      denied_actions: policy.deniedActions ?? null,
+    };
+  }
+  return {
+    schema_version: 1,
+    agent_type: "trader",
+    max_drawdown_pct: policy.maxDrawdownPct,
+    max_spend_per_tx_sol: policy.maxSpendPerTxSol,
+    allowed_venues: policy.allowedVenues,
+    heartbeat_interval_sec: policy.heartbeatIntervalSec,
+    daily_spend_sol: null,
+    social_limits: null,
+    allowed_tools: null,
+    denied_actions: null,
+  };
+}
+
 export async function confirmRegistration(
   supabase: SupabaseClient,
   input: ConfirmRegistrationInput,
@@ -56,7 +100,8 @@ export async function confirmRegistration(
   if (decoded?.kind !== "policy") {
     throw new Error("Invalid policy memo");
   }
-  const policy: PolicyV1 = decoded.policy;
+  const policy: Policy = decoded.policy;
+  const policyColumns = policyToColumns(policy);
 
   const { data: existingAgent } = await supabase
     .from("agents")
@@ -91,6 +136,7 @@ export async function confirmRegistration(
     {
       wallet,
       name: policy.name,
+      agent_type: policyColumns.agent_type,
       is_specguard: false,
       registered_at: registeredAt,
       registration_sig: signature,
@@ -115,11 +161,8 @@ export async function confirmRegistration(
       memo_sig: signature,
       blocktime: verified.blocktime.toISOString(),
       name: policy.name,
-      max_drawdown_pct: policy.maxDrawdownPct,
-      max_spend_per_tx_sol: policy.maxSpendPerTxSol,
-      allowed_venues: policy.allowedVenues,
-      heartbeat_interval_sec: policy.heartbeatIntervalSec,
-      raw_json: JSON.parse(canonicalPolicyJson(policy)),
+      ...policyColumns,
+      raw_json: JSON.parse(canonicalPolicyJsonAny(policy)),
       policy_hash: verified.policyHash,
     })
     .select("id")

@@ -17,6 +17,7 @@ describe("registry list ordering", () => {
       {
         wallet: "a",
         name: "A",
+        agentType: "trader",
         status: "GREEN",
         statusSince: "",
         registeredAt: "2026-09-01T00:00:00Z",
@@ -30,6 +31,7 @@ describe("registry list ordering", () => {
       {
         wallet: "b",
         name: "B",
+        agentType: "social",
         status: "RED",
         statusSince: "",
         registeredAt: "2026-09-10T00:00:00Z",

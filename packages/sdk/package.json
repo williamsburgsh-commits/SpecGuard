@@ -1,0 +1,40 @@
+{
+  "name": "@specguard/sdk",
+  "version": "0.1.0",
+  "description": "Make any autonomous agent verifiable onchain. Publish a policy, heartbeat, pre-check actions, and prove behavior on Solana.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "solana",
+    "agents",
+    "verification",
+    "specguard",
+    "ai-agents"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.98.0",
+    "@specguard/core": "*",
+    "bs58": "^6.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}

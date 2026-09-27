@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import {
   encodePolicyMemo,
   hashPolicy,
-  parsePolicyV1,
+  parsePolicy,
   parseGuardMinBalanceRaw,
 } from "@specguard/core";
 import { getGuardBalanceForWallet } from "@/lib/guard/balance";
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
 
   let policy;
   try {
-    policy = parsePolicyV1(rec.policy);
+    policy = parsePolicy(rec.policy);
   } catch (e) {
     const message = e instanceof Error ? e.message : "invalid policy";
     return NextResponse.json({ ok: false, error: message }, { status: 400 });

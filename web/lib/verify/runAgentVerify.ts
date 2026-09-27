@@ -1,57 +1,28 @@
-import {
-  evaluate,
-  parsePolicyV1,
-  USDC_MINT,
-  type CoreBreachReason,
-  type PolicyV1,
-  type TxSnapshot,
-} from "@specguard/core";
+import { evaluatePolicy, type CoreBreachReason, type Policy } from "@specguard/core";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { refreshPnlSnapshot } from "../pnl/refreshSnapshot";
+import {
+  actionSnapshotsFromTxRows,
+  policyFromPolicyRow,
+  type PolicyRow,
+  txSnapshotsFromRows,
+  VERIFY_LOOKBACK_SEC,
+  VERIFY_TX_ROW_LIMIT,
+  verifyLookbackIso,
+} from "./buildVerifyInput";
+import { type TxRow } from "./txSnapshot";
 
-interface TxRow {
-  signature: string;
-  program_ids: string[] | null;
-  sol_delta_lamports: number | string;
-  fee_lamports: number | string;
-  token_deltas: Record<string, string> | null;
-  success: boolean;
-}
+export { txRowToSnapshot } from "./txSnapshot";
+export type { TxRow } from "./txSnapshot";
 
-export function txRowToSnapshot(
-  row: TxRow,
-  markUsdcPerSol: number,
-): TxSnapshot {
-  const programIds = row.program_ids ?? [];
-  if (!row.success) {
-    return { signature: row.signature, spendSol: 0, programIds };
-  }
-
-  let spendSol = 0;
-  const solDelta = Number(row.sol_delta_lamports);
-  if (solDelta < 0) spendSol += -solDelta / 1e9;
-  spendSol += Number(row.fee_lamports) / 1e9;
-
-  const mark = markUsdcPerSol > 0 ? markUsdcPerSol : 1;
-  for (const [mint, raw] of Object.entries(row.token_deltas ?? {})) {
-    if (mint !== USDC_MINT) continue;
-    try {
-      const delta = BigInt(raw);
-      if (delta < 0n) {
-        spendSol += Number(-delta) / 1e6 / mark;
-      }
-    } catch {
-      /* skip */
-    }
-  }
-
-  return { signature: row.signature, spendSol, programIds };
-}
-
+/**
+ * `raw_json` is the policy as published onchain, so it is authoritative for
+ * either schema version. Column fallback covers missing or corrupt `raw_json`.
+ */
 export async function loadCurrentPolicy(
   supabase: SupabaseClient,
   wallet: string,
-): Promise<PolicyV1 | null> {
+): Promise<Policy | null> {
   const { data: agent } = await supabase
     .from("agents")
     .select("current_policy_id")
@@ -63,28 +34,13 @@ export async function loadCurrentPolicy(
   const { data: pol } = await supabase
     .from("policies")
     .select(
-      "name, max_drawdown_pct, max_spend_per_tx_sol, allowed_venues, heartbeat_interval_sec, raw_json",
+      "name, schema_version, agent_type, max_drawdown_pct, max_spend_per_tx_sol, allowed_venues, heartbeat_interval_sec, daily_spend_sol, social_limits, allowed_tools, denied_actions, raw_json",
     )
     .eq("id", agent.current_policy_id)
     .maybeSingle();
 
   if (!pol) return null;
-
-  try {
-    return parsePolicyV1({
-      version: 1,
-      name: pol.name,
-      maxDrawdownPct: Number(pol.max_drawdown_pct),
-      maxSpendPerTxSol: Number(pol.max_spend_per_tx_sol),
-      allowedVenues: pol.allowed_venues,
-      heartbeatIntervalSec: pol.heartbeat_interval_sec,
-    });
-  } catch {
-    if (pol.raw_json) {
-      return parsePolicyV1(pol.raw_json);
-    }
-    return null;
-  }
+  return policyFromPolicyRow(pol as PolicyRow);
 }
 
 export async function applyEvaluateBreachIfNeeded(
@@ -160,6 +116,7 @@ export async function runAgentVerify(
   wallet: string,
 ): Promise<RunAgentVerifyResult> {
   const now = new Date();
+  const nowSec = Math.floor(now.getTime() / 1000);
 
   const { data: agent, error: agentErr } = await supabase
     .from("agents")
@@ -194,30 +151,32 @@ export async function runAgentVerify(
   const { data: txRows, error: txErr } = await supabase
     .from("transactions")
     .select(
-      "signature, program_ids, sol_delta_lamports, fee_lamports, token_deltas, success",
+      "signature, program_ids, sol_delta_lamports, fee_lamports, token_deltas, success, blocktime, raw",
     )
     .eq("wallet", wallet)
+    .gte("blocktime", verifyLookbackIso(nowSec))
     .order("blocktime", { ascending: false })
-    .limit(100);
+    .limit(VERIFY_TX_ROW_LIMIT);
 
   if (txErr) throw new Error(`transactions load: ${txErr.message}`);
 
-  const snapshots = (txRows ?? []).map((r) =>
-    txRowToSnapshot(r as TxRow, pnl.markUsdc),
-  );
+  const rows = (txRows ?? []) as TxRow[];
+  const snapshots = txSnapshotsFromRows(rows, pnl.markUsdc);
+  const actions = actionSnapshotsFromTxRows(rows);
 
   const lastHbSec = agent.last_heartbeat_at
     ? Math.floor(new Date(agent.last_heartbeat_at).getTime() / 1000)
     : null;
 
-  const evaluation = evaluate(policy, {
+  const evaluation = evaluatePolicy(policy, {
     metrics: {
       peakEquityUsdc: Math.max(peakEquity, currentEquity),
       currentEquityUsdc: currentEquity,
       lastHeartbeatAtSec: lastHbSec,
-      nowSec: Math.floor(now.getTime() / 1000),
+      nowSec,
     },
     transactions: snapshots,
+    actions,
   });
 
   let markedRed = false;
@@ -231,6 +190,9 @@ export async function runAgentVerify(
         drawdownPct: snapRow?.drawdown_pct ?? null,
         throughSig: pnl.throughSig,
         markUsdc: pnl.markUsdc,
+        actionCount: actions.length,
+        txLookbackSec: VERIFY_LOOKBACK_SEC,
+        txRowLimit: VERIFY_TX_ROW_LIMIT,
       },
       now,
     );

@@ -4,7 +4,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletConnect } from "@/app/components/chrome/WalletConnect";
-import type { PolicyV1 } from "@specguard/core";
+// Type-only: the @specguard/core barrel reaches node:crypto via policy/hash,
+// which webpack cannot bundle for the browser.
+import type { AgentType, PolicyV2, VenueSlug } from "@specguard/core";
+import {
+  AGENT_TYPE_OPTIONS,
+  defaultPolicyFor,
+} from "@/lib/register/defaultPolicy";
 import { GuardBalanceGate, type GuardBalancePayload } from "./GuardBalanceGate";
 import { sendPolicyMemoTransaction } from "@/lib/register/sendPolicyMemo";
 import { walletAdapterToProvider } from "@/lib/wallet/walletAdapterProvider";
@@ -14,18 +20,10 @@ import { PolicyCard } from "@/components/ui/PolicyCard";
 import { BadgeEmbed } from "@/components/ui/BadgeEmbed";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 
-const DEFAULT_POLICY: PolicyV1 = {
-  version: 1,
-  name: "My SpecGuard Agent",
-  maxDrawdownPct: 10,
-  maxSpendPerTxSol: 0.5,
-  allowedVenues: ["jupiter-swap", "jupiter-trigger"],
-  heartbeatIntervalSec: 300,
-};
+type Step = "connect" | "guard" | "type" | "policy" | "sign" | "done";
+const STEPS: Step[] = ["connect", "guard", "type", "policy", "sign", "done"];
 
-type Step = "connect" | "guard" | "policy" | "sign" | "done";
-const STEPS: Step[] = ["connect", "guard", "policy", "sign", "done"];
-const VENUE_OPTIONS: { id: PolicyV1["allowedVenues"][number]; label: string }[] = [
+const VENUE_OPTIONS: { id: VenueSlug; label: string }[] = [
   { id: "jupiter-swap", label: "Jupiter" },
   { id: "jupiter-trigger", label: "Jupiter Trigger" },
   { id: "spl-token", label: "Other" },
@@ -34,7 +32,39 @@ const HEARTBEATS = [
   { sec: 60, label: "1min" },
   { sec: 300, label: "5min" },
   { sec: 900, label: "15min" },
+  { sec: 3600, label: "1h" },
 ];
+const PLATFORM_OPTIONS = ["x", "telegram", "discord", "farcaster"];
+
+const TYPE_COPY: Record<AgentType, { title: string; blurb: string }> = {
+  trader: {
+    title: "Trader",
+    blurb: "Trades onchain. Enforce drawdown limits and which venues it may touch.",
+  },
+  social: {
+    title: "Social",
+    blurb: "Posts and messages. Enforce posts per day, DMs, and which platforms.",
+  },
+  data: {
+    title: "Data",
+    blurb: "Reads and indexes. Enforce which tools it may call and what it may spend.",
+  },
+  infra: {
+    title: "Infra",
+    blurb: "Runs jobs and services. Enforce spend caps and forbidden actions.",
+  },
+  general: {
+    title: "General",
+    blurb: "Anything else. Start with spend caps and a heartbeat, add limits as needed.",
+  },
+};
+
+function parseList(value: string): string[] {
+  return value
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}
 
 export function RegisterWizard() {
   const { connection } = useConnection();
@@ -51,8 +81,10 @@ export function RegisterWizard() {
   const [useDifferentWallet, setUseDifferentWallet] = useState(false);
   const [watchedWallet, setWatchedWallet] = useState("");
   const [gate, setGate] = useState<GuardBalancePayload | null>(null);
-  const [policy, setPolicy] = useState<PolicyV1>(DEFAULT_POLICY);
-  const [prepare, setPrepare] = useState<{ memoText: string; policyHash: string } | null>(null);
+  const [policy, setPolicy] = useState<PolicyV2>(defaultPolicyFor("trader"));
+  const [prepare, setPrepare] = useState<{ memoText: string; policyHash: string } | null>(
+    null,
+  );
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<{
@@ -72,14 +104,33 @@ export function RegisterWizard() {
   const agentWallet = (useDifferentWallet ? watchedWallet.trim() : address) ?? "";
   const agentWalletValid = isLikelySolanaAddress(agentWallet);
 
-  const toggleVenue = (id: PolicyV1["allowedVenues"][number]) => {
+  const chooseType = (type: AgentType) => {
+    setPolicy((p) => ({ ...defaultPolicyFor(type), name: p.name }));
+    setStep("policy");
+  };
+
+  const toggleVenue = (id: VenueSlug) => {
     setPolicy((p) => {
-      const has = p.allowedVenues.includes(id);
+      const current = p.allowedVenues ?? [];
+      const has = current.includes(id);
+      if (has && current.length <= 1) return p;
       return {
         ...p,
-        allowedVenues: has
-          ? p.allowedVenues.filter((v) => v !== id)
-          : [...p.allowedVenues, id],
+        allowedVenues: has ? current.filter((v) => v !== id) : [...current, id],
+      };
+    });
+  };
+
+  const togglePlatform = (name: string) => {
+    setPolicy((p) => {
+      const current = p.socialLimits?.platforms ?? [];
+      const has = current.includes(name);
+      return {
+        ...p,
+        socialLimits: {
+          ...p.socialLimits,
+          platforms: has ? current.filter((v) => v !== name) : [...current, name],
+        },
       };
     });
   };
@@ -171,7 +222,7 @@ export function RegisterWizard() {
         <div className="space-y-4">
           <h2 className="text-2xl font-bold">Connect your agent wallet</h2>
           <p className="text-[#8888aa]">
-            This is the wallet your agent trades from. Not your personal wallet.
+            This is the wallet your agent operates from. Not your personal wallet.
           </p>
           <WalletConnect variant="panel" />
         </div>
@@ -186,7 +237,11 @@ export function RegisterWizard() {
               {address}
             </p>
           </div>
-          <button type="button" className="sg-btn-ghost h-10 min-h-10" onClick={() => disconnect()}>
+          <button
+            type="button"
+            className="sg-btn-ghost h-10 min-h-10"
+            onClick={() => disconnect()}
+          >
             Disconnect
           </button>
         </div>
@@ -196,31 +251,73 @@ export function RegisterWizard() {
         <div className="space-y-4">
           <GuardBalanceGate wallet={address} onBalance={setGate} />
           {canContinueGuard && (
-            <button type="button" className="sg-btn-primary w-full" onClick={() => setStep("policy")}>
-              Continue to policy →
+            <button
+              type="button"
+              className="sg-btn-primary w-full"
+              onClick={() => setStep("type")}
+            >
+              Continue →
             </button>
           )}
+        </div>
+      )}
+
+      {step === "type" && address && (
+        <div className="space-y-5">
+          <div>
+            <h2 className="text-2xl font-bold">What does your agent do?</h2>
+            <p className="mt-2 text-[#8888aa]">
+              This decides which limits your policy enforces. Every agent gets a spend cap
+              and a heartbeat — the rest depends on the work.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {AGENT_TYPE_OPTIONS.map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => chooseType(t)}
+                className={cn(
+                  "sg-card p-5 text-left transition-colors hover:border-[#00f5c4]/60",
+                  policy.type === t && "border-[#00f5c4]",
+                )}
+              >
+                <p className="text-lg font-bold">{TYPE_COPY[t].title}</p>
+                <p className="mt-1 text-sm text-[#8888aa]">{TYPE_COPY[t].blurb}</p>
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
       {step === "policy" && address && (
         <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">
           <div className="space-y-5">
-            <h2 className="text-2xl font-bold">Publish policy</h2>
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-2xl font-bold">Publish policy</h2>
+              <button
+                type="button"
+                className="sg-btn-ghost h-9 min-h-9 text-xs"
+                onClick={() => setStep("type")}
+              >
+                Change type
+              </button>
+            </div>
+
             <label className="flex items-center gap-3 text-sm">
               <input
                 type="checkbox"
                 checked={useDifferentWallet}
                 onChange={(e) => setUseDifferentWallet(e.target.checked)}
               />
-              Watch a different trading wallet. $GUARD stays on the connected wallet.
+              Watch a different wallet. $GUARD stays on the connected wallet.
             </label>
             {useDifferentWallet ? (
               <input
                 className="sg-input font-mono"
                 value={watchedWallet}
                 onChange={(e) => setWatchedWallet(e.target.value.trim())}
-                placeholder="Trading wallet public key"
+                placeholder="Agent wallet public key"
                 spellCheck={false}
               />
             ) : (
@@ -235,22 +332,11 @@ export function RegisterWizard() {
               <input
                 className="sg-input mt-2"
                 value={policy.name}
+                maxLength={64}
                 onChange={(e) => setPolicy((p) => ({ ...p, name: e.target.value }))}
               />
             </label>
-            <label className="block text-sm">
-              Max drawdown {policy.maxDrawdownPct}%
-              <input
-                type="range"
-                min={1}
-                max={50}
-                value={policy.maxDrawdownPct}
-                className="mt-2 w-full accent-[#00f5c4]"
-                onChange={(e) =>
-                  setPolicy((p) => ({ ...p, maxDrawdownPct: Number(e.target.value) }))
-                }
-              />
-            </label>
+
             <label className="block text-sm">
               Max spend per transaction (SOL)
               <input
@@ -258,34 +344,50 @@ export function RegisterWizard() {
                 step="0.01"
                 min={0.01}
                 className="sg-input mt-2 font-mono"
-                value={policy.maxSpendPerTxSol}
+                value={policy.spendLimits.perTxSol}
                 onChange={(e) =>
-                  setPolicy((p) => ({ ...p, maxSpendPerTxSol: Number(e.target.value) }))
+                  setPolicy((p) => ({
+                    ...p,
+                    spendLimits: { ...p.spendLimits, perTxSol: Number(e.target.value) },
+                  }))
                 }
               />
             </label>
-            <fieldset className="text-sm">
-              <legend className="mb-2">Allowed venues</legend>
-              <div className="flex flex-wrap gap-3">
-                {VENUE_OPTIONS.map((v) => (
-                  <label key={v.id} className="flex items-center gap-2 rounded-full border border-[#ffffff18] px-3 py-1.5">
-                    <input
-                      type="checkbox"
-                      checked={policy.allowedVenues.includes(v.id)}
-                      onChange={() => toggleVenue(v.id)}
-                    />
-                    {v.label}
-                  </label>
-                ))}
-              </div>
-            </fieldset>
+
+            <label className="block text-sm">
+              Max spend per day (SOL) — optional
+              <input
+                type="number"
+                step="0.1"
+                min={0}
+                placeholder="no daily cap"
+                className="sg-input mt-2 font-mono"
+                value={policy.spendLimits.dailySol ?? ""}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setPolicy((p) => ({
+                    ...p,
+                    spendLimits: {
+                      ...p.spendLimits,
+                      ...(v === "" || Number(v) <= 0
+                        ? { dailySol: undefined }
+                        : { dailySol: Number(v) }),
+                    },
+                  }));
+                }}
+              />
+            </label>
+
             <label className="block text-sm">
               Heartbeat interval
               <select
                 className="sg-input mt-2"
                 value={policy.heartbeatIntervalSec}
                 onChange={(e) =>
-                  setPolicy((p) => ({ ...p, heartbeatIntervalSec: Number(e.target.value) }))
+                  setPolicy((p) => ({
+                    ...p,
+                    heartbeatIntervalSec: Number(e.target.value),
+                  }))
                 }
               >
                 {HEARTBEATS.map((h) => (
@@ -295,6 +397,137 @@ export function RegisterWizard() {
                 ))}
               </select>
             </label>
+
+            {policy.type === "trader" && (
+              <>
+                <label className="block text-sm">
+                  Max drawdown {policy.maxDrawdownPct ?? 10}%
+                  <input
+                    type="range"
+                    min={1}
+                    max={50}
+                    value={policy.maxDrawdownPct ?? 10}
+                    className="mt-2 w-full accent-[#00f5c4]"
+                    onChange={(e) =>
+                      setPolicy((p) => ({ ...p, maxDrawdownPct: Number(e.target.value) }))
+                    }
+                  />
+                </label>
+                <fieldset className="text-sm">
+                  <legend className="mb-2">Allowed venues</legend>
+                  <div className="flex flex-wrap gap-3">
+                    {VENUE_OPTIONS.map((v) => (
+                      <label
+                        key={v.id}
+                        className="flex items-center gap-2 rounded-full border border-[#ffffff18] px-3 py-1.5"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={policy.allowedVenues?.includes(v.id) ?? false}
+                          onChange={() => toggleVenue(v.id)}
+                        />
+                        {v.label}
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              </>
+            )}
+
+            {policy.type === "social" && (
+              <>
+                <label className="block text-sm">
+                  Max posts per day
+                  <input
+                    type="number"
+                    min={1}
+                    className="sg-input mt-2 font-mono"
+                    value={policy.socialLimits?.maxPostsPerDay ?? 20}
+                    onChange={(e) =>
+                      setPolicy((p) => ({
+                        ...p,
+                        socialLimits: {
+                          ...p.socialLimits,
+                          maxPostsPerDay: Number(e.target.value),
+                        },
+                      }))
+                    }
+                  />
+                </label>
+                <label className="flex items-center gap-3 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={policy.socialLimits?.allowDMs ?? false}
+                    onChange={(e) =>
+                      setPolicy((p) => ({
+                        ...p,
+                        socialLimits: { ...p.socialLimits, allowDMs: e.target.checked },
+                      }))
+                    }
+                  />
+                  Allow direct messages
+                </label>
+                <fieldset className="text-sm">
+                  <legend className="mb-2">Platforms</legend>
+                  <div className="flex flex-wrap gap-3">
+                    {PLATFORM_OPTIONS.map((name) => (
+                      <label
+                        key={name}
+                        className="flex items-center gap-2 rounded-full border border-[#ffffff18] px-3 py-1.5"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={policy.socialLimits?.platforms?.includes(name) ?? false}
+                          onChange={() => togglePlatform(name)}
+                        />
+                        {name}
+                      </label>
+                    ))}
+                  </div>
+                </fieldset>
+              </>
+            )}
+
+            {(policy.type === "data" ||
+              policy.type === "infra" ||
+              policy.type === "general") && (
+              <label className="block text-sm">
+                Allowed tools — comma separated, blank for any
+                <input
+                  className="sg-input mt-2 font-mono text-xs"
+                  placeholder="firecrawl-search, alchemy-rpc"
+                  value={policy.allowedTools?.join(", ") ?? ""}
+                  onChange={(e) => {
+                    const list = parseList(e.target.value);
+                    setPolicy((p) => ({
+                      ...p,
+                      allowedTools: list.length > 0 ? list : undefined,
+                    }));
+                  }}
+                />
+              </label>
+            )}
+
+            {(policy.type === "infra" ||
+              policy.type === "general" ||
+              policy.type === "data") && (
+              <label className="block text-sm">
+                Denied actions — comma separated, blank for none
+                <input
+                  className="sg-input mt-2 font-mono text-xs"
+                  placeholder="transfer_to_unknown, delete_data"
+                  value={policy.deniedActions?.join(", ") ?? ""}
+                  onChange={(e) => {
+                    const list = parseList(e.target.value);
+                    setPolicy((p) => ({
+                      ...p,
+                      deniedActions: list.length > 0 ? list : undefined,
+                    }));
+                  }}
+                />
+              </label>
+            )}
+
             <button
               type="button"
               className="sg-btn-primary w-full"
@@ -304,13 +537,20 @@ export function RegisterWizard() {
               {busy ? "Preparing…" : "Continue to sign →"}
             </button>
           </div>
+
           <PolicyCard
             live
             policy={{
               name: policy.name,
-              maxDrawdownPct: policy.maxDrawdownPct,
-              maxSpendPerTxSol: policy.maxSpendPerTxSol,
+              agentType: policy.type,
+              maxDrawdownPct: policy.maxDrawdownPct ?? null,
+              maxSpendPerTxSol: policy.spendLimits.perTxSol,
               allowedVenues: policy.allowedVenues,
+              dailySpendSol: policy.spendLimits.dailySol ?? null,
+              heartbeatIntervalSec: policy.heartbeatIntervalSec,
+              socialLimits: policy.socialLimits ?? null,
+              allowedTools: policy.allowedTools ?? null,
+              deniedActions: policy.deniedActions ?? null,
             }}
           />
         </div>
@@ -320,7 +560,8 @@ export function RegisterWizard() {
         <div className="sg-card space-y-5 p-6">
           <h2 className="text-2xl font-bold">Sign and submit</h2>
           <p className="text-[#8888aa]">
-            This publishes your policy as an onchain transaction. It is permanent and immutable.
+            This publishes your policy as an onchain transaction. It is permanent and
+            immutable.
           </p>
           <p className="font-mono text-xs text-[#00f5c4]">
             Policy hash: {prepare.policyHash.slice(0, 16)}…

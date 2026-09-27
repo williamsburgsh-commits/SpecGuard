@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
-import { listAgents, type AgentOrder, type AgentSort, type AgentStatusFilter } from "@/lib/agents/listAgents";
+import {
+  listAgents,
+  parseAgentTypeFilter,
+  type AgentOrder,
+  type AgentSort,
+  type AgentStatusFilter,
+} from "@/lib/agents/listAgents";
 import { getSupabasePublic } from "@/lib/supabase/public";
 
 export const runtime = "nodejs";
@@ -26,6 +32,7 @@ export async function GET(request: Request) {
     const supabase = getSupabasePublic();
     const agents = await listAgents(supabase, {
       status: parseStatus(searchParams.get("status")),
+      agentType: parseAgentTypeFilter(searchParams.get("type")),
       sort: parseSort(searchParams.get("sort")),
       order: parseOrder(searchParams.get("order")),
     });

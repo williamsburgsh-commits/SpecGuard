@@ -101,9 +101,15 @@ export default async function AgentPage({
           <PolicyCard
             policy={{
               name: agent.policy.name,
+              agentType: agent.policy.agentType,
               maxDrawdownPct: agent.policy.maxDrawdownPct,
               maxSpendPerTxSol: agent.policy.maxSpendPerTxSol,
               allowedVenues: agent.policy.allowedVenues,
+              dailySpendSol: agent.policy.dailySpendSol,
+              heartbeatIntervalSec: agent.policy.heartbeatIntervalSec,
+              socialLimits: agent.policy.socialLimits,
+              allowedTools: agent.policy.allowedTools,
+              deniedActions: agent.policy.deniedActions,
               registeredAt: agent.registeredAt,
               memoSig: agent.policy.memoSig,
             }}

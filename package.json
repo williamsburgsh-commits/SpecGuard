@@ -12,6 +12,12 @@
   ],
   "scripts": {
     "test:core": "npm test -w @specguard/core",
+    "test:sdk": "npm test -w @specguard/sdk",
+    "test:policy-v2": "node --env-file=.env --import tsx scripts/policy-v2-smoke.ts",
+    "mcp:build": "npm run build -w @specguard/mcp",
+    "mcp:start": "npm run start -w @specguard/mcp",
+    "test:mcp": "npm run build -w @specguard/mcp && tsx scripts/mcp-smoke.ts",
+    "build:packages": "npm run build -w @specguard/core && npm run build -w @specguard/sdk && npm run build -w @specguard/mcp",
     "test:supabase-rls": "node --env-file=.env scripts/supabase-rls-smoke.mjs",
     "test:supabase-schema": "node --env-file=.env scripts/supabase-schema-smoke.mjs",
     "agent:generate-wallet": "npm run generate-wallet -w @specguard/agent",
@@ -46,6 +52,7 @@
     "sync:flatten-registry": "tsx scripts/sync-flatten-registry-from-log.ts"
   },
   "devDependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.1",
     "@supabase/supabase-js": "^2.49.1",
     "tsx": "^4.19.3"
   }

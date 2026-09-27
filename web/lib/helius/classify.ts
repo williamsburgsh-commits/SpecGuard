@@ -13,6 +13,7 @@ export type TxKind =
   | "memo_policy"
   | "memo_heartbeat"
   | "memo_flatten"
+  | "memo_action"
   | "transfer"
   | "other";
 
@@ -80,6 +81,8 @@ function kindFromMemo(memo: string | null): TxKind | null {
       return "memo_heartbeat";
     case "flatten":
       return "memo_flatten";
+    case "action":
+      return "memo_action";
     default:
       return null;
   }

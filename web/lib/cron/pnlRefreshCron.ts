@@ -43,11 +43,14 @@ export async function runPnlRefreshCron(
       snap?.drawdown_pct != null ? Number(snap.drawdown_pct) : null;
     const policy = await loadCurrentPolicy(supabase, agent.wallet);
 
+    // A V2 policy for a non-trading agent declares no drawdown limit.
+    const maxDrawdownPct = policy?.maxDrawdownPct ?? null;
+
     let markedRed = false;
     if (
-      policy &&
+      maxDrawdownPct != null &&
       drawdownPct != null &&
-      drawdownPct > policy.maxDrawdownPct
+      drawdownPct > maxDrawdownPct
     ) {
       markedRed = await applyEvaluateBreachIfNeeded(
         supabase,

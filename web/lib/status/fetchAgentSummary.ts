@@ -1,8 +1,10 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { PolicySchema, type AgentType, type Policy } from "@specguard/core";
 
 export interface AgentSummary {
   wallet: string;
   name: string;
+  agentType: AgentType;
   status: "GREEN" | "RED";
   statusSince: string;
   proofSig: string | null;
@@ -19,12 +21,26 @@ export interface AgentSummary {
   pnlComputedAt: string | null;
   policy: {
     name: string;
-    maxDrawdownPct: number;
+    schemaVersion: number;
+    agentType: AgentType;
+    /** Absent on V2 policies for non-trading agents. */
+    maxDrawdownPct: number | null;
     maxSpendPerTxSol: number;
     heartbeatIntervalSec: number;
     allowedVenues: string[];
+    dailySpendSol: number | null;
+    socialLimits: Record<string, unknown> | null;
+    allowedTools: string[] | null;
+    deniedActions: string[] | null;
     memoSig: string;
+    /** The canonical policy object as published onchain. */
+    raw: Policy | null;
   } | null;
+}
+
+function parseRawPolicy(value: unknown): Policy | null {
+  const result = PolicySchema.safeParse(value);
+  return result.success ? result.data : null;
 }
 
 export async function fetchAgentSummary(
@@ -34,7 +50,7 @@ export async function fetchAgentSummary(
   const { data: agent, error } = await supabase
     .from("agents")
     .select(
-      "wallet, name, status, status_since, first_breach_event_id, registered_at, registration_sig, last_tx_at, last_tx_sig, last_heartbeat_at, last_heartbeat_sig, current_policy_id",
+      "wallet, name, agent_type, status, status_since, first_breach_event_id, registered_at, registration_sig, last_tx_at, last_tx_sig, last_heartbeat_at, last_heartbeat_sig, current_policy_id",
     )
     .eq("wallet", wallet)
     .maybeSingle();
@@ -47,18 +63,27 @@ export async function fetchAgentSummary(
     const { data: pol } = await supabase
       .from("policies")
       .select(
-        "name, max_drawdown_pct, max_spend_per_tx_sol, heartbeat_interval_sec, allowed_venues, memo_sig",
+        "name, schema_version, agent_type, max_drawdown_pct, max_spend_per_tx_sol, heartbeat_interval_sec, allowed_venues, daily_spend_sol, social_limits, allowed_tools, denied_actions, raw_json, memo_sig",
       )
       .eq("id", agent.current_policy_id)
       .maybeSingle();
     if (pol) {
       policy = {
         name: pol.name,
-        maxDrawdownPct: Number(pol.max_drawdown_pct),
+        schemaVersion: pol.schema_version ?? 1,
+        agentType: (pol.agent_type ?? "trader") as AgentType,
+        maxDrawdownPct:
+          pol.max_drawdown_pct == null ? null : Number(pol.max_drawdown_pct),
         maxSpendPerTxSol: Number(pol.max_spend_per_tx_sol),
         heartbeatIntervalSec: pol.heartbeat_interval_sec,
         allowedVenues: pol.allowed_venues ?? [],
+        dailySpendSol:
+          pol.daily_spend_sol == null ? null : Number(pol.daily_spend_sol),
+        socialLimits: (pol.social_limits as Record<string, unknown> | null) ?? null,
+        allowedTools: pol.allowed_tools ?? null,
+        deniedActions: pol.denied_actions ?? null,
         memoSig: pol.memo_sig,
+        raw: parseRawPolicy(pol.raw_json),
       };
     }
   }
@@ -86,6 +111,7 @@ export async function fetchAgentSummary(
   return {
     wallet: agent.wallet,
     name: agent.name,
+    agentType: (agent.agent_type ?? "trader") as AgentType,
     status: agent.status as "GREEN" | "RED",
     statusSince: agent.status_since,
     proofSig,

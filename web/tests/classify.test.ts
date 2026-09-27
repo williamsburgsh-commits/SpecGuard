@@ -72,6 +72,21 @@ describe("normalizeEnhancedTx", () => {
     expect(tx?.kind).toBe("memo_heartbeat");
   });
 
+  it("classifies action memo from logs", () => {
+    const memo =
+      'SPECGUARD:v1:ACTION:{"type":"social_post","ts":1700000000,"platform":"x"}';
+    const tx = normalizeEnhancedTx(
+      {
+        signature: "sigAction",
+        timestamp: 1_700_000_000,
+        feePayer: WALLET,
+        logMessages: [`Program log: Memo ${memo}`],
+      },
+      WALLET,
+    );
+    expect(tx?.kind).toBe("memo_action");
+  });
+
   it("classifies Jupiter swap by type", () => {
     const tx = normalizeEnhancedTx(
       {

@@ -67,6 +67,9 @@ export function AgentCard({
           <div className="flex flex-wrap items-center gap-3">
             <h3 className="truncate text-base font-semibold">{agent.name}</h3>
             <StatusBadge status={agent.status} size="sm" />
+            <span className="rounded-full border border-[#ffffff18] px-2 py-0.5 text-[10px] uppercase tracking-[0.14em] text-[#8888aa]">
+              {agent.agentType}
+            </span>
           </div>
           <div className="mt-1 flex flex-wrap items-center gap-2 font-mono text-xs text-[#8888aa]">
             <span>{shortPubkey(agent.wallet, 4)}</span>

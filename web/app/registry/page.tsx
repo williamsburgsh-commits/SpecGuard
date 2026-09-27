@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { listAgents } from "@/lib/agents/listAgents";
+import { listAgents, parseAgentTypeFilter } from "@/lib/agents/listAgents";
 import { RegistryClient } from "@/app/components/RegistryTable";
 import { getSupabasePublic } from "@/lib/supabase/public";
 
@@ -7,6 +7,7 @@ export const dynamic = "force-dynamic";
 
 type SearchParams = {
   status?: string;
+  type?: string;
   sort?: string;
   order?: string;
 };
@@ -27,11 +28,19 @@ export default async function RegistryPage({
       ? searchParams.sort
       : "days_active";
   const order = searchParams.order === "asc" ? "asc" : "desc";
+  const agentType = parseAgentTypeFilter(searchParams.type ?? null);
 
   const supabase = getSupabasePublic();
-  const agents = await listAgents(supabase, { status, sort, order });
+  const agents = await listAgents(supabase, { status, agentType, sort, order });
   const allAgents =
-    status === "all" ? agents : await listAgents(supabase, { status: "all", sort, order });
+    status === "all" && agentType === "all"
+      ? agents
+      : await listAgents(supabase, {
+          status: "all",
+          agentType: "all",
+          sort,
+          order,
+        });
 
   const total = allAgents.length;
   const green = allAgents.filter((a) => a.status === "GREEN").length;
@@ -51,6 +60,7 @@ export default async function RegistryPage({
           <RegistryClient
             initialAgents={agents}
             initialStatus={status}
+            initialType={agentType}
             initialSort={sort}
             initialOrder={order}
           />
