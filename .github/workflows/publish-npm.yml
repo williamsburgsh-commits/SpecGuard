@@ -1,0 +1,50 @@
+name: Publish npm packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_core:
+        description: Publish @specguard/core
+        type: boolean
+        default: true
+      publish_mcp:
+        description: Publish @specguard/mcp
+        type: boolean
+        default: true
+  push:
+    tags:
+      - 'npm-v*'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install and build
+        run: npm ci && npm run build:packages
+
+      - name: Publish @specguard/core
+        if: >-
+          (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) ||
+          (github.event_name == 'workflow_dispatch' && inputs.publish_core)
+        run: npm publish -w @specguard/core --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish @specguard/mcp
+        if: >-
+          (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) ||
+          (github.event_name == 'workflow_dispatch' && inputs.publish_mcp)
+        run: npm publish -w @specguard/mcp --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
