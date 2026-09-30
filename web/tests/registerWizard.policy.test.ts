@@ -6,7 +6,7 @@ import {
   decodeMemo,
   parsePolicy,
   PolicyV2Schema,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import {
   AGENT_TYPE_OPTIONS,
   defaultPolicyFor,

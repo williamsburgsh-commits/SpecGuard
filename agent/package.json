@@ -1,5 +1,5 @@
 {
-  "name": "@specguard/agent",
+  "name": "@specguardxyz/agent",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -18,7 +18,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@specguard/core": "*",
+    "@specguardxyz/core": "*",
     "@solana-program/memo": "^0.14.1",
     "@solana-program/system": "^0.14.1",
     "@solana/kit": "^8.0.0",

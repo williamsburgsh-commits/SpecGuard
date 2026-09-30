@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { PnlInitialBalances } from "@specguard/core";
+import type { PnlInitialBalances } from "@specguardxyz/core";
 import { tokenDeltasForWallet, tokenDeltasToJson } from "../helius/tokenDeltas";
 import { computePnlFromTransactionRows } from "./computeFromTransactions";
 import type { TransactionRowForPnl } from "./buildEvents";

@@ -17,7 +17,7 @@ import {
   hashPolicy,
   parsePolicy,
   type PolicyV2,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { listAgents } from "../web/lib/agents/listAgents";
 import { fetchAgentSummary } from "../web/lib/status/fetchAgentSummary";
 

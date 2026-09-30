@@ -1,4 +1,4 @@
-import type { AgentType, PolicyV2 } from "@specguard/core";
+import type { AgentType, PolicyV2 } from "@specguardxyz/core";
 
 export const AGENT_TYPE_OPTIONS: AgentType[] = [
   "trader",

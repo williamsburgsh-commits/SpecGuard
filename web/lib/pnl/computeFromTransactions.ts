@@ -2,7 +2,7 @@ import {
   computeRealizedPnl,
   type PnlInitialBalances,
   type PnlSnapshot,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import {
   buildTradeEventsFromRows,
   type TransactionRowForPnl,

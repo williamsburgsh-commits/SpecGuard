@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { encodePolicyMemo, type PolicyV1 } from "@specguard/core";
+import { encodePolicyMemo, type PolicyV1 } from "@specguardxyz/core";
 import bs58 from "bs58";
 import { extractMemoFromGetTransactionResult } from "../lib/solana/extractMemoFromTx";
 

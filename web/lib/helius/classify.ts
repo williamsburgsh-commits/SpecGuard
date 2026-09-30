@@ -2,7 +2,7 @@ import {
   decodeMemo,
   JUPITER_AGGREGATOR_V6_PROGRAM_ID,
   MEMO_PREFIX,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { tokenDeltasForWallet, tokenDeltasToJson } from "./tokenDeltas";
 
 export type TxKind =

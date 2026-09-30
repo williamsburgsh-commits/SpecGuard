@@ -39,7 +39,7 @@ Set `GUARD_MIN_BALANCE_RAW` on Vercel production when you deploy.
 ## Verify
 
 ```bash
-npm run build -w @specguard/core
+npm run build -w @specguardxyz/core
 npm run test:core
 npm run test:guard-balance
 ```

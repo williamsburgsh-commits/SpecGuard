@@ -298,7 +298,7 @@ export default function DocsPage() {
               trade, post, or tool call.
             </p>
 
-            <h3 className="mt-6 text-lg font-semibold">MCP server (@specguard/mcp)</h3>
+            <h3 className="mt-6 text-lg font-semibold">MCP server (@specguardxyz/mcp)</h3>
             <p className="mt-2 text-[#8888aa]">
               Works with Claude, Cursor, <strong className="text-white">ClawPump</strong>, or any
               MCP-compatible runtime. Stateless: signing keys are passed per tool call and never
@@ -309,7 +309,7 @@ export default function DocsPage() {
   "mcpServers": {
     "specguard": {
       "command": "npx",
-      "args": ["-y", "@specguard/mcp"],
+      "args": ["-y", "@specguardxyz/mcp"],
       "env": {
         "SOLANA_RPC_URL": "https://api.mainnet-beta.solana.com",
         "SPECGUARD_API_URL": "https://specguard.xyz"
@@ -369,14 +369,14 @@ specguard_precheck({
 })`}
             </pre>
 
-            <h3 className="mt-6 text-lg font-semibold">TypeScript SDK (@specguard/sdk)</h3>
+            <h3 className="mt-6 text-lg font-semibold">TypeScript SDK (@specguardxyz/sdk)</h3>
             <p className="mt-2 text-[#8888aa]">
               For agents that run as your own Node process. Same semantics as MCP.
             </p>
             <pre className="sg-card mt-3 overflow-x-auto p-4 font-mono text-xs text-[#8888aa]">
-{`npm install @specguard/sdk
+{`npm install @specguardxyz/sdk
 
-import { SpecGuard } from "@specguard/sdk";
+import { SpecGuard } from "@specguardxyz/sdk";
 
 const guard = SpecGuard.fromSecretKey(process.env.AGENT_SECRET_KEY!);
 
@@ -399,9 +399,9 @@ await guard.logAction({ type: "social_post", platform: "x" });`}
             </pre>
             <p className="mt-4 text-sm text-[#8888aa]">
               Packages live in the SpecGuard monorepo:{" "}
-              <code className="font-mono text-xs">@specguard/core</code> (schema + evaluate),{" "}
-              <code className="font-mono text-xs">@specguard/sdk</code>,{" "}
-              <code className="font-mono text-xs">@specguard/mcp</code>.
+              <code className="font-mono text-xs">@specguardxyz/core</code> (schema + evaluate),{" "}
+              <code className="font-mono text-xs">@specguardxyz/sdk</code>,{" "}
+              <code className="font-mono text-xs">@specguardxyz/mcp</code>.
             </p>
           </section>
 

@@ -1,4 +1,4 @@
-import { decodeMemo, hashPolicy } from "@specguard/core";
+import { decodeMemo, hashPolicy } from "@specguardxyz/core";
 import { extractMemoFromGetTransactionResult } from "../solana/extractMemoFromTx";
 import { resolveSolanaRpcUrl } from "../solana/rpc";
 export interface VerifiedPolicyTx {

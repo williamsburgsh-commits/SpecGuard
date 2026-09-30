@@ -4,7 +4,7 @@ import {
   decodeMemo,
   isPolicyV2,
   type Policy,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { getGuardBalanceForWallet } from "../guard/balance";
 import { syncHeliusWebhookAddresses } from "../helius/syncWebhookAddresses";
 import { verifyPolicyMemoTransaction } from "./verifyPolicyTx";

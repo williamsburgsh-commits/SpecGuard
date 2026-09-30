@@ -10,7 +10,7 @@ import {
   type AgentStatus,
   type Policy,
   type TxSnapshot,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { RegistryClient } from "./client.js";
 import { keypairFromSecret, sendMemoTransaction } from "./memo.js";
 import {
@@ -37,8 +37,8 @@ export type {
   PolicyV1,
   PolicyV2,
   TxSnapshot,
-} from "@specguard/core";
-export { PolicySchema, PolicyV2Schema, evaluatePolicy, hashPolicy } from "@specguard/core";
+} from "@specguardxyz/core";
+export { PolicySchema, PolicyV2Schema, evaluatePolicy, hashPolicy } from "@specguardxyz/core";
 
 export class SpecGuard {
   private readonly keypair?: Keypair;

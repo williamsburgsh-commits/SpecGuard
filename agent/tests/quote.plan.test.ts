@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { evaluate, type PolicyV1 } from "@specguard/core";
+import { evaluate, type PolicyV1 } from "@specguardxyz/core";
 import { effectiveQuoteSizeSol, planQuotes } from "../src/quote/plan.js";
 
 const policy: PolicyV1 = {

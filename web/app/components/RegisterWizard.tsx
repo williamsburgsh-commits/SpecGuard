@@ -4,9 +4,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { WalletConnect } from "@/app/components/chrome/WalletConnect";
-// Type-only: the @specguard/core barrel reaches node:crypto via policy/hash,
+// Type-only: the @specguardxyz/core barrel reaches node:crypto via policy/hash,
 // which webpack cannot bundle for the browser.
-import type { AgentType, PolicyV2, VenueSlug } from "@specguard/core";
+import type { AgentType, PolicyV2, VenueSlug } from "@specguardxyz/core";
 import {
   AGENT_TYPE_OPTIONS,
   defaultPolicyFor,

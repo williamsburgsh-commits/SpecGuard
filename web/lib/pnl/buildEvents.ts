@@ -3,7 +3,7 @@ import {
   WSOL_MINT,
   type TradeEvent,
   type TradeEventKind,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 
 export interface TransactionRowForPnl {
   signature: string;

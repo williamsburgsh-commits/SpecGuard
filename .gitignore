@@ -8,6 +8,8 @@ logs/*.txt
 node_modules/
 site/node_modules/
 packages/core/dist/
+packages/mcp/dist/
+packages/sdk/dist/
 agent/.keys/
 agent/keypair.json
 agent/state/

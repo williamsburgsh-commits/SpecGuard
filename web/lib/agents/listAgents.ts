@@ -1,4 +1,4 @@
-import { AGENT_TYPES, type AgentType } from "@specguard/core";
+import { AGENT_TYPES, type AgentType } from "@specguardxyz/core";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type AgentSort = "days_active" | "registered_at" | "name" | "pnl";

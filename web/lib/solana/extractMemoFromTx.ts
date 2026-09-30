@@ -1,4 +1,4 @@
-import { decodeMemo, MEMO_PREFIX } from "@specguard/core";
+import { decodeMemo, MEMO_PREFIX } from "@specguardxyz/core";
 import bs58 from "bs58";
 
 const MEMO_PROGRAM_ID = "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr";

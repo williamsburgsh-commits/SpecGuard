@@ -3,7 +3,7 @@ import {
   encodePolicyMemo,
   hashPolicy,
   type PolicyV1,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { getAddMemoInstruction } from "@solana-program/memo";
 import { createMainnetAgentClient } from "./client.js";
 import { MIN_PUBLISH_LAMPORTS } from "./config.js";

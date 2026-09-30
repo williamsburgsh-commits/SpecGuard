@@ -1,5 +1,5 @@
 {
-  "name": "@specguard/core",
+  "name": "@specguardxyz/core",
   "version": "0.1.0",
   "description": "SpecGuard policy engine — validation, evaluation, and memo formats for onchain agent verification.",
   "type": "module",
