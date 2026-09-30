@@ -371,10 +371,19 @@ specguard_precheck({
 
             <h3 className="mt-6 text-lg font-semibold">TypeScript SDK (@specguardxyz/sdk)</h3>
             <p className="mt-2 text-[#8888aa]">
-              For agents that run as your own Node process. Same semantics as MCP.
+              For agents that run as your own Node process. Same semantics as MCP. The SDK lives in
+              the monorepo; install from the repo (or clone{" "}
+              <a href={GITHUB_URL} className="text-[#00f5c4] hover:underline">
+                SpecGuard
+              </a>
+              ) until <code className="font-mono text-xs">@specguardxyz/sdk</code> is published to
+              npm. <strong className="text-white">MCP</strong> is on npm today:{" "}
+              <code className="font-mono text-xs">npx -y @specguardxyz/mcp</code>.
             </p>
             <pre className="sg-card mt-3 overflow-x-auto p-4 font-mono text-xs text-[#8888aa]">
-{`npm install @specguardxyz/sdk
+{`# from repo root after git clone
+npm install
+npm run build -w @specguardxyz/sdk
 
 import { SpecGuard } from "@specguardxyz/sdk";
 
@@ -398,10 +407,13 @@ await postToX(content);
 await guard.logAction({ type: "social_post", platform: "x" });`}
             </pre>
             <p className="mt-4 text-sm text-[#8888aa]">
-              Packages live in the SpecGuard monorepo:{" "}
-              <code className="font-mono text-xs">@specguardxyz/core</code> (schema + evaluate),{" "}
+              Monorepo packages:{" "}
+              <code className="font-mono text-xs">@specguardxyz/core</code>,{" "}
               <code className="font-mono text-xs">@specguardxyz/sdk</code>,{" "}
-              <code className="font-mono text-xs">@specguardxyz/mcp</code>.
+              <code className="font-mono text-xs">@specguardxyz/mcp</code>. On npm (public):{" "}
+              <code className="font-mono text-xs">@specguardxyz/core</code> and{" "}
+              <code className="font-mono text-xs">@specguardxyz/mcp</code> — MCP pulls in core
+              automatically.
             </p>
           </section>
 
