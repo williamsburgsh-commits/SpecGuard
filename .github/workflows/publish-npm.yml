@@ -29,6 +29,18 @@ jobs:
           node-version: '22'
           cache: npm
           registry-url: https://registry.npmjs.org
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Verify npm auth
+        run: |
+          if [ -z "${NODE_AUTH_TOKEN}" ]; then
+            echo "::error::Add repository secret NPM_TOKEN (npm automation token with publish access to @specguard)."
+            exit 1
+          fi
+          npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Install and build
         run: npm ci && npm run build:packages
