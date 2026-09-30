@@ -8,9 +8,14 @@ No trust required.
 
 ## Install
 
+From the SpecGuard monorepo (npm publish coming soon):
+
 ```bash
-npm install @specguardxyz/sdk
+git clone https://github.com/williamsburgsh-commits/SpecGuard.git
+cd SpecGuard && npm install && npm run build -w @specguardxyz/sdk
 ```
+
+For Claude / Cursor / ClawPump without a custom Node app, use **`npx -y @specguardxyz/mcp`** instead.
 
 ## Three-line integration
 
