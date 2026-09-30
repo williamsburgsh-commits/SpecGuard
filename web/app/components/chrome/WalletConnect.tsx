@@ -137,7 +137,7 @@ export function WalletConnect({
             {wallet?.adapter.name ? `${wallet.adapter.name} · ` : ""}
             <span className="font-mono">{shortPubkey(address)}</span>
           </summary>
-          <div className="absolute right-0 z-[120] mt-2 w-48 rounded-2xl border border-[#ffffff0f] bg-[#0f0f1a] p-2">
+          <div className="absolute right-0 z-[120] mt-2 w-48 border border-[#2A2824] bg-[#141311] p-2">
             <button
               type="button"
               className="w-full rounded-xl px-3 py-2 text-left text-sm text-[#8888aa] hover:bg-[#ffffff08] hover:text-white"

@@ -1,93 +1,52 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
-import { FadeUp } from "@/components/ui/FadeUp";
-import { StatusBadge } from "@/components/ui/StatusBadge";
-import { usePrefersReducedMotion } from "@/lib/motion/usePrefersReducedMotion";
-import { cn } from "@/lib/utils";
+import { StatusLamp } from "@/components/ui/StatusLamp";
+import { shortPubkey } from "@/lib/format";
+import type { LandingData } from "@/lib/home/loadLanding";
 
-export interface RegistryPreviewRow {
-  name: string;
-  status: "GREEN" | "RED";
-  meta: string;
-  href: string;
-}
-
-export function RegistryPreview({ rows }: { rows: RegistryPreviewRow[] }) {
-  const reduced = usePrefersReducedMotion();
-
+export function RegistryPreview({ data }: { data: LandingData }) {
   return (
-    <section className="sg-section">
+    <section className="border-b border-[#2A2824] py-12 sm:py-16">
       <div className="sg-shell">
-        <FadeUp>
-          <h2 className="sg-headline">
-            Every agent.
-            <br />
-            <span className="text-[#00f5c4]">One place.</span>
-          </h2>
-        </FadeUp>
+        <p className="sg-kicker">Registry</p>
+        <h2 className="sg-headline mt-3 max-w-[16ch]">The list is the proof.</h2>
 
-        {rows.length === 0 ? (
-          <FadeUp className="mt-12">
-            <div className="sg-card px-6 py-8">
-              <p className="text-lg font-semibold">No registered agents yet.</p>
-              <p className="mt-2 max-w-xl text-sm text-[#8888aa]">
-                The public registry lists only wallets that published a policy memo. This preview
-                uses that same list — nothing here is a sample name.
-              </p>
-            </div>
-          </FadeUp>
-        ) : (
-          <div className="mt-12 space-y-3">
-            {rows.map((row, i) => {
-              const red = row.status === "RED";
-              return (
-                <motion.div
-                  key={row.href}
-                  initial={reduced ? false : { opacity: 0, y: 18 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ delay: i * 0.08, duration: 0.45 }}
-                  className={cn(
-                    "sg-card relative overflow-hidden px-5 py-4",
-                    red && "bg-[#ff3b3b08]",
-                  )}
-                >
-                  {red ? (
-                    <motion.span
-                      className="absolute inset-y-0 left-0 w-1 bg-[#ff3b3b]"
-                      initial={reduced ? false : { opacity: 0.2 }}
-                      whileInView={reduced ? undefined : { opacity: [0.2, 1, 0.7] }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.9 }}
-                    />
-                  ) : (
-                    <span className="absolute inset-y-0 left-0 w-1 bg-[#00ff8822]" />
-                  )}
-                  <Link
-                    href={row.href}
-                    className="flex flex-wrap items-center justify-between gap-3 pl-2"
-                  >
-                    <p className="font-semibold">{row.name}</p>
-                    <div className="flex items-center gap-3">
-                      <StatusBadge status={row.status} size="sm" />
-                      <p className={cn("text-sm", red ? "text-[#ff3b3b]" : "text-[#8888aa]")}>
-                        {row.meta}
-                      </p>
-                    </div>
-                  </Link>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
-
-        <FadeUp className="mt-10">
-          <Link href="/registry" className="sg-btn-ghost">
-            View Full Registry →
+        <div className="mt-8 border border-[#2A2824]">
+          <Link
+            href={data.profileHref}
+            className="grid gap-3 border-b border-[#2A2824] px-4 py-4 hover:bg-[#141311] sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-5"
+          >
+            <span className="font-mono text-[11px] tracking-[0.16em] text-[#A39E93]">#1</span>
+            <span className="min-w-0">
+              <span className="block font-semibold text-[#F4F1EA]">{data.name}</span>
+              <span className="mt-1 block font-mono text-xs text-[#A39E93]">
+                {data.market} · {shortPubkey(data.wallet, 4)}
+              </span>
+            </span>
+            <span className="flex items-center gap-3 sm:justify-end">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/badge/${data.wallet}`}
+                alt={`${data.name} status badge`}
+                className="h-7"
+              />
+              <StatusLamp signal={data.signal} />
+            </span>
           </Link>
-        </FadeUp>
+
+          <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-4 sm:px-5">
+            <div>
+              <p className="font-mono text-[11px] tracking-[0.16em] text-[#A39E93]">#2</p>
+              <p className="mt-1 text-[#F4F1EA]">Be the next agent listed.</p>
+            </div>
+            <Link href="/register" className="sg-btn-primary">
+              Register an agent
+            </Link>
+          </div>
+        </div>
+
+        <Link href="/registry" className="sg-text-link mt-4 inline-flex">
+          Open the full registry →
+        </Link>
       </div>
     </section>
   );

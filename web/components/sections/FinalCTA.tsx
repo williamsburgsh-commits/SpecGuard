@@ -1,19 +1,23 @@
 import Link from "next/link";
-import { FadeUp } from "@/components/ui/FadeUp";
 
 export function FinalCTA() {
   return (
-    <section className="sg-section">
-      <div className="sg-shell text-center">
-        <FadeUp>
-          <h2 className="sg-headline">Register your agent.</h2>
-          <p className="mx-auto mt-6 max-w-md text-lg text-[#8888aa]">
-            Prove you follow your own rules.
-          </p>
-          <Link href="/register" className="sg-btn-primary mt-10">
-            Connect Wallet to Register
+    <section className="py-12 sm:py-16">
+      <div className="sg-shell">
+        <p className="max-w-[16ch] text-4xl font-semibold leading-[1.05] tracking-[-0.04em] text-[#F4F1EA] sm:text-6xl">
+          No apology tweets. Onchain receipts.
+        </p>
+        <p className="mt-6 max-w-[14ch] text-3xl font-semibold leading-[1.05] tracking-[-0.04em] text-[#F4F1EA] sm:text-5xl">
+          Not a setting. A transaction.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <Link href="/register" className="sg-btn-primary">
+            Register an agent
           </Link>
-        </FadeUp>
+          <Link href="/registry" className="sg-text-link">
+            View the registry →
+          </Link>
+        </div>
       </div>
     </section>
   );

@@ -17,10 +17,10 @@ import {
 
 function TerminalRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <>
-      <dt className="text-xs text-[#8888aa]">{label}</dt>
-      <dd className="font-mono text-sm mb-3">{children}</dd>
-    </>
+    <div className="mb-5 last:mb-0">
+      <dt className="text-xs leading-none text-[#A39E93]">{label}</dt>
+      <dd className="mt-2 font-mono text-sm leading-relaxed">{children}</dd>
+    </div>
   );
 }
 
@@ -61,9 +61,9 @@ function TerminalCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`sg-card p-6 ${wide ? "md:col-span-2" : ""}`}>
+    <div className={`sg-card px-6 py-7 sm:px-8 ${wide ? "md:col-span-2" : ""}`}>
       <div>
-        <h3 className="text-sm text-[#8888aa]">{title}</h3>
+        <h3 className="mb-6 text-sm text-[#A39E93]">{title}</h3>
         {loading ? (
           <div className="space-y-2">
             <div className="h-3 w-full animate-pulse rounded bg-[#ffffff12]" />
@@ -151,17 +151,17 @@ export function PhoenixTerminal() {
         </div>
       ) : null}
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         <TerminalCard title="Live state" loading={isLoading}>
           {computed && data ? (
             <>
               <TerminalRow label="Operator status">
-                <span className={`rounded-full border border-[#ffffff18] px-2 py-0.5 text-xs ${statusBadgeClass(String(computed.operatorStatus))}`}>
+                <span className={`inline-flex items-center rounded-full border border-[#ffffff18] px-3 py-1 text-xs ${statusBadgeClass(String(computed.operatorStatus))}`}>
                   {computed.operatorStatus}
                 </span>
               </TerminalRow>
               <TerminalRow label="Display status">
-                <span className={`rounded-full border border-[#ffffff18] px-2 py-0.5 text-xs ${statusBadgeClass(String(computed.displayStatus))}`}>
+                <span className={`inline-flex items-center rounded-full border border-[#ffffff18] px-3 py-1 text-xs ${statusBadgeClass(String(computed.displayStatus))}`}>
                   {computed.displayStatus}
                 </span>
               </TerminalRow>
@@ -173,7 +173,7 @@ export function PhoenixTerminal() {
               </TerminalRow>
               <TerminalRow label="TTL">{computed.ttl}s</TerminalRow>
               <TerminalRow label="Copy-trade">
-                <span className="rounded-full border border-[#ffffff18] px-2 py-0.5 text-xs">
+                <span className="inline-flex items-center rounded-full border border-[#ffffff18] px-3 py-1 text-xs">
                   {computed.copyEligible ? "eligible" : "not eligible"}
                 </span>
               </TerminalRow>
@@ -336,8 +336,8 @@ export function PhoenixTerminal() {
           ) : null}
         </TerminalCard>
 
-        <div className="sg-card md:col-span-2 p-6">
-          <h3 className="font-medium">STALE / copy-trade rules</h3>
+        <div className="sg-card px-6 py-7 sm:px-8 md:col-span-2">
+          <h3 className="mb-4 font-medium">STALE / copy-trade rules</h3>
           <div className="text-sm text-[#8888aa]">
             <p>
               Copy-trade is eligible only when <strong>operator status is GREEN</strong> and the

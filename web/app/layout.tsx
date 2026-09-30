@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BRAND, TAGLINE } from "@/lib/marketingCopy";
 import { SolanaWalletProvider } from "@/lib/wallet/SolanaWalletProvider";
 
-const inter = Inter({
+const display = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%2308080f'/><circle cx='16' cy='16' r='5' fill='%2300f5c4'/></svg>",
+        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230B0B0A'/><circle cx='16' cy='16' r='5' fill='%2322C55E'/></svg>",
         sizes: "any",
       },
     ],
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrains.variable} dark`}>
+    <html lang="en" className={`${display.variable} ${jetbrains.variable} dark`}>
       <body className="flex min-h-screen flex-col font-sans">
         <SolanaWalletProvider>
           <Navbar />

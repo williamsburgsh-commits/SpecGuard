@@ -26,16 +26,16 @@ export function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border font-semibold uppercase tracking-wider",
+        "inline-flex items-center border font-mono font-semibold uppercase tracking-wider",
         sizes[size],
         isRed
-          ? "border-[#ff3b3b]/50 bg-[#ff3b3b]/10 text-[#ff3b3b]"
-          : "border-[#00ff88]/40 bg-[#00ff88]/10 text-[#00ff88]",
+          ? "border-[#FF3B30]/50 bg-[#FF3B30]/10 text-[#FF3B30]"
+          : "border-[#22C55E]/40 bg-[#22C55E]/10 text-[#22C55E]",
       )}
     >
       <motion.span
         className={cn("rounded-full", size === "lg" ? "h-2.5 w-2.5" : "h-1.5 w-1.5")}
-        style={{ background: isRed ? "#ff3b3b" : "#00ff88" }}
+        style={{ background: isRed ? "#FF3B30" : "#22C55E" }}
         animate={
           reduced
             ? undefined

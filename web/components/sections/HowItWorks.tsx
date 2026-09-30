@@ -1,86 +1,75 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { FadeUp } from "@/components/ui/FadeUp";
+import { useEffect, useState } from "react";
+import { StatusLamp } from "@/components/ui/StatusLamp";
 import { usePrefersReducedMotion } from "@/lib/motion/usePrefersReducedMotion";
 
 const STEPS = [
   {
-    icon: "lock",
-    title: "Publish your limits onchain",
+    n: "01",
+    title: "Publish limits onchain",
     body: "Max drawdown, spend caps, allowed venues. Not a setting. A transaction.",
   },
   {
-    icon: "eye",
+    n: "02",
     title: "Helius watches every tx",
-    body: "Every transaction from your registered wallet is indexed and checked against your policy in real time.",
+    body: "Every transaction from the registered wallet is indexed and checked against that policy.",
   },
   {
-    icon: "shield",
-    title: "Breach and go RED in public",
-    body: "Limits broken — cancel all orders, flatten positions, post the proof. No apology tweets. Onchain receipts.",
+    n: "03",
+    title: "Breach goes RED in public",
+    body: "Limits broken. Orders cancel, positions flatten, the proof is posted. No apology tweets. Onchain receipts.",
   },
 ];
 
-function StepIcon({ name }: { name: string }) {
-  return (
-    <span className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#ffffff18] text-[#00f5c4]">
-      {name === "lock" ? (
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <rect x="5" y="11" width="14" height="10" rx="2" />
-          <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-        </svg>
-      ) : name === "eye" ? (
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z" />
-          <circle cx="12" cy="12" r="3" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
-          <path d="M12 3 4 7v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7l-8-4Z" />
-        </svg>
-      )}
-    </span>
-  );
-}
-
 export function HowItWorks() {
   const reduced = usePrefersReducedMotion();
-  const lineRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(lineRef, { once: true, margin: "-80px" });
+  const [breached, setBreached] = useState(false);
+
+  useEffect(() => {
+    if (reduced) return;
+    const id = window.setInterval(() => setBreached((v) => !v), 3200);
+    return () => window.clearInterval(id);
+  }, [reduced]);
+
+  const signal = breached ? "RED" : "GREEN";
 
   return (
-    <section id="how" className="sg-section">
+    <section id="how" className="border-b border-[#2A2824] py-12 sm:py-16">
       <div className="sg-shell">
-        <FadeUp>
-          <h2 className="sg-headline">
-            Rules that live
-            <br />
-            <span className="text-[#00f5c4]">outside the model.</span>
-          </h2>
-        </FadeUp>
+        <p className="sg-kicker">01 — 03</p>
+        <h2 className="sg-headline mt-3 max-w-[18ch]">Publish. Watch. Mark the breach.</h2>
 
-        <div ref={lineRef} className="relative mt-16">
-          <div className="absolute left-0 right-0 top-8 hidden h-px bg-[#ffffff12] lg:block" />
-          <motion.div
-            className="absolute left-0 top-8 hidden h-px origin-left bg-[#00f5c4] lg:block"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: inView && !reduced ? 1 : reduced ? 1 : 0 }}
-            transition={{ duration: 1.1, ease: "easeOut" }}
-            style={{ width: "100%" }}
-          />
-          <div className="grid gap-6 lg:grid-cols-3">
-            {STEPS.map((step, i) => (
-              <FadeUp key={step.title} delay={i * 0.12}>
-                <article className="sg-card relative p-6">
-                  <StepIcon name={step.icon} />
-                  <h3 className="mt-6 text-xl font-bold tracking-tight">{step.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-[#8888aa]">{step.body}</p>
-                </article>
-              </FadeUp>
-            ))}
+        <ol className="mt-8 grid border border-[#2A2824] lg:grid-cols-3">
+          {STEPS.map((step, index) => (
+            <li
+              key={step.n}
+              className={`px-4 py-5 sm:px-5 ${index > 0 ? "border-t border-[#2A2824] lg:border-t-0 lg:border-l" : ""}`}
+            >
+              <p className="font-mono text-[11px] tracking-[0.16em] text-[#22C55E]">{step.n}</p>
+              <h3 className="mt-3 text-lg font-semibold tracking-tight text-[#F4F1EA]">{step.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#A39E93]">{step.body}</p>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-4 border border-[#2A2824] bg-[#141311]">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#2A2824] px-4 py-3 sm:px-5">
+            <p className="sg-kicker">Example breach</p>
+            <StatusLamp signal={signal} />
           </div>
+          <dl className="grid gap-px bg-[#2A2824] sm:grid-cols-3">
+            {[
+              ["Reason", breached ? "max_drawdown" : "within spec"],
+              ["Proof", "example — not a live tx"],
+              ["Public", breached ? "badge flips RED" : "badge stays GREEN"],
+            ].map(([label, value]) => (
+              <div key={label} className="bg-[#141311] px-4 py-3 sm:px-5">
+                <dt className="sg-kicker">{label}</dt>
+                <dd className="mt-1 font-mono text-sm text-[#F4F1EA]">{value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
       </div>
     </section>
