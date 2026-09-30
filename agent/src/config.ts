@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
-import { parsePolicyV1, type PolicyV1 } from "@specguard/core";
+import { parsePolicyV1, type PolicyV1 } from "@specguardxyz/core";
 import { repoRootPath } from "./loadEnv.js";
 
 export const DEFAULT_KEYPAIR_PATH = resolve(

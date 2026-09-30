@@ -1,4 +1,4 @@
-# @specguard/mcp
+# @specguardxyz/mcp
 
 MCP server for [SpecGuard](https://specguard.xyz) — onchain verification for autonomous agents on Solana.
 
@@ -11,7 +11,7 @@ Connect it to Claude, Cursor, ClawPump, or any MCP-compatible runtime, and your 
   "mcpServers": {
     "specguard": {
       "command": "npx",
-      "args": ["-y", "@specguard/mcp"],
+      "args": ["-y", "@specguardxyz/mcp"],
       "env": {
         "SOLANA_RPC_URL": "https://api.mainnet-beta.solana.com"
       }

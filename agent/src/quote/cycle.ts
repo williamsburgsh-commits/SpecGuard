@@ -1,4 +1,4 @@
-import { evaluate, type PolicyV1 } from "@specguard/core";
+import { evaluate, type PolicyV1 } from "@specguardxyz/core";
 import type { TransactionSigner } from "@solana/kit";
 import { loadQuoteConfig, type QuoteConfig } from "../config.js";
 import {

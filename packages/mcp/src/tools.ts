@@ -10,7 +10,7 @@ import {
   type ActionSnapshot,
   type Policy,
   type TxSnapshot,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { SpecGuardApi, SpecGuardApiError } from "./lib/api.js";
 import { buildUnsignedMemoTx, parseKeypair, sendMemo } from "./lib/rpc.js";
 import type { SpecGuardMcpConfig } from "./lib/config.js";

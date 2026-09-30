@@ -1,4 +1,4 @@
-import { USDC_MINT, type TxSnapshot } from "@specguard/core";
+import { USDC_MINT, type TxSnapshot } from "@specguardxyz/core";
 
 export interface TxRow {
   signature: string;

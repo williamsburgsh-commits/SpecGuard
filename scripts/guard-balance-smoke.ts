@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 import {
   meetsGuardMinimum,
   parseGuardMinBalanceRaw,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { getGuardBalanceForWallet } from "../web/lib/guard/balance.ts";
 
 function loadEnv() {

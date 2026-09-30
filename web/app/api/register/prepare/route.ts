@@ -4,7 +4,7 @@ import {
   hashPolicy,
   parsePolicy,
   parseGuardMinBalanceRaw,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { getGuardBalanceForWallet } from "@/lib/guard/balance";
 import { isLikelySolanaAddress } from "@/lib/solana/rpc";
 

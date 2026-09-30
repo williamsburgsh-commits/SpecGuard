@@ -9,7 +9,7 @@ import {
   type Policy,
   type TxSnapshot,
   type VenueSlug,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { extractMemoFromNormalizedRaw } from "../helius/registryStatus";
 import { txRowToSnapshot, type TxRow } from "./txSnapshot";
 

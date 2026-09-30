@@ -38,7 +38,7 @@ const publicEnv = {
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   transpilePackages: [
-    "@specguard/core",
+    "@specguardxyz/core",
     "@solana/wallet-adapter-base",
     "@solana/wallet-adapter-react",
     "@solana/wallet-adapter-react-ui",

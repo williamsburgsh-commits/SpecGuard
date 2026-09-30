@@ -18,6 +18,6 @@ npm run agent:flatten-drill -- --reason=policy_breach
 
 ## DoD
 
-Three+ sigs on Solscan (cancel(s), swap, flatten memo); memo decodes with `@specguard/core`; local RED state.
+Three+ sigs on Solscan (cancel(s), swap, flatten memo); memo decodes with `@specguardxyz/core`; local RED state.
 
 **Slice 8** wires Helius → Supabase RED + `proof_sig`.

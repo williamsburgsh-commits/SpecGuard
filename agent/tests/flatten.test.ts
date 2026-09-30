@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { decodeMemo, encodeFlattenMemo } from "@specguard/core";
+import { decodeMemo, encodeFlattenMemo } from "@specguardxyz/core";
 import { computeSellableLamports } from "../src/flatten/runFlatten.js";
 
 describe("flatten", () => {

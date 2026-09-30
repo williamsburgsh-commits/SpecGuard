@@ -4,7 +4,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { createClient } from "@supabase/supabase-js";
-import { computeRealizedPnl } from "@specguard/core";
+import { computeRealizedPnl } from "@specguardxyz/core";
 import { computePnlFromTransactionRows } from "../web/lib/pnl/computeFromTransactions.ts";
 import { refreshPnlSnapshot } from "../web/lib/pnl/refreshSnapshot.ts";
 import { fetchSolUsdcMark } from "../web/lib/pnl/markPrice.ts";

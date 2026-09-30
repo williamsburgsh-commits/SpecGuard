@@ -6,7 +6,7 @@ import {
   TransactionInstruction,
 } from "@solana/web3.js";
 import bs58 from "bs58";
-import { MEMO_PROGRAM_ID } from "@specguard/core";
+import { MEMO_PROGRAM_ID } from "@specguardxyz/core";
 
 const MEMO_PROGRAM = new PublicKey(MEMO_PROGRAM_ID);
 

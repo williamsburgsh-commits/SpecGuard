@@ -1,4 +1,4 @@
-import type { Policy } from "@specguard/core";
+import type { Policy } from "@specguardxyz/core";
 
 export interface AgentSummary {
   wallet: string;

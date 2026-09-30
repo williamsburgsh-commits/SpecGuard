@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       publish_core:
-        description: Publish @specguard/core
+        description: Publish @specguardxyz/core
         type: boolean
         default: true
       publish_mcp:
-        description: Publish @specguard/mcp
+        description: Publish @specguardxyz/mcp
         type: boolean
         default: true
   push:
@@ -35,7 +35,7 @@ jobs:
       - name: Verify npm auth
         run: |
           if [ -z "${NODE_AUTH_TOKEN}" ]; then
-            echo "::error::Add repository secret NPM_TOKEN (npm automation token with publish access to @specguard)."
+            echo "::error::Add repository secret NPM_TOKEN (npm automation token with publish access to @specguardxyz)."
             exit 1
           fi
           npm whoami
@@ -45,18 +45,18 @@ jobs:
       - name: Install and build
         run: npm ci && npm run build:packages
 
-      - name: Publish @specguard/core
+      - name: Publish @specguardxyz/core
         if: >-
           (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) ||
           (github.event_name == 'workflow_dispatch' && inputs.publish_core)
-        run: npm publish -w @specguard/core --access public
+        run: npm publish -w @specguardxyz/core --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish @specguard/mcp
+      - name: Publish @specguardxyz/mcp
         if: >-
           (github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')) ||
           (github.event_name == 'workflow_dispatch' && inputs.publish_mcp)
-        run: npm publish -w @specguard/mcp --access public
+        run: npm publish -w @specguardxyz/mcp --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

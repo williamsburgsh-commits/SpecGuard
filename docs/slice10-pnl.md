@@ -5,7 +5,7 @@
 - Migration `0008_pnl_snapshots.sql` (+ remote `0008_pnl_snapshots_slice10`)
 - Classify Jupiter `SWAP` / aggregator v6 → `kind = swap`
 - Helius `tokenTransfers` → `transactions.token_deltas`
-- `@specguard/core` `computeRealizedPnl` over ordered `swap` + `limit_fill` rows
+- `@specguardxyz/core` `computeRealizedPnl` over ordered `swap` + `limit_fill` rows
 - Webhook hook: after ingest of swap/fill → `refreshPnlSnapshot`
 - Cron stub: `GET /api/cron/pnl-refresh` (same refresh, all agents with `last_tx_at`)
 
@@ -17,7 +17,7 @@
 ## Commands
 
 ```bash
-npm run build -w @specguard/core   # after core mint constants change
+npm run build -w @specguardxyz/core   # after core mint constants change
 npm run web:test
 npm run test:pnl-refresh
 ```

@@ -1,7 +1,7 @@
 /**
  * Slice 9: post SPECGUARD:v1:HB:<unix_sec> memo on mainnet.
  */
-import { encodeHeartbeatMemo } from "@specguard/core";
+import { encodeHeartbeatMemo } from "@specguardxyz/core";
 import { getAddMemoInstruction } from "@solana-program/memo";
 import { loadRepoEnv } from "../src/loadEnv.js";
 import { createMainnetAgentClient } from "../src/client.js";

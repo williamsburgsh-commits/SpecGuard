@@ -1,5 +1,5 @@
 {
-  "name": "@specguard/sdk",
+  "name": "@specguardxyz/sdk",
   "version": "0.1.0",
   "description": "Make any autonomous agent verifiable onchain. Publish a policy, heartbeat, pre-check actions, and prove behavior on Solana.",
   "type": "module",
@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@solana/web3.js": "^1.98.0",
-    "@specguard/core": "*",
+    "@specguardxyz/core": "*",
     "bs58": "^6.0.0"
   },
   "devDependencies": {

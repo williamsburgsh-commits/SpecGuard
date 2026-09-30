@@ -1,5 +1,5 @@
 import type { Keypair } from "@solana/web3.js";
-import type { AgentStatus, Policy } from "@specguard/core";
+import type { AgentStatus, Policy } from "@specguardxyz/core";
 
 export const DEFAULT_API_URL = "https://specguard.xyz";
 export const DEFAULT_RPC_URL = "https://api.mainnet-beta.solana.com";

@@ -5,7 +5,7 @@
 `POST /api/agents/[wallet]/verify`
 
 - Refreshes PnL snapshot from Supabase `transactions`
-- Runs `@specguard/core` `evaluate()` (drawdown, heartbeat, spend, venues)
+- Runs `@specguardxyz/core` `evaluate()` (drawdown, heartbeat, spend, venues)
 - If agent is **GREEN** and evaluation breaches → inserts RED `status_events` (preserves existing `first_breach_event_id`)
 - If agent is already **RED** → returns reasons only; **does not** insert duplicate breach rows
 

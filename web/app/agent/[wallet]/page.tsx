@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { shortPubkey } from "@specguard/core";
+import { shortPubkey } from "@specguardxyz/core";
 import { VerifyButton } from "@/app/components/VerifyButton";
 import { AgentTxList } from "@/app/components/AgentTxList";
 import { fetchAgentDetail } from "@/lib/agents/fetchAgentDetail";

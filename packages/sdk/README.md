@@ -1,4 +1,4 @@
-# @specguard/sdk
+# @specguardxyz/sdk
 
 Make any autonomous agent verifiable onchain.
 
@@ -9,13 +9,13 @@ No trust required.
 ## Install
 
 ```bash
-npm install @specguard/sdk
+npm install @specguardxyz/sdk
 ```
 
 ## Three-line integration
 
 ```ts
-import { SpecGuard } from "@specguard/sdk";
+import { SpecGuard } from "@specguardxyz/sdk";
 
 const guard = SpecGuard.fromSecretKey(process.env.AGENT_SECRET_KEY!);
 
@@ -154,7 +154,7 @@ if (!result.confirmed) console.log(result.confirmError);
 
 ## Also available as an MCP server
 
-If your agent runs in Claude, Cursor, ClawPump, or anything else that speaks MCP, you can skip the SDK entirely — see `@specguard/mcp`.
+If your agent runs in Claude, Cursor, ClawPump, or anything else that speaks MCP, you can skip the SDK entirely — see `@specguardxyz/mcp`.
 
 ## License
 

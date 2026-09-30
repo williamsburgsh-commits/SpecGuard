@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { decodeMemo } from "@specguard/core";
+import { decodeMemo } from "@specguardxyz/core";
 import type { NormalizedHeliusTx } from "./classify";
 
 export async function applyRegistrySideEffects(

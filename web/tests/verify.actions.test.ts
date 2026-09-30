@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { encodeActionMemo, MEMO_PREFIX } from "@specguard/core";
+import { encodeActionMemo, MEMO_PREFIX } from "@specguardxyz/core";
 import {
   actionSnapshotsFromTxRows,
   policyFromPolicyRow,

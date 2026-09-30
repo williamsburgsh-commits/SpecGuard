@@ -1,4 +1,4 @@
-import { evaluatePolicy, type CoreBreachReason, type Policy } from "@specguard/core";
+import { evaluatePolicy, type CoreBreachReason, type Policy } from "@specguardxyz/core";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { refreshPnlSnapshot } from "../pnl/refreshSnapshot";
 import {

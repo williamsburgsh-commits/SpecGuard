@@ -2,7 +2,7 @@ import {
   decodeMemo,
   encodeFlattenMemo,
   type FlattenMemoPayload,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import { getAddMemoInstruction } from "@solana-program/memo";
 import type { Address, TransactionSigner } from "@solana/kit";
 import { loadQuoteConfig } from "../config.js";

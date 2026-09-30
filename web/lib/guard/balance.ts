@@ -4,7 +4,7 @@ import {
   GUARD_MIN_WHOLE_TOKENS,
   meetsGuardMinimum,
   parseGuardMinBalanceRaw,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import {
   fetchGuardBalanceRaw,
   fetchMintDecimals,

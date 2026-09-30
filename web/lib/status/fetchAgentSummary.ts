@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { PolicySchema, type AgentType, type Policy } from "@specguard/core";
+import { PolicySchema, type AgentType, type Policy } from "@specguardxyz/core";
 
 export interface AgentSummary {
   wallet: string;

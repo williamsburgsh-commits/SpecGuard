@@ -1,4 +1,4 @@
-import type { AgentMetrics } from "@specguard/core";
+import type { AgentMetrics } from "@specguardxyz/core";
 import { fetchSolUsdcMidPrice } from "../jupiter/trigger.js";
 import {
   getSolBalanceLamports,

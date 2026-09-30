@@ -1,4 +1,4 @@
-import { WSOL_MINT } from "@specguard/core";
+import { WSOL_MINT } from "@specguardxyz/core";
 
 export async function fetchSolUsdcMark(): Promise<number> {
   const base =

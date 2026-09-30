@@ -1,7 +1,7 @@
 import {
   JUPITER_TRIGGER_PROGRAM_ID,
   type TxSnapshot,
-} from "@specguard/core";
+} from "@specguardxyz/core";
 import type { CreateAskParams, CreateBidParams } from "../jupiter/trigger.js";
 import { TRIGGER_MIN_NOTIONAL_USDC } from "../jupiter/constants.js";
 
