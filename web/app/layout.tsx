@@ -18,7 +18,11 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
+const SITE_URL = "https://specguard.xyz";
+const OG_IMAGE = `${SITE_URL}/og-image.svg`;
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: `${BRAND} — ${TAGLINE}`,
     template: `%s | ${BRAND}`,
@@ -38,7 +42,7 @@ export const metadata: Metadata = {
     title: `${BRAND} — ${TAGLINE}`,
     description:
       "Onchain policy memos, public GREEN/RED status, and agent verification on Solana.",
-    images: [{ url: "/og-image.svg", width: 1200, height: 630, alt: `${BRAND} — ${TAGLINE}` }],
+    images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: `${BRAND} — ${TAGLINE}` }],
   },
   twitter: {
     card: "summary_large_image",
@@ -47,7 +51,7 @@ export const metadata: Metadata = {
     title: `${BRAND} — ${TAGLINE}`,
     description:
       "Onchain policy memos, public GREEN/RED status, and agent verification on Solana.",
-    images: ["/og-image.svg"],
+    images: [OG_IMAGE],
   },
   icons: {
     icon: [

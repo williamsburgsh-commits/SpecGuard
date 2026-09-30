@@ -7,10 +7,9 @@ import { StatCard } from "@/components/ui/StatCard";
 import { ParticleGrid } from "./ParticleGrid";
 import { shortPubkey } from "@/lib/format";
 import { usePrefersReducedMotion } from "@/lib/motion/usePrefersReducedMotion";
+import type { OperatorStatus } from "@/lib/phoenix/operatorStatus";
 
-const DEMO_WALLET = "Spec1GuardJup11111111111111111111111111111";
-
-export function Hero() {
+export function Hero({ operator }: { operator: OperatorStatus }) {
   const reduced = usePrefersReducedMotion();
 
   return (
@@ -45,17 +44,30 @@ export function Hero() {
         >
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.18em] text-[#8888aa]">Live agent</p>
-              <h2 className="mt-2 text-xl font-bold">SpecGuard Jupiter Demo</h2>
-              <p className="mt-2 font-mono text-xs text-[#8888aa]">{shortPubkey(DEMO_WALLET, 4)}</p>
+              <p className="text-xs uppercase tracking-[0.18em] text-[#8888aa]">
+                Reference operator
+              </p>
+              <h2 className="mt-2 text-xl font-bold">SpecGuard · {operator.market}</h2>
+              <p className="mt-2 font-mono text-xs text-[#8888aa]">
+                {shortPubkey(operator.wallet, 4)}
+              </p>
             </div>
-            <StatusBadge status="GREEN" label="VERIFIED" />
+            <StatusBadge status={operator.status} label={operator.status} />
           </div>
           <div className="mt-6 grid grid-cols-3 gap-3">
-            <StatCard label="PnL" value={124.5} prefix="$" digits={2} className="p-4" />
-            <StatCard label="Transactions" value={86} className="p-4" />
-            <StatCard label="Days Active" value={21} className="p-4" />
+            <StatCard
+              label="Realized PnL"
+              value={operator.realizedPnlUsd}
+              prefix="$"
+              digits={2}
+              className="p-4"
+            />
+            <StatCard label="Fills" value={operator.fills} className="p-4" />
+            <StatCard label="Quotes" value={operator.quotePosts} className="p-4" />
           </div>
+          <Link href="/phoenix" className="mt-4 inline-block text-sm text-[#00f5c4] hover:underline">
+            Open Phoenix terminal →
+          </Link>
         </motion.div>
       </div>
     </section>
