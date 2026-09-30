@@ -18,6 +18,7 @@
     "mcp:start": "npm run start -w @specguard/mcp",
     "test:mcp": "npm run build -w @specguard/mcp && tsx scripts/mcp-smoke.ts",
     "build:packages": "npm run build -w @specguard/core && npm run build -w @specguard/sdk && npm run build -w @specguard/mcp",
+    "publish:npm": "npm run build:packages && npm publish -w @specguard/core --access public && npm publish -w @specguard/mcp --access public",
     "test:supabase-rls": "node --env-file=.env scripts/supabase-rls-smoke.mjs",
     "test:supabase-schema": "node --env-file=.env scripts/supabase-schema-smoke.mjs",
     "agent:generate-wallet": "npm run generate-wallet -w @specguard/agent",
