@@ -87,6 +87,24 @@ export class SpecGuardApi {
     });
   }
 
+  async getHistory(wallet: string): Promise<Record<string, unknown>> {
+    return this.request(
+      `/api/agents/${encodeURIComponent(wallet)}/history?limit=100`,
+    );
+  }
+
+  /** Asks the registry to index a heartbeat or action memo already confirmed onchain. */
+  async reportMemo(
+    wallet: string,
+    signature: string,
+  ): Promise<Record<string, unknown>> {
+    return this.request(`/api/agents/${encodeURIComponent(wallet)}/memo`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ signature }),
+    });
+  }
+
   async prepareRegistration(payload: {
     wallet: string;
     policy: Policy;

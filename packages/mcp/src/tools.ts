@@ -3,14 +3,14 @@ import { z } from "zod";
 import {
   encodeActionMemo,
   encodeHeartbeatMemo,
-  encodePolicyMemo,
-  evaluatePolicy,
-  hashPolicy,
   PolicySchema,
-  type ActionSnapshot,
   type Policy,
-  type TxSnapshot,
 } from "@specguardxyz/core";
+import {
+  assertGuardMinimum,
+  evaluatePrecheck,
+  spendHistoryFromResponse,
+} from "./checks.js";
 import { SpecGuardApi, SpecGuardApiError } from "./lib/api.js";
 import { buildUnsignedMemoTx, parseKeypair, sendMemo } from "./lib/rpc.js";
 import type { SpecGuardMcpConfig } from "./lib/config.js";
@@ -88,32 +88,17 @@ function parsePolicyInput(input: Record<string, unknown>): Policy {
   return result.data;
 }
 
-/** Pulls the agent's onchain-published policy out of the registry response. */
-function policyFromAgentResponse(body: Record<string, unknown>): Policy {
-  const agent = body.agent;
-  if (!agent || typeof agent !== "object") {
-    throw new Error("Registry response did not include an agent");
+async function indexConfirmedMemo(
+  api: SpecGuardApi,
+  wallet: string,
+  signature: string,
+): Promise<{ indexed: boolean; indexError?: string }> {
+  try {
+    await api.reportMemo(wallet, signature);
+    return { indexed: true };
+  } catch (e) {
+    return { indexed: false, indexError: errorMessage(e) };
   }
-  const policy = (agent as Record<string, unknown>).policy;
-  if (!policy || typeof policy !== "object") {
-    throw new Error("Agent has no current policy — register it first");
-  }
-  const raw = (policy as Record<string, unknown>).raw;
-  const parsed = PolicySchema.safeParse(raw);
-  if (!parsed.success) {
-    throw new Error(
-      "Agent's stored policy could not be parsed — it may predate the current policy schema",
-    );
-  }
-  return parsed.data;
-}
-
-function heartbeatSecFromAgent(body: Record<string, unknown>): number | null {
-  const agent = body.agent as Record<string, unknown> | undefined;
-  const at = agent?.lastHeartbeatAt;
-  if (typeof at !== "string") return null;
-  const ms = Date.parse(at);
-  return Number.isFinite(ms) ? Math.floor(ms / 1000) : null;
 }
 
 export function registerTools(server: McpServer, config: SpecGuardMcpConfig): void {
@@ -124,7 +109,7 @@ export function registerTools(server: McpServer, config: SpecGuardMcpConfig): vo
     {
       title: "Register an agent with SpecGuard",
       description:
-        "Validates a SpecGuard policy and returns the onchain memo plus an unsigned transaction for the agent's wallet to sign. Publishing that transaction is what registers the agent. Registration requires the wallet to hold $GUARD.",
+        "Checks the wallet holds the $GUARD minimum, then returns an unsigned policy memo transaction. The agent is not registered until that transaction is signed and confirmed at confirmUrl.",
       annotations: { readOnlyHint: true },
       inputSchema: {
         wallet: walletSchema,
@@ -134,18 +119,25 @@ export function registerTools(server: McpServer, config: SpecGuardMcpConfig): vo
     async ({ wallet, policy }) =>
       guarded(async () => {
         const parsed = parsePolicyInput(policy);
-        const memoText = encodePolicyMemo(parsed);
-        const policyHash = hashPolicy(parsed);
+        const prepared = await api.prepareRegistration({ wallet, policy: parsed });
+        assertGuardMinimum(prepared);
+        const memoText = prepared.memoText;
+        const policyHash = prepared.policyHash;
+        if (typeof memoText !== "string" || typeof policyHash !== "string") {
+          throw new Error("Registry prepare response did not include a memo");
+        }
         const unsigned = await buildUnsignedMemoTx(config.rpcUrl, wallet, memoText);
         return ok({
           ok: true,
+          registered: false,
           wallet,
           policy: parsed,
           policyHash,
           memoText,
+          meetsMinimum: true,
           transactionBase64: unsigned.transactionBase64,
           nextStep:
-            "Sign and send transactionBase64 from the agent's wallet, then POST the signature and policyHash to /api/register/confirm.",
+            "Sign and send transactionBase64 from the agent's wallet, then POST the signature and policyHash to confirmUrl. The agent is not registered until that confirm call succeeds.",
           confirmUrl: `${config.apiUrl}/api/register/confirm`,
         });
       }),
@@ -156,7 +148,7 @@ export function registerTools(server: McpServer, config: SpecGuardMcpConfig): vo
     {
       title: "Publish a SpecGuard heartbeat",
       description:
-        "Publishes a heartbeat memo onchain, proving the agent is alive. Call this at least as often as the policy's heartbeatIntervalSec or the agent is marked RED.",
+        "Publishes a heartbeat memo onchain and asks the registry to index it. Call this at least as often as the policy's heartbeatIntervalSec. indexed:false means the chain send succeeded but the registry has not recorded it yet.",
       inputSchema: {
         keypair: keypairSchema,
         timestampSec: z
@@ -172,7 +164,8 @@ export function registerTools(server: McpServer, config: SpecGuardMcpConfig): vo
         const kp = parseKeypair(keypair);
         const ts = timestampSec ?? Math.floor(Date.now() / 1000);
         const result = await sendMemo(config.rpcUrl, kp, encodeHeartbeatMemo(ts));
-        return ok({ ok: true, timestampSec: ts, ...result });
+        const indexed = await indexConfirmedMemo(api, result.wallet, result.signature);
+        return ok({ ok: true, timestampSec: ts, ...result, ...indexed });
       }),
   );
 
@@ -181,7 +174,7 @@ export function registerTools(server: McpServer, config: SpecGuardMcpConfig): vo
     {
       title: "Log an agent action onchain",
       description:
-        "Publishes an ACTION memo, creating a verifiable record that the agent took this action. Use it for non-trading work: posts, outbound messages, paid API calls.",
+        "Publishes an ACTION memo and asks the registry to index it. indexed:false means the chain send succeeded but the registry has not recorded it yet.",
       inputSchema: {
         keypair: keypairSchema,
         action: actionInputSchema,
@@ -199,7 +192,8 @@ export function registerTools(server: McpServer, config: SpecGuardMcpConfig): vo
           ...(action.tool != null ? { tool: action.tool } : {}),
         });
         const result = await sendMemo(config.rpcUrl, kp, memoText);
-        return ok({ ok: true, action: { ...action, ts }, ...result });
+        const indexed = await indexConfirmedMemo(api, result.wallet, result.signature);
+        return ok({ ok: true, action: { ...action, ts }, ...result, ...indexed });
       }),
   );
 
@@ -226,51 +220,28 @@ export function registerTools(server: McpServer, config: SpecGuardMcpConfig): vo
     async ({ wallet, action, spendSol, programIds }) =>
       guarded(async () => {
         const body = await api.getAgent(wallet);
-        const policy = policyFromAgentResponse(body);
         const nowSec = Math.floor(Date.now() / 1000);
-
-        // Heartbeat and drawdown are the registry's job to judge; this call
-        // answers only "would this specific action breach the policy?", so the
-        // metrics are neutral.
-        const transactions: TxSnapshot[] =
-          spendSol != null || programIds != null
-            ? [
-                {
-                  signature: "pending",
-                  spendSol: spendSol ?? 0,
-                  programIds: programIds ?? [],
-                  timestampSec: nowSec,
-                },
-              ]
-            : [];
-        const actions: ActionSnapshot[] = action
-          ? [
-              {
-                type: action.type,
-                ...(action.tool != null ? { tool: action.tool } : {}),
-                ...(action.platform != null ? { platform: action.platform } : {}),
-                timestampSec: nowSec,
-              },
-            ]
-          : [];
-
-        const result = evaluatePolicy(policy, {
-          metrics: {
-            peakEquityUsdc: 0,
-            currentEquityUsdc: 0,
-            lastHeartbeatAtSec: heartbeatSecFromAgent(body) ?? nowSec,
-            nowSec,
+        let history: ReturnType<typeof spendHistoryFromResponse> = null;
+        try {
+          history = spendHistoryFromResponse(await api.getHistory(wallet), nowSec);
+        } catch {
+          history = null;
+        }
+        const outcome = evaluatePrecheck(
+          body,
+          history,
+          {
+            ...(action ? { action } : {}),
+            ...(spendSol != null ? { spendSol } : {}),
+            ...(programIds != null ? { programIds } : {}),
           },
-          transactions,
-          actions,
-        });
+          nowSec,
+        );
 
         return ok({
           ok: true,
           wallet,
-          allowed: result.status === "GREEN",
-          reasons: result.breachReasons,
-          policyName: policy.name,
+          ...outcome,
           checked: {
             ...(action ? { action } : {}),
             ...(spendSol != null ? { spendSol } : {}),
@@ -300,7 +271,7 @@ export function registerTools(server: McpServer, config: SpecGuardMcpConfig): vo
     {
       title: "Run a SpecGuard verification check",
       description:
-        "Triggers an on-demand verification of a registered agent: refreshes its PnL, re-evaluates its policy, and flips it to RED onchain if it is in breach. Rate-limited by the registry.",
+        "Re-evaluates a registered agent in the registry and can mark it RED. This writes a registry status event. It does not publish an onchain transaction.",
       inputSchema: { wallet: walletSchema },
     },
     async ({ wallet }) =>

@@ -13,7 +13,7 @@ Connect it to Claude, Cursor, ClawPump, or any MCP-compatible runtime, and your 
       "command": "npx",
       "args": ["-y", "@specguardxyz/mcp"],
       "env": {
-        "SOLANA_RPC_URL": "https://api.mainnet-beta.solana.com"
+        "SOLANA_RPC_URL": "https://mainnet.helius-rpc.com/?api-key=YOUR_KEY"
       }
     }
   }
@@ -22,19 +22,19 @@ Connect it to Claude, Cursor, ClawPump, or any MCP-compatible runtime, and your 
 
 | Env var | Default | Purpose |
 |---|---|---|
-| `SOLANA_RPC_URL` | `https://api.mainnet-beta.solana.com` | RPC for sending memo transactions |
+| `SOLANA_RPC_URL` | public mainnet RPC | RPC for sending memo transactions. Set a keyed Helius (or other) URL — the public default is rate-limited. |
 | `SPECGUARD_API_URL` | `https://specguard.xyz` | Registry endpoint |
 
 ## Tools
 
 | Tool | Needs a key? | What it does |
 |---|---|---|
-| `specguard_register` | no | Validates a policy, returns the memo and an unsigned transaction to sign |
-| `specguard_heartbeat` | yes | Publishes a heartbeat memo onchain |
-| `specguard_log_action` | yes | Publishes an ACTION memo — a verifiable record of non-trading work |
-| `specguard_precheck` | no | Evaluates a proposed action against the agent's policy *before* it happens |
+| `specguard_register` | no | Checks the $GUARD minimum, then returns an unsigned memo. The agent is registered only after confirm |
+| `specguard_heartbeat` | yes | Publishes a heartbeat memo and indexes it in the registry |
+| `specguard_log_action` | yes | Publishes an ACTION memo and indexes it in the registry |
+| `specguard_precheck` | no | Evaluates a proposed action against the published policy, heartbeat, drawdown, and daily spend |
 | `specguard_status` | no | Any agent's GREEN/RED status, policy, heartbeat, PnL |
-| `specguard_verify` | no | Triggers an on-demand re-evaluation |
+| `specguard_verify` | no | Re-evaluates the registry and can mark the agent RED. No onchain transaction |
 | `specguard_list_agents` | no | Lists every registered agent |
 
 ## Key handling

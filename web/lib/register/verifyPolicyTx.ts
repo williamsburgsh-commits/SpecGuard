@@ -36,12 +36,21 @@ function feePayerFromTx(result: Record<string, unknown>): string | null {
   return null;
 }
 
-export async function verifyPolicyMemoTransaction(
+export interface VerifiedMemoTx {
+  wallet: string;
+  signature: string;
+  blocktime: Date;
+  slot: number | null;
+  memoText: string;
+  feeLamports: number;
+}
+
+/** Confirmed memo tx whose fee payer is the expected wallet. */
+export async function verifySignedMemoTransaction(
   signature: string,
   expectedWallet: string,
-  expectedPolicyHash: string,
   expectedFeePayer?: string,
-): Promise<VerifiedPolicyTx> {
+): Promise<VerifiedMemoTx> {
   const res = await fetch(resolveSolanaRpcUrl(), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -89,14 +98,39 @@ export async function verifyPolicyMemoTransaction(
 
   const memoText = extractMemoFromTxResult(result);
   if (!memoText) {
-    throw new Error("Policy memo not found in transaction logs");
+    throw new Error("Memo not found in transaction logs");
   }
 
-  const decoded = decodeMemo(memoText);
+  const blockTime = result.blockTime;
+  const slot = result.slot;
+  const feeRaw = meta?.fee;
+  return {
+    wallet: expectedWallet,
+    signature,
+    blocktime:
+      typeof blockTime === "number" ? new Date(blockTime * 1000) : new Date(),
+    slot: typeof slot === "number" ? slot : null,
+    memoText,
+    feeLamports: typeof feeRaw === "number" ? feeRaw : 0,
+  };
+}
+
+export async function verifyPolicyMemoTransaction(
+  signature: string,
+  expectedWallet: string,
+  expectedPolicyHash: string,
+  expectedFeePayer?: string,
+): Promise<VerifiedPolicyTx> {
+  const verified = await verifySignedMemoTransaction(
+    signature,
+    expectedWallet,
+    expectedFeePayer,
+  );
+  const decoded = decodeMemo(verified.memoText);
   if (decoded?.kind !== "policy") {
-    const preview = memoText.slice(0, 80);
+    const preview = verified.memoText.slice(0, 80);
     throw new Error(
-      `Memo is not a SpecGuard policy (got ${memoText.length} chars, starts with: ${preview}${memoText.length > 80 ? "…" : ""})`,
+      `Memo is not a SpecGuard policy (got ${verified.memoText.length} chars, starts with: ${preview}${verified.memoText.length > 80 ? "…" : ""})`,
     );
   }
 
@@ -105,19 +139,12 @@ export async function verifyPolicyMemoTransaction(
     throw new Error("Policy hash does not match prepare step");
   }
 
-  const blockTime = result.blockTime;
-  const slot = result.slot;
-  const blocktime =
-    typeof blockTime === "number"
-      ? new Date(blockTime * 1000)
-      : new Date();
-
   return {
-    wallet: expectedWallet,
-    signature,
-    blocktime,
-    slot: typeof slot === "number" ? slot : null,
-    memoText,
+    wallet: verified.wallet,
+    signature: verified.signature,
+    blocktime: verified.blocktime,
+    slot: verified.slot,
+    memoText: verified.memoText,
     policyHash,
   };
 }
