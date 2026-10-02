@@ -4,8 +4,8 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-10-02T04:44:20.349Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-02T04-44-20-349Z.json",
+  "last_heartbeat_at": "2026-10-02T04:49:34.354Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-02T04-49-34-354Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
@@ -28,18 +28,18 @@
   },
   "pnl": {
     "baseline_equity_usd": 21,
-    "current_equity_usd": 42.97,
+    "current_equity_usd": 43.01,
     "withdrawn_usd": 24,
-    "realized_pnl_usd": 9.27,
-    "unrealized_pnl_usd": 0.45,
-    "trading_pnl_usd": 9.72,
-    "return_pct": 22.6,
+    "realized_pnl_usd": 9.5,
+    "unrealized_pnl_usd": 0.27,
+    "trading_pnl_usd": 9.77,
+    "return_pct": 22.7,
     "drawdown_usd": 0,
-    "inventory_usd": 12.25,
-    "leverage": 0.288,
+    "inventory_usd": 6.17,
+    "leverage": 0.144,
     "drawdown_pct_of_cap": 0,
-    "inventory_pct_of_cap": 12.2,
-    "leverage_pct_of_cap": 14.4,
+    "inventory_pct_of_cap": 6.2,
+    "leverage_pct_of_cap": 7.2,
     "within_spec": true,
     "breach_reasons": [],
     "spec_limits": {
@@ -47,16 +47,16 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-10-02T04:44:20.349Z"
+    "updated_at": "2026-10-02T04:49:34.354Z"
   },
   "fills": {
-    "count": 430,
-    "maker_count": 428,
+    "count": 431,
+    "maker_count": 429,
     "taker_count": 2,
     "maker_pct": 99.5,
-    "last_fill_at": "2026-10-02T04:30:12Z",
-    "last_fill_sig": "3S4FCFc2sTCNEmudt9Zhv818d4LkeNiPemC3sjYhyXw7iFibaAXyK6rS6RTMVMsacXWe2ZfQZ42z4pDrqH57zeqp",
-    "position_size_sol": 0.1,
+    "last_fill_at": "2026-10-02T04:44:45Z",
+    "last_fill_sig": "2wYhNs7tdbDYwsF7Ua5FVk6h4w6y3E9kjVCAs5eHboPkNWXnCFrnaQ8uRNKjdfGsR21QR8YmUZYhfHuQPtdBoN5Z",
+    "position_size_sol": 0.05,
     "source": "phoenix"
   }
 }
