@@ -4,24 +4,24 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-10-02T17:56:46.989Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-02T17-56-46-989Z.json",
+  "last_heartbeat_at": "2026-10-02T18:01:59.490Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-02T18-01-59-490Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 1828,
-    "posts_total": 3656,
-    "cancels_total": 1828,
-    "last_cycle_at": "2026-10-02T17:56:46.990Z",
+    "cycles_total": 1829,
+    "posts_total": 3658,
+    "cancels_total": 1829,
+    "last_cycle_at": "2026-10-02T18:01:59.492Z",
     "last_action": "quoted",
-    "last_mark_usd": 119.91,
+    "last_mark_usd": 119.67,
     "spread_bps": 100,
-    "last_bid_sig": "NnStqvPWN8t5NLcvd5Biwzdfm23fBki4evdtFuGdANhPHgwwXk6aQ7DXKHwKoqgMR65PnANimM7tDpacFP198mE",
-    "last_ask_sig": "4VLpuEwPJaWLKVcTigXBm5TEVTJXQKBndssLZPtHd8qetS6mZaVN8HKx4rV5xKgncmknPRni1zjY5Pjc3vpdv7Y7",
-    "last_cancel_sig": "4jipqvNT8EPQt1CLkCiHkGww9NRDMpw1xqgnvszpwx9H8xWkkLMyyMbovw1xv4HAXtwqm2J4vJGh2zDuMadCHnfe",
+    "last_bid_sig": "56BpgH2aYqV372QLXLvnnb1Q1mztwCkdrJq5RocDkgwv8JGtUib1FRL2TQrCefcPex3d3SNhACwxdnhhsVnp5kFW",
+    "last_ask_sig": "219tusnkqh79VGVnte6reUEXrd9bqrvK6qc6eK9mjvZyWFpL9P7ZSFNbtC3uuYiqLjt34kQGG8D6gbLVuGb2qiSD",
+    "last_cancel_sig": "463CQNWUnvDzPHdZB2e3DA1TbXjY88aqMdZDwXMjUNqKcFVXtGGCPojmQAWVT1oeoHPAACJhRZqxPn3ztr8KhUHV",
     "open_order_count": 1,
     "quantity_sol": 0.05,
     "margin_usdc": 10
@@ -47,7 +47,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-10-02T17:56:46.989Z"
+    "updated_at": "2026-10-02T18:01:59.490Z"
   },
   "fills": {
     "count": 438,
