@@ -4,24 +4,24 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-10-02T08:52:06.332Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-02T08-52-06-332Z.json",
+  "last_heartbeat_at": "2026-10-02T08:57:18.918Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-02T08-57-18-918Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 1738,
-    "posts_total": 3476,
-    "cancels_total": 1738,
-    "last_cycle_at": "2026-10-02T08:52:06.332Z",
+    "cycles_total": 1739,
+    "posts_total": 3478,
+    "cancels_total": 1739,
+    "last_cycle_at": "2026-10-02T08:57:18.918Z",
     "last_action": "quoted",
     "last_mark_usd": 121.76,
     "spread_bps": 100,
-    "last_bid_sig": "3uNkK2SnyGzu7LhCrxvXn4iTWAZpWi8VWStRGgRZzD5xUs96uj1k3ZUzZgeSJcpSy5jspFu73WoUFPq3MtELZ2DS",
-    "last_ask_sig": "2d7BjtbRoZCHTzgTUGmeAdttPibPeZha7h1QASff81cEqXMcTHU1vcgskdHPT3pLoDoUFoKLtsLPFPZJhSRytVdz",
-    "last_cancel_sig": "6P3rb4jg2u2sK8htGsiKyvwp5QCdE4XmvhW5J96MF42rwFuDAj9ramNBW8T9rFuHzS3oc1bNA953L5oNJ9V4ASi",
+    "last_bid_sig": "MaZZFpjB4oHi4DAmx4Lr8fw3eq52qi5z5LWBMmmCw48Tm5sKXUh398NEm94y85dFEJsQKJq9Y3dAPYubWqJW6GL",
+    "last_ask_sig": "5QycwUpgzswYmeEfTg7s5zBauQgou4TFCusLUEsDgs5NP9nvxUi3UxA5aFNbcHscSnka81tKBdU67DUTA8jwupLc",
+    "last_cancel_sig": "28oSPgqjWXwjsLnJCE2B2K8Mv4hbzA2Ay5DqS4spJvqoVdq4hnoCF6pEawo7u6MY5UaP723QMsPSaNLXoSiXnLMG",
     "open_order_count": 1,
     "quantity_sol": 0.05,
     "margin_usdc": 10
@@ -47,7 +47,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-10-02T08:52:06.332Z"
+    "updated_at": "2026-10-02T08:57:18.918Z"
   },
   "fills": {
     "count": 436,
