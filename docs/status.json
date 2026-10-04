@@ -4,24 +4,24 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-10-04T07:01:41.994Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-04T07-01-41-994Z.json",
+  "last_heartbeat_at": "2026-10-04T07:06:57.651Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-04T07-06-57-651Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 2212,
-    "posts_total": 4424,
-    "cancels_total": 2212,
-    "last_cycle_at": "2026-10-04T07:01:42.004Z",
+    "cycles_total": 2213,
+    "posts_total": 4426,
+    "cancels_total": 2213,
+    "last_cycle_at": "2026-10-04T07:06:57.652Z",
     "last_action": "quoted",
     "last_mark_usd": 121,
     "spread_bps": 100,
-    "last_bid_sig": "MQsVknAgTWMFPk9zNHjjUGa9oSLvKqUkJaWZ8YajhD8wCRwV6U6tEkvyuxmgtd5DsUmgVFq9iWDcJxLVpAWdmgq",
-    "last_ask_sig": "3btSush5wRNbDETaVFvyLV9PSF7sQv49jEemnXr9Wh89TTCcEohKhFnSxHRPGrQDNKM7kCxzFRher2vz96i4tRRu",
-    "last_cancel_sig": "2d3P37PCoMJDLrWx2eW99xpar8j5zsKzAuDgSVbCGtzMAjdhUNakvZibf5uLwRZM1ezwqNRTG8mWHg3xFycAv9Ym",
+    "last_bid_sig": "3x14bP1cN5YWCeJmDZYnFpQCcVnTmZWQc6ieB8jYBoxeNXh55WoeYXzKM4PidAPgFip2FHBiiLFnJyc5GsXE7zRQ",
+    "last_ask_sig": "4sjwNo4vzx312mwsmCkPsz71LTkn1DxkZDbfGurbeHFM7QxgHnSQgh9PzxF8wGKucxPaSoqu7Jbp8CxkCF6i2o8i",
+    "last_cancel_sig": "476o7AFZ6TWAqRjC9GCv1tBWwwwWXRRS5e1uVcz9oCLRynzvScQNfyi5nPEeEMkz98hfoqDkNQktPoTV6nQjCCqW",
     "open_order_count": 2,
     "quantity_sol": 0.05,
     "margin_usdc": 10
@@ -47,7 +47,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-10-04T07:01:41.994Z"
+    "updated_at": "2026-10-04T07:06:57.651Z"
   },
   "fills": {
     "count": 439,
