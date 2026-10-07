@@ -4,24 +4,24 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-10-07T04:05:49.898Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-07T04-05-49-898Z.json",
+  "last_heartbeat_at": "2026-10-07T04:11:05.922Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-07T04-11-05-922Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
   "quoting": {
     "operator": "digitalocean",
     "started_at": null,
-    "cycles_total": 2896,
-    "posts_total": 5792,
-    "cancels_total": 2896,
-    "last_cycle_at": "2026-10-07T04:05:49.899Z",
+    "cycles_total": 2897,
+    "posts_total": 5794,
+    "cancels_total": 2897,
+    "last_cycle_at": "2026-10-07T04:11:05.923Z",
     "last_action": "quoted",
     "last_mark_usd": 118.3,
     "spread_bps": 100,
-    "last_bid_sig": "4XowXoviig27uw84Gm2uZKsrxMoQFPxBi9Qp1mohMp5uSEepWbPXywa1TKjcCgrWFSfgGvucmauWdx7fdhEz6AB1",
-    "last_ask_sig": "5KUSetXzcv3gFJgV4ABGfrN2JJPjLdBdLHRaQAjLZk9XwZRFJo1jT2pAiYJATUjgBtXf3utq2BmUwdtAUL384rfZ",
-    "last_cancel_sig": "N4zEaFrLrSrVpcQYyZBU4j6aLRFG71xmADqhzY8ajjPYSpzfqArhxmtpAj7wCweqVVSLxME7gRj1oGYk2UagSpG",
+    "last_bid_sig": "4G3akh1CsNydU6gbVcUz9sW7Au3z2Gr3j5mfKy4XDt5CxDLZe5KM4dWWqmSDWBGvR4rPGM19ajUfvhRSGfiGcAMp",
+    "last_ask_sig": "2XgZ6W6UQRqC3jrTtBdNkswb7VSLzobWvm7yxWVXMMzm3PQrhZNJYsxC1eTdE9NMy5r8nHHsVmk3cfu41EHUch17",
+    "last_cancel_sig": "d8TF5BEsTMsqWa7fyBDGDaFVk9UdEA1LFjdsMTQAipRHnnACZQfLKmiBySG92d3jWEhNKfJwqLAh4d3GvWTz1an",
     "open_order_count": 1,
     "quantity_sol": 0.05,
     "margin_usdc": 10
@@ -47,7 +47,7 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-10-07T04:05:49.898Z"
+    "updated_at": "2026-10-07T04:11:05.922Z"
   },
   "fills": {
     "count": 455,
