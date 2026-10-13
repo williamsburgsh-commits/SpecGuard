@@ -4,8 +4,8 @@
   "spec_url": "https://raw.githubusercontent.com/williamsburgsh-commits/SpecGuard/main/spec/reference-spec.json",
   "spec_sha256": "256ABA792FF0C3A275D67AC5FC15661628B791888DA45BA3D7BCB0FCF2D35F5C",
   "heartbeat_ttl_seconds": 300,
-  "last_heartbeat_at": "2026-10-13T02:52:43.348Z",
-  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-13T02-52-43-348Z.json",
+  "last_heartbeat_at": "2026-10-13T02:58:01.170Z",
+  "last_heartbeat_proof": "logs/heartbeat/heartbeat-2026-10-13T02-58-01-170Z.json",
   "agent_id": "89ca5e76-d59f-4276-8399-eecdf8bb3a04",
   "wallet_address": "2rjFWZzDUqcD2ZvD5MgxmKuNQdz56ap8oR9zKPExdnJk",
   "copy_trade_eligible": true,
@@ -15,7 +15,7 @@
     "cycles_total": 3167,
     "posts_total": 6334,
     "cancels_total": 3167,
-    "last_cycle_at": "2026-10-13T02:52:43.350Z",
+    "last_cycle_at": "2026-10-13T02:58:01.182Z",
     "last_action": "skip_breach",
     "last_mark_usd": 105.44,
     "spread_bps": 100,
@@ -28,17 +28,17 @@
   },
   "pnl": {
     "baseline_equity_usd": 21,
-    "current_equity_usd": 33.78,
+    "current_equity_usd": 34.17,
     "withdrawn_usd": 24,
-    "realized_pnl_usd": 9.77,
-    "unrealized_pnl_usd": -8.83,
-    "trading_pnl_usd": 0.94,
-    "return_pct": 2.8,
+    "realized_pnl_usd": 9.27,
+    "unrealized_pnl_usd": -7.93,
+    "trading_pnl_usd": 1.34,
+    "return_pct": 3.9,
     "drawdown_usd": 0,
-    "inventory_usd": 90.58,
-    "leverage": 2.126,
+    "inventory_usd": 85.63,
+    "leverage": 2.034,
     "drawdown_pct_of_cap": 0,
-    "inventory_pct_of_cap": 90.6,
+    "inventory_pct_of_cap": 85.6,
     "leverage_pct_of_cap": 100,
     "within_spec": false,
     "breach_reasons": [
@@ -49,16 +49,16 @@
       "max_inventory_usd": 100,
       "max_leverage": 2
     },
-    "updated_at": "2026-10-13T02:52:43.348Z"
+    "updated_at": "2026-10-13T02:58:01.170Z"
   },
   "fills": {
-    "count": 461,
-    "maker_count": 459,
+    "count": 462,
+    "maker_count": 460,
     "taker_count": 2,
     "maker_pct": 99.6,
-    "last_fill_at": "2026-10-13T00:06:58Z",
-    "last_fill_sig": "5k8MXNvEXgsXkxUYsMRedH1qSMUb28i4S7Av3TpqUbMKTb5gwFmReWhkc5dzrjpzrxYP1NomL6Xdd7qFkh3rBbJE",
-    "position_size_sol": 0.85,
+    "last_fill_at": "2026-10-13T02:57:08Z",
+    "last_fill_sig": "4muVCX9vZqU7nEv8QgiTAdrapJeF8u8aE4tU6LxM4SrNsXV3a1in1rcYzw5MqWrQBfZqBuqWvCcyqAdg66DPbMBC",
+    "position_size_sol": 0.8,
     "source": "phoenix"
   }
 }
